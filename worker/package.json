@@ -1,0 +1,18 @@
+{
+  "name": "kd-inbound-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --test-scheduled",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute kd-inbound --remote --file=schema.sql",
+    "db:init:local": "wrangler d1 execute kd-inbound --local --file=schema.sql",
+    "test": "node --test test/"
+  },
+  "dependencies": {
+    "postal-mime": "^2.4.4"
+  },
+  "devDependencies": {
+    "wrangler": "^4.40.0"
+  }
+}

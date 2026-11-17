@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How the knowdrive inbound system works</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/funnel.css">
+<style>
+  body { overflow-x: hidden; }
+  .stage-wrap { max-width: 1240px; margin: 0 auto; padding: 18px 20px 30px; }
+  svg { width: 100%; height: auto; display: block; }
+  .box rect.b { fill: #111723; stroke: #2e3a50; stroke-width: 1.2; }
+  .box .t { font: 600 15px Sora, sans-serif; fill: #e8edf6; }
+  .box .s { font: 400 11.5px "DM Sans", sans-serif; fill: #9aa6ba; }
+  .box .k { font: 500 9.5px "DM Mono", monospace; fill: #6b778c; letter-spacing: .08em; }
+  .edge { fill: none; stroke: #5a6880; stroke-width: 1.4; marker-end: url(#arr); }
+  .edge.loop { stroke: #3ddc84; stroke-dasharray: 5 5; marker-end: url(#arrG); }
+  .edge.amber { stroke: #ffb547; stroke-dasharray: 5 5; marker-end: url(#arrA); }
+  .lbl { font: 500 10.5px "DM Mono", monospace; fill: #9aa6ba; }
+  .pill { fill: #0c1019; stroke: #2e3a50; }
+  .sec { font: 500 10.5px "DM Mono", monospace; fill: #6b778c; letter-spacing: .14em; }
+  .hot rect.b, .hot polygon.b { stroke: #ff5d6c; stroke-width: 2.4; filter: drop-shadow(0 0 10px rgba(255,93,108,.55)); }
+  .dim { opacity: .35; transition: opacity .3s; }
+  g.box, g.edgeg { transition: opacity .3s; }
+  .caption { min-height: 64px; text-align: center; font: 600 clamp(18px, 2.4vw, 26px)/1.3 Sora, sans-serif; margin-top: 8px; }
+  .ctrls { display: flex; justify-content: center; gap: 10px; margin-top: 8px; }
+  .ctrls button { min-height: 40px; font-size: 14px; padding: 0 16px; }
+  body.embed .chrome { display: none; } body.embed .stage-wrap { padding: 0; } body.embed::before { display: none; } body.embed { background: transparent; }
+  .hint { text-align: center; font: 500 12px "DM Mono", monospace; color: var(--faint); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="stage-wrap">
+  <p class="eyebrow chrome" style="text-align:center">How a knowdrive design-partner application works</p>
+  <svg viewBox="0 0 1200 760" role="img" aria-label="Flow: ad, AI qualification form, qualified check, calendar, booking check with AI follow-up, thank-you page, closing call, new client. Disqualified leads go to free resources. Qualified lead data feeds back to the ad platform.">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#5a6880"/></marker>
+      <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#3ddc84"/></marker>
+      <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#ffb547"/></marker>
+      <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="rgba(255,255,255,.05)"/></pattern>
+    </defs>
+    <rect width="1200" height="760" fill="url(#dots)"/>
+
+    <text class="sec" x="300" y="150">FRONT END · TRAFFIC → BOOKING</text>
+    <text class="sec" x="1192" y="470" text-anchor="end">BACK END · SALES</text>
+    <text class="sec" x="690" y="472" style="fill:#b98a3f">AI FOLLOW-UP LOOP · AUTOMATED</text>
+
+    <!-- edges -->
+    <g class="edgeg" data-s="signal">
+      <path class="edge loop" d="M600 156 V112"/>
+      <path class="edge loop" d="M300 75 H140 V166"/>
+      <rect class="pill" x="150" y="90" width="112" height="20" rx="10"/><text class="lbl" x="206" y="104" text-anchor="middle" style="fill:#3ddc84">smarter targeting</text>
+      <rect class="pill" x="612" y="122" width="104" height="20" rx="10"/><text class="lbl" x="664" y="136" text-anchor="middle" style="fill:#3ddc84">qualified signal</text>
+    </g>
+    <g class="edgeg" data-s="ad"><path class="edge" d="M140 266 V306"/><rect class="pill" x="150" y="276" width="86" height="20" rx="10"/><text class="lbl" x="193" y="290" text-anchor="middle">powered by</text></g>
+    <g class="edgeg" data-s="form"><path class="edge" d="M240 218 H296"/></g>
+    <g class="edgeg" data-s="q"><path class="edge" d="M510 218 H534"/></g>
+    <g class="edgeg" data-s="cal"><path class="edge" d="M662 218 H736"/><rect class="pill" x="680" y="194" width="38" height="18" rx="9"/><text class="lbl" x="699" y="207" text-anchor="middle" style="fill:#3ddc84">yes</text></g>
+    <g class="edgeg" data-s="dq"><path class="edge" d="M600 280 V326"/><rect class="pill" x="612" y="292" width="32" height="18" rx="9"/><text class="lbl" x="628" y="305" text-anchor="middle">no</text><path class="edge" d="M605 400 V441"/><text class="lbl" x="618" y="425">redirect</text></g>
+    <g class="edgeg" data-s="booked"><path class="edge" d="M920 218 H984"/></g>
+    <g class="edgeg" data-s="fu"><path class="edge amber" d="M1022 250 L924 360"/><rect class="pill" x="944" y="300" width="64" height="18" rx="9"/><text class="lbl" x="976" y="313" text-anchor="middle" style="fill:#ffb547">not yet</text><path class="edge amber" d="M805 326 V270"/><rect class="pill" x="812" y="285" width="80" height="18" rx="9"/><text class="lbl" x="852" y="298" text-anchor="middle" style="fill:#ffb547">AI re-books</text></g>
+    <g class="edgeg" data-s="ty"><path class="edge" d="M1050 280 V326"/><rect class="pill" x="1060" y="292" width="38" height="18" rx="9"/><text class="lbl" x="1079" y="305" text-anchor="middle" style="fill:#3ddc84">yes</text></g>
+    <g class="edgeg" data-s="close"><path class="edge" d="M1050 426 V476"/><rect class="pill" x="964" y="442" width="76" height="18" rx="9"/><text class="lbl" x="1002" y="455" text-anchor="middle">shows up</text></g>
+    <g class="edgeg" data-s="won"><path class="edge" d="M1050 576 V626"/><rect class="pill" x="942" y="592" width="98" height="18" rx="9"/><text class="lbl" x="991" y="605" text-anchor="middle" style="fill:#3ddc84">closes the deal</text></g>
+
+    <!-- nodes -->
+    <g class="box" data-s="signal"><rect class="b" x="300" y="40" width="300" height="70" rx="12" style="stroke:#2c6b48;fill:#0f1a16"/><text class="k" x="318" y="62" style="fill:#3ddc84">AI SIGNAL · CAPI</text><text class="t" x="318" y="83">Qualified lead data → ad platforms</text><text class="s" x="318" y="100">Meta, LinkedIn, Google · positive feedback loop</text></g>
+    <g class="box" data-s="ad"><rect class="b" x="40" y="170" width="200" height="96" rx="12"/><text class="k" x="58" y="194">01</text><text class="t" x="58" y="222">Ad</text><text class="s" x="58" y="244">LinkedIn · Meta · YouTube</text></g>
+    <g class="box" data-s="ad"><rect class="b" x="40" y="310" width="200" height="300" rx="12"/><text class="k" x="58" y="334">CREATIVE</text><text class="t" x="58" y="358">9 ad types</text>
+      <g class="s" id="types"></g></g>
+    <g class="box" data-s="form"><rect class="b" x="300" y="170" width="210" height="96" rx="12"/><text class="k" x="318" y="194">02</text><text class="t" x="318" y="222">AI qualification form</text><text class="s" x="318" y="244">Conditional logic + AI read of</text><text class="s" x="318" y="259">the use case</text></g>
+    <g class="box" data-s="q"><polygon class="b" points="600,156 662,218 600,280 538,218" style="fill:#16130c;stroke:#5c4a26;stroke-width:1.2"/><text class="k" x="600" y="208" text-anchor="middle" style="fill:#ffb547">FILTER</text><text class="t" x="600" y="228" text-anchor="middle" style="font-size:13px">Qualified?</text></g>
+    <g class="box" data-s="dq"><rect class="b" x="530" y="330" width="150" height="70" rx="12"/><text class="k" x="546" y="352">DQ</text><text class="t" x="546" y="374" style="font-size:14px">Disqualified</text><text class="s" x="546" y="390">Auto-routed</text></g>
+    <g class="box" data-s="dq"><rect class="b" x="530" y="445" width="150" height="70" rx="12"/><text class="t" x="546" y="472" style="font-size:14px">Resource path</text><text class="s" x="546" y="490">Free plan · stay in touch</text></g>
+    <g class="box" data-s="cal"><rect class="b" x="740" y="170" width="180" height="96" rx="12"/><text class="k" x="758" y="194">03</text><text class="t" x="758" y="222">Calendar</text><text class="s" x="758" y="244">Pick a time for the call</text></g>
+    <g class="box" data-s="booked"><polygon class="b" points="1050,156 1112,218 1050,280 988,218" style="fill:#16130c;stroke:#5c4a26;stroke-width:1.2"/><text class="k" x="1050" y="208" text-anchor="middle" style="fill:#ffb547">CHECK</text><text class="t" x="1050" y="228" text-anchor="middle" style="font-size:13px">Booked?</text></g>
+    <g class="box" data-s="fu"><rect class="b" x="690" y="330" width="230" height="120" rx="12" style="stroke:#5c4a26;fill:#16130c"/><text class="k" x="708" y="352" style="fill:#ffb547">AI AUTOMATION</text><text class="t" x="708" y="374" style="font-size:14px">AI email + SMS follow-up</text><text class="s" x="708" y="392">Writes, sends and replies · 10 days</text><text class="s" x="708" y="407">Every message links to the calendar</text><g id="chips"></g></g>
+    <g class="box" data-s="ty"><rect class="b" x="950" y="330" width="200" height="96" rx="12"/><text class="k" x="968" y="354">04</text><text class="t" x="968" y="380" style="font-size:14px">Thank-you page</text><text class="s" x="968" y="400">Video · FAQs · prep</text><text class="s" x="968" y="415">Reminders</text></g>
+    <g class="box" data-s="close"><rect class="b" x="950" y="480" width="200" height="96" rx="12"/><text class="k" x="968" y="504">05</text><text class="t" x="968" y="530" style="font-size:14px">Closing call</text><text class="s" x="968" y="550">Discovery → offer → close</text><text class="s" x="968" y="565">AI pre-call brief</text></g>
+    <g class="box" data-s="won"><rect class="b" x="950" y="630" width="200" height="80" rx="40" style="stroke:#2c6b48;fill:#0f1a16"/><text class="t" x="1050" y="666" text-anchor="middle" style="font-size:15px">New client</text><text class="s" x="1050" y="684" text-anchor="middle">Won → signal to ad platforms</text></g>
+  </svg>
+
+  <div class="caption chrome" id="cap" aria-live="polite">Press → to walk through the system.</div>
+  <div class="ctrls chrome"><button class="btn ghost" id="prev">← Back</button><button class="btn" id="nxt">Next →</button><button class="btn ghost" id="all">Show all</button></div>
+  <p class="hint chrome">Keyboard: → / Space next · ← back · A show all. Built for screen-recording the breakdown video.</p>
+</div>
+<script>
+(function () {
+  const types = ["UGC / selfie", "Static text", "Green screen", "Carousel", "Podcast clip", "Professional", "Sketchbook", "Client win", "Testimonial"];
+  const ns = "http://www.w3.org/2000/svg";
+  const g = document.getElementById("types");
+  types.forEach((t, i) => {
+    const y = 384 + i * 25;
+    const c = document.createElementNS(ns, "circle"); c.setAttribute("cx", 66); c.setAttribute("cy", y - 4); c.setAttribute("r", 8); c.setAttribute("fill", "#ff5d6c"); g.appendChild(c);
+    const n = document.createElementNS(ns, "text"); n.setAttribute("x", 66); n.setAttribute("y", y - 0.5); n.setAttribute("text-anchor", "middle"); n.setAttribute("style", "font:600 9.5px DM Sans;fill:#fff"); n.textContent = i + 1; g.appendChild(n);
+    const l = document.createElementNS(ns, "text"); l.setAttribute("x", 82); l.setAttribute("y", y); l.setAttribute("style", "font:400 12.5px DM Sans;fill:#e8edf6"); l.textContent = t; g.appendChild(l);
+  });
+  const chips = document.getElementById("chips");
+  ["D0", "D1", "D2", "D3", "D5", "D7", "D10"].forEach((d, i) => {
+    const x = 708 + i * 29;
+    const r = document.createElementNS(ns, "rect"); r.setAttribute("x", x); r.setAttribute("y", 420); r.setAttribute("width", 25); r.setAttribute("height", 18); r.setAttribute("rx", 4); r.setAttribute("fill", "rgba(255,181,71,.12)"); r.setAttribute("stroke", "#ffb547"); chips.appendChild(r);
+    const t = document.createElementNS(ns, "text"); t.setAttribute("x", x + 12.5); t.setAttribute("y", 433); t.setAttribute("text-anchor", "middle"); t.setAttribute("style", "font:500 9.5px DM Mono;fill:#ffb547"); t.textContent = d; chips.appendChild(t);
+  });
+
+  const steps = [
+    ["ad", "Nine ad formats run at once. The qualified-lead signal decides which ones scale."],
+    ["form", "A short application with conditional logic. AI reads the use case as they type it."],
+    ["q", "Qualified? Role, use case, volume, timeline, budget and the AI read decide."],
+    ["dq", "Not a fit yet: the free plan and resources, emailed, with a re-apply link."],
+    ["signal", "Qualified leads are sent back to Meta, LinkedIn and Google. Targeting gets smarter."],
+    ["cal", "Qualified leads pick a time straight away."],
+    ["booked", "Booked? If not, the follow-up loop takes over."],
+    ["fu", "AI writes, sends and answers email and SMS for ten days. Every message links to the calendar."],
+    ["ty", "Booked leads land on a thank-you page: prep video, FAQs, calendar file, and one question to bring."],
+    ["close", "You get an AI pre-call brief. The call runs discovery, demo, offer, close."],
+    ["won", "A new client. The win is sent back to the ad platforms as the strongest signal of all."]
+  ];
+  let i = -1;
+  const all = () => document.querySelectorAll("[data-s]");
+  function render() {
+    all().forEach(el => { const on = i < 0 || el.dataset.s === steps[i][0]; el.classList.toggle("hot", i >= 0 && on && el.classList.contains("box")); el.classList.toggle("dim", i >= 0 && !on); });
+    document.getElementById("cap").textContent = i < 0 ? "Press → to walk through the system." : steps[i][1];
+  }
+  const next = () => { i = Math.min(i + 1, steps.length - 1); render(); };
+  const prev = () => { i = Math.max(i - 1, -1); render(); };
+  document.getElementById("nxt").onclick = next;
+  document.getElementById("prev").onclick = prev;
+  document.getElementById("all").onclick = () => { i = -1; render(); };
+  // ?embed=1: no chrome, auto-walk the steps (used as the landing-page visual until the video exists).
+  if (new URLSearchParams(location.search).get("embed") === "1") {
+    document.body.classList.add("embed");
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setInterval(() => { i = i >= steps.length - 1 ? -1 : i + 1; render(); }, 2600);
+  }
+  document.addEventListener("keydown", e => { if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); next(); } if (e.key === "ArrowLeft") prev(); if (e.key.toLowerCase() === "a") { i = -1; render(); } });
+})();
+</script>
+</body>
+</html>

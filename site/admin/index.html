@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inbound pipeline · knowdrive</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/funnel.css">
+<script src="../assets/config.js"></script>
+<style>
+  body { font-size: 15px; }
+  .shell { max-width: 1280px; margin: 0 auto; padding: 0 20px 60px; }
+  .kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 8px 0 22px; }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .kpi b { display: block; font: 600 26px/1.1 var(--display); }
+  .kpi span { font: 500 12px/1.3 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .kpi i { font-style: normal; color: var(--teal); font: 500 12px/1 var(--mono); }
+  @media (max-width: 900px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 500 12px/1 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; position: sticky; top: 0; background: var(--bg); }
+  tr.row { cursor: pointer; } tr.row:hover td { background: var(--panel); }
+  .stage { font: 500 12px/1 var(--mono); padding: 5px 8px; border-radius: 999px; border: 1px solid var(--line-2); white-space: nowrap; }
+  .s-qualified { color: var(--blue); border-color: rgba(79,140,255,.4); }
+  .s-booked { color: var(--amber); border-color: rgba(255,181,71,.4); }
+  .s-showed { color: var(--violet); border-color: rgba(155,123,255,.4); }
+  .s-won { color: var(--green); border-color: rgba(61,220,132,.4); }
+  .s-dq, .s-lost { color: var(--faint); }
+  .s-no_show, .s-cancelled { color: var(--red); border-color: rgba(255,93,108,.4); }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .chip { background: var(--panel); border: 1px solid var(--line-2); color: var(--muted); border-radius: 999px; padding: 7px 12px; font: 500 13px/1 var(--mono); cursor: pointer; }
+  .chip.on { color: var(--text); border-color: var(--teal); }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 100%); background: var(--bg-2); border-left: 1px solid var(--line-2); box-shadow: var(--shadow); padding: 22px; overflow: auto; transform: translateX(100%); transition: transform .2s; z-index: 50; }
+  .drawer.open { transform: none; }
+  .msg { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0; background: var(--panel); white-space: pre-wrap; font-size: 14px; }
+  .msg.in { border-color: rgba(47,212,192,.4); }
+  .msg .meta { font: 500 11.5px/1.3 var(--mono); color: var(--faint); margin-bottom: 6px; white-space: normal; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .actions button { min-height: 38px; font-size: 14px; padding: 0 14px; }
+  dl { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; margin: 0; font-size: 14px; }
+  dt { color: var(--faint); font-family: var(--mono); font-size: 12px; padding-top: 2px; }
+  dd { margin: 0; }
+  .login { max-width: 380px; margin: 14vh auto; }
+  @media (max-width: 600px) { dl { grid-template-columns: 1fr; } dt { padding-top: 8px; } dd { word-break: break-word; } }
+</style>
+</head>
+<body>
+<div class="login panel" id="login" hidden>
+  <h2 style="font-size:24px">Inbound pipeline</h2>
+  <p class="muted small">Paste the ADMIN_TOKEN set on the Worker. It stays in this browser tab only.</p>
+  <div class="field"><label for="tok">Admin token</label><input id="tok" type="password" autocomplete="off"></div>
+  <button class="btn block" id="go">Open</button>
+  <p class="small" id="loginErr" style="color:var(--red)"></p>
+</div>
+
+<div class="shell" id="app" hidden>
+  <header class="top">
+    <span class="wordmark"><span class="dot"></span>knowdrive inbound</span>
+    <span class="toolbar" style="margin:0">
+      <select id="days" class="chip"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select>
+      <button class="chip" id="csv">Google Ads CSV</button>
+      <button class="chip" id="refresh">Refresh</button>
+      <button class="chip" id="logout">Lock</button>
+    </span>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <h3 style="font-size:16px;margin:8px 0 10px">By creative (utm_content)</h3>
+  <div style="overflow:auto;margin-bottom:26px"><table id="byAd"></table></div>
+
+  <div class="toolbar" id="filters"></div>
+  <div style="overflow:auto"><table id="leads"></table></div>
+</div>
+
+<aside class="drawer" id="drawer" aria-live="polite"></aside>
+
+<script>
+(function () {
+  const C = window.KD_FUNNEL;
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  let token = sessionStorage.getItem("kd_admin") || "";
+  let filter = "";
+  const STAGES = ["qualified", "booked", "showed", "won", "no_show", "cancelled", "lost", "dq"];
+
+  async function api(path, body) {
+    const r = await fetch(C.apiBase + "/api/admin" + path, { method: body ? "POST" : "GET", headers: { authorization: "Bearer " + token, "content-type": "application/json" }, body: body ? JSON.stringify(body) : undefined });
+    if (r.status === 401) { lock(); throw new Error("unauthorized"); }
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status);
+    return path.endsWith(".csv") ? r.text() : r.json();
+  }
+  function lock() { sessionStorage.removeItem("kd_admin"); token = ""; $("#app").hidden = true; $("#login").hidden = false; }
+  $("#go").onclick = async () => { token = $("#tok").value.trim(); try { await load(); sessionStorage.setItem("kd_admin", token); } catch (e) { $("#loginErr").textContent = "That token didn't work."; } };
+  $("#tok").addEventListener("keydown", e => { if (e.key === "Enter") $("#go").click(); });
+  $("#logout").onclick = lock;
+  $("#refresh").onclick = load;
+  $("#days").onchange = load;
+  $("#csv").onclick = async () => {
+    const t = await api("/export/google-ads.csv");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([t], { type: "text/csv" })); a.download = "google-ads-offline-conversions.csv"; a.click();
+  };
+
+  const pct = (a, b) => b ? Math.round(a / b * 100) + "%" : "–";
+  const when = ts => ts ? new Date(ts).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "";
+
+  async function load() {
+    const [stats, list] = await Promise.all([api("/stats?days=" + $("#days").value), api("/leads" + (filter ? "?stage=" + filter : ""))]);
+    $("#login").hidden = true; $("#app").hidden = false;
+    const f = stats.funnel;
+    const k = [["Applied", f.applied, ""], ["Qualified", f.qualified, pct(f.qualified, f.applied) + " of applied"], ["Booked", f.booked, pct(f.booked, f.qualified) + " of qualified"], ["Showed", f.showed, pct(f.showed, f.booked) + " of booked"], ["Won", f.won, pct(f.won, f.showed) + " of showed"], ["Revenue", "$" + Math.round(stats.revenue).toLocaleString(), C.enterpriseFloorMonthly ? "won deal value" : ""]];
+    $("#kpis").innerHTML = k.map(([l, v, s]) => `<div class="kpi"><span>${l}</span><b>${v}</b><i>${s}</i></div>`).join("");
+    const ads = Object.entries(stats.byAd).sort((a, b) => b[1].qualified - a[1].qualified);
+    $("#byAd").innerHTML = "<tr><th>Creative</th><th>Applied</th><th>Qualified</th><th>Q-rate</th><th>Booked</th><th>Showed</th><th>Won</th></tr>" +
+      (ads.length ? ads.map(([n, r]) => `<tr><td>${esc(n)}</td><td>${r.applied}</td><td>${r.qualified}</td><td>${pct(r.qualified, r.applied)}</td><td>${r.booked}</td><td>${r.showed}</td><td>${r.won}</td></tr>`).join("") : `<tr><td colspan="7" class="muted">No applications in this window yet.</td></tr>`);
+    $("#filters").innerHTML = ['<button class="chip ' + (!filter ? "on" : "") + '" data-f="">All</button>'].concat(STAGES.map(s => `<button class="chip ${filter === s ? "on" : ""}" data-f="${s}">${s.replace("_", " ")}</button>`)).join("");
+    document.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { filter = b.dataset.f; load(); });
+    $("#leads").innerHTML = "<tr><th>Lead</th><th>Stage</th><th>Score</th><th>AI read</th><th>Call</th><th>Source</th><th>Updated</th></tr>" +
+      (list.leads.length ? list.leads.map(l => `<tr class="row" data-id="${l.id}"><td><b>${esc(l.name)}</b><div class="small muted">${esc(l.company)} · ${esc(l.email)}</div></td><td><span class="stage s-${l.stage}">${l.stage.replace("_", " ")}</span></td><td class="mono">${l.score ?? ""}${l.ai_fit != null ? " · ai " + l.ai_fit : ""}</td><td class="small muted" style="max-width:340px">${esc(l.ai_summary || "")}</td><td class="small">${when(l.booking_start)}</td><td class="small mono">${esc((l.attribution.last && (l.attribution.last.utm_source || "")) || "")} ${esc((l.attribution.last && l.attribution.last.utm_content) || "")}</td><td class="small muted">${when(l.updated_at)}</td></tr>`).join("") : `<tr><td colspan="7" class="muted">No leads here.</td></tr>`);
+    document.querySelectorAll("tr.row").forEach(r => r.onclick = () => open(r.dataset.id));
+    if (location.hash.length > 1 && !$("#drawer").classList.contains("open")) open(location.hash.slice(1));
+  }
+
+  // Only offer the stage moves that make sense from where the lead is now.
+  function actionsFor(l) {
+    const callPassed = l.booking_start && l.booking_start < Date.now();
+    const b = (st, label, primary) => `<button class="btn ${primary ? "" : "ghost"}" data-st="${st}">${label}</button>`;
+    if (l.stage === "dq") return b("qualified", "Qualify → follow up", true);
+    if (l.stage === "qualified" || l.stage === "cancelled" || l.stage === "direct") return b("lost", "Lost");
+    if (l.stage === "booked") return callPassed ? b("showed", "Showed", true) + b("no_show", "No-show → rebook") + b("won", "Won…") + b("lost", "Lost") : b("lost", "Lost");
+    if (l.stage === "showed") return b("won", "Won…", true) + b("lost", "Lost");
+    if (l.stage === "no_show") return b("showed", "Actually showed") + b("lost", "Lost");
+    if (l.stage === "lost") return b("qualified", "Reopen");
+    return "";
+  }
+
+  async function open(id) {
+    const d = $("#drawer");
+    d.innerHTML = '<p class="muted">Loading…</p>'; d.classList.add("open"); history.replaceState(null, "", "#" + id);
+    const { lead: l, messages, events } = await api("/lead/" + id);
+    const a = l.answers || {};
+    d.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:10px">
+        <div><h2 style="font-size:22px;margin:0">${esc(l.name)}</h2><div class="muted small">${esc(l.company)} · <a href="mailto:${esc(l.email)}">${esc(l.email)}</a>${l.phone ? " · " + esc(l.phone) : ""}</div></div>
+        <button class="chip" id="close">Close</button>
+      </div>
+      <div style="margin:12px 0"><span class="stage s-${l.stage}">${l.stage}</span> <span class="mono small muted">score ${l.score ?? "–"} · ai fit ${l.ai_fit ?? "–"}</span></div>
+      <div class="actions">${actionsFor(l)}<button class="btn ghost" id="stopAuto" title="Cancel every pending automated message for this lead">Stop automation</button></div>
+      <p class="small" style="color:var(--teal)">${esc(l.ai_summary || "")}</p>
+      ${l.ai_angle ? `<p class="small muted">Angle: ${esc(l.ai_angle)}</p>` : ""}
+      ${Array.isArray(l.ai_flags) && l.ai_flags.length ? `<p class="small" style="color:var(--amber)">Flags: ${l.ai_flags.map(esc).join(" · ")}</p>` : ""}
+      <dl>
+        <dt>Role</dt><dd>${esc(a.role)}</dd><dt>Building</dt><dd>${esc(a.building)}</dd>
+        <dt>Stack</dt><dd>${esc((a.stack || []).join(", "))}</dd><dt>Volume</dt><dd>${esc(a.volume)}</dd>
+        <dt>Needs</dt><dd>${esc((a.needs || []).join(", "))}</dd><dt>Timeline</dt><dd>${esc(a.timeline)}</dd>
+        <dt>Budget</dt><dd>${esc(a.budget)}</dd><dt>Use case</dt><dd>${esc(a.usecase)}</dd>
+        <dt>Call</dt><dd>${when(l.booking_start)}</dd>
+        <dt>Pre-call</dt><dd>${l.precall ? esc((l.precall.wrong || "") + (l.precall.team ? " · joining: " + l.precall.team : "")) : "–"}</dd>
+        <dt>Source</dt><dd class="mono small">${esc(JSON.stringify((l.attribution || {}).last || (l.attribution || {}).first || {}))}</dd>
+      </dl>
+      <h3 style="font-size:16px;margin:22px 0 4px">Messages</h3>
+      ${messages.map(m => `<div class="msg ${m.direction === "in" ? "in" : ""}"><div class="meta">${m.direction === "in" ? "← them" : "→ " + m.seq + " " + m.step} · ${m.channel} · ${m.status}${m.error ? " (" + esc(m.error) + ")" : ""} · ${when(m.sent_at || m.send_at)}</div>${m.subject ? "<b>" + esc(m.subject) + "</b>\n" : ""}${esc(m.body || (m.status === "pending" ? (["followup", "rebook", "recancel"].includes(m.seq) ? "(written by AI at send time, template fallback)" : "(fixed template)") : ""))}</div>`).join("") || '<p class="muted small">None yet.</p>'}
+      <h3 style="font-size:16px;margin:22px 0 4px">Events</h3>
+      ${events.map(e => `<div class="small mono muted" style="padding:4px 0;border-bottom:1px solid var(--line)">${when(e.ts)} · ${esc(e.type)} <span style="opacity:.7">${esc((e.data || "").slice(0, 220))}</span></div>`).join("")}
+    `;
+    $("#stopAuto").onclick = async () => { if (!confirm("Cancel all pending automated messages for this lead?")) return; await api("/stop", { id: l.id }); open(l.id); };
+    $("#close").onclick = () => { d.classList.remove("open"); history.replaceState(null, "", location.pathname); };
+    d.querySelectorAll("[data-st]").forEach(b => b.onclick = async () => {
+      let value;
+      if (b.dataset.st === "won") { value = prompt("Deal value (first-year, " + "CAD):", ""); if (value === null) return; }
+      b.disabled = true;
+      try { await api("/stage", { id: l.id, stage: b.dataset.st, value }); await load(); await open(l.id); } catch (e) { alert("Couldn't update: " + e.message); b.disabled = false; }
+    });
+  }
+  document.addEventListener("keydown", e => { if (e.key === "Escape") $("#drawer").classList.remove("open"); });
+
+  if (token) load().catch(() => lock()); else lock();
+})();
+</script>
+</body>
+</html>

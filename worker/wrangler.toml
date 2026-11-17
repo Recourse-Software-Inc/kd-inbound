@@ -1,0 +1,45 @@
+name = "kd-inbound"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Send whatever follow-ups are due every 10 minutes.
+[triggers]
+crons = ["*/10 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kd-inbound"
+database_id = "REPLACE_WITH_D1_ID"   # npx wrangler d1 create kd-inbound
+
+[observability]
+enabled = true
+
+[vars]
+SITE_URL = "https://recourse-software-inc.github.io/kd-inbound"
+SITE_ORIGINS = "https://recourse-software-inc.github.io"
+API_URL = "https://kd-inbound.recourse.workers.dev"
+FROM_EMAIL = "Joel at knowdrive <joel@knowdrive.ai>"
+REPLY_DOMAIN = "knowdrive.ai"         # Email Routing: replies+<leadId>@knowdrive.ai → this Worker
+REPLY_LOCAL = "replies"
+POSTAL_ADDRESS = "815 Safari Rd, Millgrove, Ontario L8B 1A4, Canada"
+FREE_PLAN_URL = "https://knowdrive.ai/pricing"
+QUALIFY_THRESHOLD = "7"
+MAX_APPS_PER_IP_HOUR = "8"
+CURRENCY = "CAD"
+AI_MODEL_FAST = "claude-haiku-5-5"
+AI_MODEL_WRITE = "claude-sonnet-5-5"
+AI_FOLLOWUPS = "1"                    # "0" = fixed templates only
+AI_REPLIES = "1"                      # "0" = every reply goes to a human
+ALLOW_LOCALHOST = "0"
+META_API_VERSION = "v21.0"
+LINKEDIN_VERSION = "202601"           # set to a currently supported LinkedIn Marketing API version (YYYYMM)
+
+# Secrets (npx wrangler secret put NAME):
+#   TOKEN_SECRET, ADMIN_TOKEN, ANTHROPIC_API_KEY, RESEND_API_KEY
+#   SALES_NOTIFY_EMAIL, REPLY_FORWARD_TO
+#   CAL_WEBHOOK_SECRET
+#   TWILIO_SID, TWILIO_TOKEN, TWILIO_FROM (or TWILIO_MESSAGING_SERVICE)
+#   META_PIXEL_ID, META_CAPI_TOKEN, (META_TEST_EVENT_CODE while testing)
+#   LINKEDIN_TOKEN, LINKEDIN_CONV_QUALIFIED, LINKEDIN_CONV_BOOKED, LINKEDIN_CONV_SHOWED, LINKEDIN_CONV_WON
+#   GA4_MEASUREMENT_ID, GA4_API_SECRET

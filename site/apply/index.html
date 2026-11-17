@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Apply · knowdrive design-partner program</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07090f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/funnel.css">
+<script src="../assets/config.js"></script>
+<script src="../assets/common.js"></script>
+</head>
+<body>
+<div class="form-shell">
+  <header class="narrow top" style="width:100%">
+    <a class="wordmark" href="../"><span class="dot" aria-hidden="true"></span>knowdrive</a>
+    <span class="top-note" id="stepNote" aria-live="polite"></span>
+  </header>
+
+  <main class="narrow" style="width:100%;flex:1">
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+
+    <form id="app" novalidate autocomplete="on">
+
+      <fieldset class="q" data-q="role" data-type="single">
+        <legend>What's your role?</legend>
+        <p class="hint">So we bring the right people to the call.</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="role" value="ai_lead"><span>Head of AI / ML<kbd>1</kbd></span></label>
+          <label class="opt"><input type="radio" name="role" value="cto"><span>CTO / VP Engineering<kbd>2</kbd></span></label>
+          <label class="opt"><input type="radio" name="role" value="platform"><span>Platform, data or infrastructure lead<kbd>3</kbd></span></label>
+          <label class="opt"><input type="radio" name="role" value="founder"><span>Founder / CEO<kbd>4</kbd></span></label>
+          <label class="opt"><input type="radio" name="role" value="ic"><span>Engineer or developer<kbd>5</kbd></span></label>
+          <label class="opt"><input type="radio" name="role" value="other"><span>Something else<kbd>6</kbd></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-q="building" data-type="single">
+        <legend>What are you building with AI right now?</legend>
+        <p class="hint">Pick the closest one.</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="building" value="customer_product"><span>Retrieval, search or agents inside a product our customers use<kbd>1</kbd></span></label>
+          <label class="opt"><input type="radio" name="building" value="internal"><span>Assistants or agents for our own staff and processes<kbd>2</kbd></span></label>
+          <label class="opt"><input type="radio" name="building" value="prototype"><span>Prototypes; nothing in production yet<kbd>3</kbd></span></label>
+          <label class="opt"><input type="radio" name="building" value="personal"><span>A personal, student or side project<kbd>4</kbd></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-q="stack" data-type="multi">
+        <legend>What does retrieval run on today?</legend>
+        <p class="hint">Select all that apply.</p>
+        <div class="opts two">
+          <label class="opt"><input type="checkbox" name="stack" value="pinecone"><span>Pinecone</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="qdrant"><span>Qdrant</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="weaviate"><span>Weaviate</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="milvus"><span>Milvus / Zilliz</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="pgvector"><span>pgvector / Postgres</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="elastic"><span>Elasticsearch / OpenSearch</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="homegrown"><span>Something we built</span></label>
+          <label class="opt"><input type="checkbox" name="stack" value="none"><span>Nothing yet</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-q="volume" data-type="single">
+        <legend>Roughly how much content would go in?</legend>
+        <p class="hint">Documents, recordings and video combined. A guess is fine.</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="volume" value="lt10"><span>Under 10 GB<kbd>1</kbd></span></label>
+          <label class="opt"><input type="radio" name="volume" value="10_250"><span>10 – 250 GB<kbd>2</kbd></span></label>
+          <label class="opt"><input type="radio" name="volume" value="250_5000"><span>250 GB – 5 TB<kbd>3</kbd></span></label>
+          <label class="opt"><input type="radio" name="volume" value="gt5000"><span>More than 5 TB<kbd>4</kbd></span></label>
+          <label class="opt"><input type="radio" name="volume" value="unsure"><span>Not sure yet<kbd>5</kbd></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-q="needs" data-type="multi">
+        <legend>What has to be true for this to be worth it?</legend>
+        <p class="hint">Select all that apply.</p>
+        <div class="opts">
+          <label class="opt"><input type="checkbox" name="needs" value="citations"><span>Every answer cited and auditable</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="cost"><span>Lower retrieval and re-indexing cost</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="sovereignty"><span>Data stays in our jurisdiction or on our hardware</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="media"><span>Search across audio and video, alongside documents</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="agent_memory"><span>Shared memory across our agents</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="consolidate"><span>One system in place of vector DB + file store + chunking</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-q="timeline" data-type="single">
+        <legend>When do you want this running?</legend>
+        <div class="opts" style="margin-top:20px">
+          <label class="opt"><input type="radio" name="timeline" value="month"><span>Within a month<kbd>1</kbd></span></label>
+          <label class="opt"><input type="radio" name="timeline" value="quarter"><span>This quarter<kbd>2</kbd></span></label>
+          <label class="opt"><input type="radio" name="timeline" value="half"><span>In the next 6 months<kbd>3</kbd></span></label>
+          <label class="opt"><input type="radio" name="timeline" value="research"><span>Just researching for now<kbd>4</kbd></span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q" data-q="budget" data-type="single">
+        <legend>Enterprise plans start at <span data-floor>$5,120</span>/month. Where are you on budget?</legend>
+        <p class="hint">Straight answers help us skip the parts of the call you don't need.</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="budget" value="approved"><span>Budget at that level is set aside<kbd>1</kbd></span></label>
+          <label class="opt"><input type="radio" name="budget" value="if_proven"><span>We'd fund it if a pilot proves the case<kbd>2</kbd></span></label>
+          <label class="opt"><input type="radio" name="budget" value="build_case"><span>I'd need to build the business case first<kbd>3</kbd></span></label>
+          <label class="opt"><input type="radio" name="budget" value="no"><span>Not at this stage<kbd>4</kbd></span></label>
+        </div>
+      </fieldset>
+
+      <div class="q" data-q="usecase" data-type="text">
+        <p class="qtitle" id="ucTitle">In two or three sentences, what should knowdrive do for you?</p>
+        <p class="hint">Which sources, which agents or people use the answers, and what goes wrong today.</p>
+        <div class="field">
+          <label class="sr-only" for="usecase">Use case</label>
+          <textarea id="usecase" name="usecase" maxlength="1500" placeholder="e.g. Our support agents answer from 40k PDFs and call recordings. Answers are often wrong and we can't show customers the source."></textarea>
+          <span class="err">A sentence or two is enough, at least 20 characters.</span>
+        </div>
+      </div>
+
+      <div class="q" data-q="contact" data-type="contact">
+        <p class="qtitle">Last step: where do we reach you?</p>
+        <p class="hint" id="contactHint">If it's a fit, you'll pick a time on the next screen.</p>
+        <div class="grid-2" style="gap:0 14px">
+          <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required><span class="err">Please add your name.</span></div>
+          <div class="field"><label for="company">Company</label><input id="company" name="company" autocomplete="organization" required><span class="err">Please add your company.</span></div>
+        </div>
+        <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required><span class="err">Please use a valid email address.</span></div>
+        <div class="field"><label for="phone">Mobile <span class="muted">(optional, for texts about your application and call)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+1 416 555 0100"><span class="err">Include the country code, e.g. +1 416 555 0100.</span></div>
+        <label class="consent"><input type="checkbox" id="smsConsent" name="smsConsent"><span>Text me from Recourse Software Inc. (knowdrive) about this application and my call: up to 5 automated messages, plus replies to my texts. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
+        <p class="small muted" style="margin:6px 0 0">We'll email you about this application from Recourse Software Inc. Every email has a one-click unsubscribe. <a data-privacy href="#" target="_blank" rel="noopener">Privacy</a>.</p>
+        <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
+      </div>
+
+      <div class="nav" id="nav">
+        <button type="button" class="back" id="back">← Back</button>
+        <button type="button" class="btn" id="next">Continue <span class="arrow" aria-hidden="true">→</span></button>
+        <span class="enter">press <b>Enter ↵</b></span>
+      </div>
+      <div class="form-error" id="formError" role="alert"></div>
+    </form>
+
+    <div class="checking" id="checking" aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <h2 style="font-size:26px">Checking your fit…</h2>
+      <ul class="checklist">
+        <li>Reading your use case</li>
+        <li>Matching your stack and volume</li>
+        <li>Preparing your next step</li>
+      </ul>
+    </div>
+  </main>
+</div>
+<footer class="narrow foot" style="width:100%;border-top:0">
+  <span>Recourse Software Inc. · 815 Safari Rd, Millgrove, Ontario, Canada · <a href="mailto:hello@knowdrive.ai">hello@knowdrive.ai</a></span>
+</footer>
+<script src="../assets/apply.js"></script>
+</body>
+</html>

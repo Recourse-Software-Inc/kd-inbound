@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>You're booked · knowdrive</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07090f">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/funnel.css">
+<script src="../assets/config.js"></script>
+<script src="../assets/common.js"></script>
+</head>
+<body>
+<header class="wrap top">
+  <a class="wordmark" href="../"><span class="dot" aria-hidden="true"></span>knowdrive</a>
+  <span class="top-note">Booked</span>
+</header>
+
+<main class="narrow" style="max-width:780px;padding-bottom:40px">
+  <div class="banner" role="status">
+    <div class="check" aria-hidden="true">✓</div>
+    <div>
+      <b id="when">Your fit call is booked.</b>
+      <div class="small muted" id="whenSub">The calendar invite and video link are in your inbox.</div>
+    </div>
+  </div>
+  <section style="padding:40px 0 10px" id="videoSec">
+    <p class="eyebrow">Before your call · 4 minutes</p>
+    <h1 style="font-size:clamp(30px,4.2vw,44px)">Watch this before the call.</h1>
+    <div class="video" id="cv" style="margin-top:18px"></div>
+    <p class="small muted" style="margin-top:10px">How cited retrieval works, what a pilot looks like, and what we'll ask you about.</p>
+  </section>
+
+  <section style="padding:30px 0">
+    <h2 style="font-size:28px">Three things that make the call worth it</h2>
+    <div class="todo" style="margin-top:18px">
+      <div class="item"><div class="n">1</div><div><h3>Tell us the question your AI gets wrong</h3>
+        <p>One real example lets us show cited retrieval on a problem you care about.</p>
+        <form id="prep" style="margin-top:14px" novalidate>
+          <div class="field"><label for="wrong">A question your agents or search get wrong today</label><textarea id="wrong" name="wrong" maxlength="800" style="min-height:90px"></textarea></div>
+          <div class="field"><label for="team">Anyone joining you? <span class="muted">(name and role)</span></label><input id="team" name="team" maxlength="300" placeholder="e.g. Priya, Head of Platform"></div>
+          <div id="smsAsk" hidden>
+            <div class="field"><label for="phone">Mobile for a reminder text one hour before</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 416 555 0100"></div>
+            <label class="consent"><input type="checkbox" id="smsConsent"><span>Text me from Recourse Software Inc. (knowdrive) about this call: up to 3 reminder or rescheduling texts. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
+          </div>
+          <button class="btn" type="submit" id="prepBtn">Send to the team</button>
+          <span class="small" id="prepMsg" style="margin-left:12px" aria-live="polite"></span>
+        </form>
+      </div></div>
+      <div class="item"><div class="n">2</div><div><h3>Have 3–5 representative files handy</h3><p>Non-sensitive documents, a recording or a video that look like your real corpus. Nothing leaves your machine unless you choose to share it on the call.</p></div></div>
+      <div class="item"><div class="n">3</div><div><h3>Bring whoever owns the budget or the stack</h3><p>If someone else signs off on infrastructure or security, invite them now; forward the calendar invite. Calls with the decision-maker present end with a real next step.</p></div></div>
+    </div>
+  </section>
+
+  <section style="padding:20px 0">
+    <h2 style="font-size:28px">Who you'll meet</h2>
+    <div class="grid-2" id="hosts" style="margin-top:14px"></div>
+  </section>
+
+  <section style="padding:24px 0">
+    <h2 style="font-size:28px">Common questions</h2>
+    <details class="faq"><summary>Do I need to prepare anything technical?</summary><p>No. If you can describe your sources and where answers break, that's enough. Engineers are welcome to go deep.</p></details>
+    <details class="faq"><summary>Will there be a live demo?</summary><p>Yes. You'll see cited retrieval in the knowdrive Inspector, with the file, version and byte range behind each passage.</p></details>
+    <details class="faq"><summary>We need an NDA first.</summary><p>Reply to the confirmation email and we'll sort it out before the call.</p></details>
+    <details class="faq"><summary>How do I reschedule?</summary><p>Use the reschedule link in your confirmation email. Please move it rather than skip it; another applicant can take the slot.</p></details>
+    <details class="faq"><summary>What does a pilot cost?</summary><p>Enterprise plans start at <span data-floor>$5,120</span>/month. We'll scope a pilot on the call based on your volume and jurisdiction.</p></details>
+  </section>
+</main>
+
+<footer class="wrap foot">
+  <span>© <span data-year></span> Recourse Software Inc. · Made in Canada</span>
+  <span><a href="https://knowdrive.ai">knowdrive.ai</a></span>
+</footer>
+
+<script>
+(async function () {
+  const C = KD.C;
+  let lead = KD.store.sget("kd_lead") || {};
+  let booking = KD.store.sget("kd_booking") || {};
+  // From the reminder email: ?lid=…&t=… loads the lead and the booked time without a login.
+  const qp = new URLSearchParams(location.search);
+  if (qp.get("lid") && qp.get("t")) {
+    try {
+      const r = await KD.api("/api/lead?lid=" + encodeURIComponent(qp.get("lid")) + "&t=" + encodeURIComponent(qp.get("t")), null, { timeout: 5000 });
+      lead = { id: r.id, token: qp.get("t"), name: r.name, email: r.email, phone: r.phone, company: r.company };
+      if (r.bookingStart) booking = { startTime: new Date(r.bookingStart).toISOString() };
+      KD.store.sset("kd_lead", lead);
+    } catch {}
+  }
+  document.querySelectorAll("[data-floor]").forEach(n => n.textContent = "$" + Number(C.enterpriseFloorMonthly).toLocaleString("en-US"));
+  if (C.confirmVideo) KD.videoInto(document.getElementById("cv"), C.confirmVideo, "Watch-before-your-call video");
+  else document.getElementById("videoSec").remove(); // no placeholder: an empty video slot reads as broken
+
+  // Date line + add-to-calendar
+  if (booking.startTime) {
+    const d = new Date(booking.startTime);
+    if (!isNaN(d)) {
+      const fmt = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
+      document.getElementById("when").textContent = "Booked: " + fmt.format(d);
+    }
+  }
+
+  document.getElementById("hosts").innerHTML = (C.hosts || []).map(h =>
+    '<div class="panel" style="padding:18px"><b style="font-family:var(--display)">' + h.name.replace(/</g, "&lt;") + '</b><div class="small muted">' + h.role.replace(/</g, "&lt;") + '</div></div>').join("");
+
+  if (!lead.phone) document.getElementById("smsAsk").hidden = false;
+
+  const prep = document.getElementById("prep");
+  prep.addEventListener("submit", async e => {
+    e.preventDefault();
+    const msg = document.getElementById("prepMsg");
+    const btn = document.getElementById("prepBtn");
+    const wrong = prep.wrong.value.trim(), team = prep.team.value.trim();
+    const phone = KD.normPhone(prep.phone ? prep.phone.value : "");
+    const smsConsent = document.getElementById("smsConsent").checked;
+    if (!lead.id || !lead.token) { msg.style.color = "var(--red)"; msg.textContent = "Open this page from your reminder email, or reply to your confirmation email with this."; return; }
+    if (!wrong && !team && !smsConsent) { msg.style.color = "var(--red)"; msg.textContent = "Add at least one answer first."; return; }
+    if (smsConsent && !/^\+\d{8,15}$/.test(phone)) { msg.style.color = "var(--red)"; msg.textContent = "Add a mobile number with country code, e.g. +1 416 555 0100."; return; }
+    btn.disabled = true; msg.style.color = "var(--muted)"; msg.textContent = "Sending…";
+    try {
+      await KD.api("/api/precall", { leadId: lead.id, token: lead.token, email: lead.email, wrong, team, phone, smsConsent });
+      msg.style.color = "var(--teal)"; msg.textContent = "Got it. We'll prepare around this.";
+      KD.track("kd_precall_submitted", {});
+    } catch (err) {
+      btn.disabled = false; msg.style.color = "var(--red)";
+      msg.textContent = err.data && err.data.field === "phone" ? err.data.error : "Couldn't send. Reply to your confirmation email with this instead.";
+    }
+  });
+  KD.track("kd_confirmed_view", {});
+})();
+</script>
+</body>
+</html>

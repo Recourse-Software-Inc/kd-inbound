@@ -2,7 +2,7 @@
 // Anything left as an empty string is hidden or skipped gracefully.
 window.KD_FUNNEL = {
   // Cloudflare Worker base URL (no trailing slash), e.g. https://inbound-api.knowdrive.ai
-  apiBase: "https://kd-inbound.recourse.workers.dev",
+  apiBase: "https://kd-inbound.joelauge.workers.dev",
 
   // Cal.com booking link for the fit call ("username/event-slug" or "team/x/event-slug").
   calLink: "recourse/knowdrive-fit-call",

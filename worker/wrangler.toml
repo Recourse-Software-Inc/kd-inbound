@@ -10,7 +10,7 @@ crons = ["*/10 * * * *"]
 [[d1_databases]]
 binding = "DB"
 database_name = "kd-inbound"
-database_id = "REPLACE_WITH_D1_ID"   # npx wrangler d1 create kd-inbound
+database_id = "254c9daf-af76-4b81-95fb-5d2fec76d33e"
 
 [observability]
 enabled = true
@@ -18,7 +18,7 @@ enabled = true
 [vars]
 SITE_URL = "https://recourse-software-inc.github.io/kd-inbound"
 SITE_ORIGINS = "https://recourse-software-inc.github.io"
-API_URL = "https://kd-inbound.recourse.workers.dev"
+API_URL = "https://kd-inbound.joelauge.workers.dev"
 FROM_EMAIL = "Joel at knowdrive <joel@knowdrive.ai>"
 REPLY_DOMAIN = "knowdrive.ai"         # Email Routing: replies+<leadId>@knowdrive.ai → this Worker
 REPLY_LOCAL = "replies"

@@ -16,7 +16,6 @@
 <body>
 <header class="wrap top">
   <a class="wordmark" href="../"><img class="mark" src="../assets/kd-mark.png" alt="" width="34" height="21">knowdrive</a>
-  <span class="top-note">Booked</span>
 </header>
 
 <main class="narrow" style="max-width:780px;padding-bottom:40px">
@@ -55,24 +54,16 @@
     </div>
   </section>
 
-  <section style="padding:20px 0">
-    <h2 style="font-size:28px">Who you'll meet</h2>
-    <div class="grid-2" id="hosts" style="margin-top:14px"></div>
-  </section>
 
   <section style="padding:24px 0">
     <h2 style="font-size:28px">Common questions</h2>
-    <details class="faq"><summary>Do I need to prepare anything technical?</summary><p>No. If you can describe your sources and where answers break, that's enough. Engineers are welcome to go deep.</p></details>
-    <details class="faq"><summary>Will there be a live demo?</summary><p>Yes. You'll see cited retrieval in the knowdrive Inspector, with the file, version and byte range behind each passage.</p></details>
     <details class="faq"><summary>We need an NDA first.</summary><p>Reply to the confirmation email and we'll sort it out before the call.</p></details>
     <details class="faq"><summary>How do I reschedule?</summary><p>Use the reschedule link in your confirmation email. Please move it rather than skip it; another applicant can take the slot.</p></details>
-    <details class="faq"><summary>What does a pilot cost?</summary><p>Enterprise plans start at <span data-floor>$5,120</span>/month. We'll scope a pilot on the call based on your volume and jurisdiction.</p></details>
   </section>
 </main>
 
 <footer class="wrap foot">
-  <span>© <span data-year></span> Recourse Software Inc. · Made in Canada</span>
-  <span><a href="https://knowdrive.ai">knowdrive.ai</a></span>
+  <span>© <span data-year></span> Recourse Software Inc.</span>
 </footer>
 
 <script>
@@ -103,7 +94,7 @@
     }
   }
 
-  document.getElementById("hosts").innerHTML = (C.hosts || []).map(h =>
+  if (document.getElementById("hosts")) document.getElementById("hosts").innerHTML = (C.hosts || []).map(h =>
     '<div class="panel" style="padding:18px"><b style="font-family:var(--display)">' + h.name.replace(/</g, "&lt;") + '</b><div class="small muted">' + h.role.replace(/</g, "&lt;") + '</div></div>').join("");
 
   if (!lead.phone) document.getElementById("smsAsk").hidden = false;

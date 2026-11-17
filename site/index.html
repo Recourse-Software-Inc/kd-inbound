@@ -7,7 +7,7 @@
 <title>knowdrive · Design-partner program for AI and platform teams</title>
 <meta name="description" content="Cited answers from your company's data for every agent and employee. Apply for a knowdrive design-partner build.">
 <meta property="og:title" content="knowdrive design-partner program">
-<meta property="og:description" content="Shared memory and cited answers for AI agents, on Arm CPUs in your jurisdiction.">
+<meta property="og:description" content="Cited answers from your company's data for every agent and employee. Runs on ordinary CPUs in your jurisdiction.">
 <meta name="theme-color" content="#07090f">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
@@ -17,97 +17,53 @@
 </head>
 <body>
 <header class="wrap top">
-  <a class="wordmark" href="./"><img class="mark" src="assets/kd-mark.png" alt="" width="34" height="21">knowdrive</a>
-  <span class="top-note">by Recourse Software · Canada</span>
+  <a class="wordmark" href="./" aria-label="knowdrive"><img class="mark" src="assets/kd-mark.png" alt="" width="34" height="21">knowdrive</a>
 </header>
 
 <main>
   <section class="wrap hero">
     <div>
-      <p class="eyebrow">For AI, ML and platform leaders</p>
       <h1>Cited answers from your company's data, for <span class="grad">every agent and employee</span>.</h1>
-      <p class="lede">knowdrive stores your documents, audio and video once and returns the exact passage behind every answer, cited to file, version and byte range. It runs on ordinary Arm CPUs, in your jurisdiction, behind any model.</p>
+      <p class="lede">Every answer comes back with the exact passage behind it: file, version and byte range. Runs on ordinary CPUs rather than GPUs, in your jurisdiction, behind any model.</p>
       <div data-hero-cta>
         <a class="btn" href="apply/" data-carry data-cta="hero">Apply for a design-partner build <span class="arrow" aria-hidden="true">→</span></a>
-        <p class="cta-note">2-minute application · 30-minute fit call with the founders · Enterprise plans from <span data-floor>$5,120</span>/month</p>
+        <p class="cta-note">2-minute application · 30-minute call with the founders</p>
       </div>
     </div>
     <div>
-      <div class="video" id="vsl" aria-label="Breakdown video"></div>
-      <p class="small muted" style="margin-top:10px" id="vslNote">Watch: how a design-partner build goes from your corpus to cited answers in your agents.</p>
-    </div>
-  </section>
-
-  <section class="wrap" aria-label="Proof">
-    <div class="proof">
-      <div><b>Any MCP client</b><span>Claude, Claude Code, Codex, Cursor, or REST</span></div>
-      <div><b>Every answer cited</b><span>File, version, and byte range or timestamp</span></div>
-      <div><b>Arm CPUs</b><span>Embedding and retrieval on CPU, no GPU queue</span></div>
-      <div><b>80+ languages</b><span>PDF, Office, HTML, images, audio and video</span></div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="wrap grid-2" style="align-items:start">
-      <div>
-        <p class="eyebrow">The problem</p>
-        <h2>Your agents answer fast. Nobody can check where the answer came from.</h2>
-        <p class="muted">Most teams run a vector database, a file store and a chunking pipeline that were built separately. Costs climb with every re-index, answers drift, and when legal or a customer asks "where did that come from?" there is no trail.</p>
-        <p class="muted">knowdrive replaces those three systems with one store. Content is vectorized once and read at any scale, every result carries its citation, and your material is isolated per store, encrypted at rest and never used to train models.</p>
-      </div>
-      <div class="panel">
-        <p class="eyebrow" style="color:var(--amber)">Good fit</p>
-        <ul class="muted" style="margin:0 0 18px;padding-left:20px">
-          <li>You ship retrieval, search or agents to customers or staff</li>
-          <li>You need an audit trail for what your AI tells people</li>
-          <li>Your data has to stay in Canada, the EU or on your own hardware</li>
-          <li>Retrieval cost or answer quality is already a line item</li>
-        </ul>
-        <p class="eyebrow" style="color:var(--faint)">Better served by the free plan</p>
-        <ul class="muted" style="margin:0;padding-left:20px">
-          <li>Personal projects and early prototypes</li>
-          <li>Teams without a production use case this year</li>
-        </ul>
-      </div>
+      <div class="video" id="vsl" aria-label="Example of a cited result"></div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <p class="eyebrow">How a design-partner build runs</p>
-      <h2>Five steps from your corpus to cited answers in production.</h2>
-      <div class="steps" style="margin-top:28px">
-        <div class="step"><div class="num">01</div><div><h3>Fit call</h3><p>30 minutes with the founders. We map your sources, your agents and your compliance constraints, and decide together whether a pilot makes sense.</p></div></div>
-        <div class="step"><div class="num">02</div><div><h3>Pilot on your corpus</h3><p>We provision a store in your jurisdiction and load a representative slice of your real documents, recordings and video.</p></div></div>
-        <div class="step"><div class="num">03</div><div><h3>Wire it into your agents</h3><p>Claude, Claude Code, Codex, Cursor or any MCP client connects directly. Your own apps use the REST API.</p></div></div>
-        <div class="step"><div class="num">04</div><div><h3>Measure against what you run today</h3><p>Cost per query, answer quality and citation coverage, side by side with your current stack.</p></div></div>
-        <div class="step"><div class="num">05</div><div><h3>Hand-off and enablement</h3><p>Your team runs it. Deployment package and enablement days included; you own the store and the data.</p></div></div>
-      </div>
-      <div style="margin-top:34px">
-        <a class="btn" href="apply/" data-carry data-cta="steps">See if you qualify <span class="arrow" aria-hidden="true">→</span></a>
+      <h2>How a design-partner build runs</h2>
+      <div class="steps" style="margin-top:24px">
+        <div class="step"><div class="num">01</div><div><h3>Fit call</h3><p>30 minutes: your sources, your agents, your constraints.</p></div></div>
+        <div class="step"><div class="num">02</div><div><h3>Pilot on your corpus</h3><p>A store in your jurisdiction, loaded with a slice of your real content.</p></div></div>
+        <div class="step"><div class="num">03</div><div><h3>Wire it into your agents</h3><p>Claude, Codex, Cursor or any MCP client; REST for your own apps.</p></div></div>
+        <div class="step"><div class="num">04</div><div><h3>Measure it</h3><p>Cost per query, answer quality and citation coverage against what you run today.</p></div></div>
+        <div class="step"><div class="num">05</div><div><h3>Hand-off</h3><p>Your team runs it. You own the store and the data.</p></div></div>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="narrow">
-      <p class="eyebrow">Questions</p>
       <h2>Before you apply</h2>
-      <details class="faq"><summary>What does it cost?</summary><p>Enterprise plans start at <span data-floor>$5,120</span>/month: a flat org fee plus compute at cost, with storage overage billed per GB. Self-serve plans start free (500 MB, 500 searches a month) if you want to try it first.</p></details>
-      <details class="faq"><summary>Where does our data live?</summary><p>In the jurisdiction you choose. knowdrive runs on ordinary Arm CPUs, so it can run in a Canadian or EU region or on your own hardware. Each store is isolated and encrypted at rest, and nothing is used to train models.</p></details>
-      <details class="faq"><summary>Which models and tools does it work with?</summary><p>Any MCP-compatible assistant (Claude, Claude Code, OpenAI Codex, Cursor and others) plus a REST API for your own applications. Search is vector, full-text or hybrid across 80+ languages.</p></details>
-      <details class="faq"><summary>What happens after I apply?</summary><p>If the application looks like a fit you pick a time straight away. If it doesn't, we send you the free plan and the resources that match what you told us, so you are never left waiting.</p></details>
-      <details class="faq"><summary>What do I get from the call?</summary><p>A scoped view of your sources and constraints, a live look at cited retrieval on content like yours, and a written go/no-go with what a pilot would cost.</p></details>
+      <details class="faq"><summary>What does it cost?</summary><p>Enterprise plans start at <span data-floor>$5,120</span>/month. Smaller teams can start on the free plan.</p></details>
+      <details class="faq"><summary>Where does our data live?</summary><p>In the jurisdiction you choose, including on your own hardware. Each store is isolated, encrypted at rest and never used to train models.</p></details>
+      <details class="faq"><summary>What happens after I apply?</summary><p>If it's a fit, you pick a call time on the next screen. If not, you get the free plan and resources that match what you told us.</p></details>
       <div style="margin-top:34px">
-        <a class="btn" href="apply/" data-carry data-cta="faq">Start the application <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn" href="apply/" data-carry data-cta="faq">Apply for a design-partner build <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
 </main>
 
 <footer class="wrap foot">
-  <span>© <span data-year></span> Recourse Software Inc. · Made in Canada</span>
-  <span><a href="https://knowdrive.ai">knowdrive.ai</a> · <a data-privacy href="https://knowdrive.ai/privacy">Privacy</a></span>
+  <span>© <span data-year></span> Recourse Software Inc.</span>
+  <a data-privacy href="https://knowdrive.ai/privacy">Privacy</a>
 </footer>
 
 <div class="sticky-cta"><a class="btn block" href="apply/" data-carry data-cta="sticky">Apply for a design-partner build →</a></div>
@@ -129,7 +85,6 @@
         <div style="font-size:15.5px;margin-bottom:10px">“…we keep the recordings for two years, that's the policy…”</div>
         <div class="mono small" style="color:var(--violet)">calls/team-sync-2026-03-12.mp4 · v1 · 00:14:32–00:14:41</div>
       </div>`;
-    document.getElementById("vslNote").textContent = "Illustration: every passage comes back with its file, version and exact location, including inside audio and video.";
   }
   document.querySelectorAll("[data-floor]").forEach(n => n.textContent = "$" + Number(C.enterpriseFloorMonthly).toLocaleString("en-US"));
   document.querySelectorAll("[data-privacy]").forEach(a => a.href = C.privacyUrl);

@@ -8,7 +8,7 @@ Both use the same look as the source ad. You talk to camera for the hook. The re
 
 **Problem (to camera):** "Most teams run three systems they built separately: a vector database, a file store and a chunking pipeline. Every re-index costs money. Answers drift. And when legal or a customer asks where an answer came from, there's no trail."
 
-**What knowdrive does (Inspector screen recording):** "knowdrive stores documents, audio and video once. Every result comes back as the exact passage, cited to its file, version and byte range, or a timestamp for media. It runs on ordinary Arm CPUs, so it can run in Canada, the EU or on your own hardware. And it works with Claude, Codex, Cursor or any MCP client."
+**What knowdrive does (Inspector screen recording):** "knowdrive stores documents, audio and video once. Every result comes back as the exact passage, cited to its file, version and byte range, or a timestamp for media. It runs on ordinary CPUs rather than GPUs, so it can run in Canada, the EU or on your own hardware. And it works with Claude, Codex, Cursor or any MCP client."
 
 **How a design-partner build runs (diagram):** walk the five steps: fit call, pilot on your corpus, wire it into your agents, measure against what you run today, hand-off.
 

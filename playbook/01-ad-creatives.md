@@ -11,7 +11,7 @@ The source system runs nine proven formats at once and lets the qualified-lead s
 | # | Format | Slug (`utm_content`) | Hook (first 2 seconds) | Body beats | CTA |
 |---|---|---|---|---|---|
 | 1 | UGC / selfie | `ugc-selfie` | "Your agent just told a customer something. Can you show where it came from?" | Joel on phone camera. 3 beats: answers ship without sources → knowdrive returns the exact passage with file, version and byte range → we're taking on a small number of design partners. | "Apply, link below." |
-| 2 | Static text | `static-text` | Large type: **"Every answer cited to file, version and byte range."** | Sub-line: "One service in place of your vector DB, file store and chunking pipeline." Small: "Runs on Arm CPUs in your jurisdiction." | "Apply for a design-partner build" |
+| 2 | Static text | `static-text` | Large type: **"Every answer cited to file, version and byte range."** | Sub-line: "One service in place of your vector DB, file store and chunking pipeline." Small: "Runs on ordinary CPUs rather than GPUs, in your jurisdiction." | "Apply for a design-partner build" |
 | 3 | Green screen | `green-screen` | Joel in front of a typical RAG architecture diagram: "Count the systems in this picture." | Point to vector DB, blob store, chunker, re-index jobs. Swap the background to a single knowdrive box. "Vectorize once, read at any scale." | "See if you qualify" |
 | 4 | Carousel | `carousel` | Card 1: "5 questions legal will ask about your AI" | 2: Where did this answer come from? 3: Which version of the file? 4: Where is the data stored? 5: Was our data used to train a model? 6: knowdrive answers all four by default. 7: CTA. | "Apply" |
 | 5 | Podcast clip | `podcast` | A 30–45 s cut from The Brain Podcast: "Attention as a service." | Joel explains reading the exact passage behind each answer and why cost per query drops when content is vectorized once. Burned-in captions. | "Link in the description" |
@@ -34,7 +34,7 @@ The source system runs nine proven formats at once and lets the qualified-lead s
 >
 > Most teams run a vector database, a file store and a chunking pipeline built separately. Every re-index costs money, answers drift, and when someone asks "where did that come from?" there's no trail.
 >
-> knowdrive is one service: content vectorized once, every result cited to file, version and byte range, running on Arm CPUs in your jurisdiction. Works with Claude, Codex, Cursor and any MCP client.
+> knowdrive is one service: content vectorized once, every result cited to file, version and byte range, running on ordinary CPUs rather than GPUs, in your jurisdiction. Works with Claude, Codex, Cursor and any MCP client.
 >
 > We're onboarding a small number of enterprise design partners. Enterprise plans start at $5,120/month.
 >

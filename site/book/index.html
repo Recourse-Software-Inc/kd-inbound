@@ -16,25 +16,13 @@
 <body>
 <header class="wrap top">
   <a class="wordmark" href="../"><img class="mark" src="../assets/kd-mark.png" alt="" width="34" height="21">knowdrive</a>
-  <span class="top-note">Step 2 of 2</span>
 </header>
 
 <main class="wrap" style="padding-bottom:60px">
   <h1 class="mob-only" id="mobHello" style="font-size:24px;margin:0 0 14px">Pick a time for your fit call.</h1>
   <div class="grid-2" style="grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start" id="bookGrid">
     <div id="bookInfo">
-      <span class="tag teal" style="margin-bottom:16px">✓ Application approved</span>
       <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">Pick a time with the founders.</h1>
-      <p class="muted" id="intro">30 minutes on video with the founders. Pick the slot that suits you.</p>
-      <div class="panel" style="margin-top:22px">
-        <p class="eyebrow" style="margin-bottom:10px">On the call</p>
-        <ul class="muted" style="margin:0;padding-left:20px;display:grid;gap:6px">
-          <li>Your sources, your agents and where answers break today</li>
-          <li>Live look at cited retrieval on content like yours</li>
-          <li>Jurisdiction, security and deployment options</li>
-          <li>What a pilot would cost and how long it would take</li>
-        </ul>
-      </div>
       <p class="small muted" style="margin-top:18px">Can't see a time that works? <a id="altLink" href="#">Open the full calendar</a>, or email <a href="mailto:hello@knowdrive.ai">hello@knowdrive.ai</a> and we'll find one.</p>
     </div>
     <div>
@@ -52,7 +40,7 @@
   #bookGrid{grid-template-columns:1fr !important; gap:20px !important}
   #bookGrid > div:last-child{order:-1}
   #bookInfo h1{font-size:26px !important}
-  #bookInfo .tag, #bookInfo #intro, #bookInfo h1{display:none}
+  #bookInfo h1{display:none}
 }
 @media (min-width: 921px){ .mob-only{display:none} }
 </style>

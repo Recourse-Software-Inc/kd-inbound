@@ -9,7 +9,7 @@ export const FACTS = `
 - Works with Claude, Claude Code, OpenAI Codex, Cursor and any MCP client.
 - Replaces a separately built vector database, file store and chunking pipeline with one service.
 - Security: material is isolated per store, encrypted at rest, and never used to train AI models.
-- Architecture: VORAS (Vectorize Once, Read at Any Scale). Runs on ordinary Arm CPUs, so it can run in the customer's jurisdiction (e.g. Canada, EU) or on their own hardware, behind any model including local open models.
+- Architecture: VORAS (Vectorize Once, Read at Any Scale). Runs on ordinary CPUs rather than GPUs, so it can run in the customer's jurisdiction (e.g. Canada, EU) or on their own hardware, behind any model including local open models.
 - Customers: never name, describe or hint at any customer. If asked, say Joel can talk about references on the call.
 - Pricing: Free plan (500 MB, 500 searches/month, no card). Launch $19/month. Scale $249/month. Enterprise starts at $5,120/month: flat org fee plus compute at cost plus per-GB storage overage. Searches beyond plan: $0.001 each.
 - The fit call: 30 minutes on video with the founders. Covers sources, agents, where answers break today, a live look at cited retrieval in the knowdrive Inspector, jurisdiction and deployment options, and what a pilot would cost.

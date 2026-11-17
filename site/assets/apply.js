@@ -91,7 +91,7 @@
     const likelyDQ = localScore(a, contact()).route !== "qualified"; // same rule as the final button
     document.getElementById("contactHint").textContent = likelyDQ
       ? "We'll send you the free plan and the resources that match what you told us."
-      : "If it's a fit, the next screen opens the founders' calendar: 30 minutes, live demo on your files. If not, we email you the free plan.";
+      : "If it's a fit, the next screen opens Joel's calendar: 30 minutes, live demo on your files. If not, we email you the free plan.";
   }
 
   function valid(id, report) {

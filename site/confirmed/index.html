@@ -22,7 +22,7 @@
   <div class="banner" role="status">
     <div class="check" aria-hidden="true">✓</div>
     <div>
-      <b id="when">Your call is booked · 30 min with the founders</b>
+      <b id="when">Your call is booked · 30 min with Joel</b>
       <div class="small muted" id="whenSub">Invite and video link are in your inbox.</div>
     </div>
   </div>
@@ -54,7 +54,7 @@
         <form id="prep" style="margin-top:14px" novalidate>
           <div class="field"><label for="wrong">A question your agents or search get wrong today</label><textarea id="wrong" name="wrong" maxlength="800" style="min-height:90px" placeholder="e.g. Which version of the contract set the 2024 rate cap?"></textarea></div>
           <div class="field"><label for="team">Who's joining you? <span class="muted">(name and role)</span></label><input id="team" name="team" maxlength="300" placeholder="e.g. Priya, Head of Platform"></div>
-          <button class="btn" type="submit" id="prepBtn">Send to the founders</button>
+          <button class="btn" type="submit" id="prepBtn">Send to Joel</button>
           <span class="small" id="prepMsg" style="margin-left:12px" aria-live="polite"></span>
         </form>
       </div></div>
@@ -100,7 +100,7 @@
     const d = new Date(booking.startTime);
     if (!isNaN(d)) {
       const fmt = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-      document.getElementById("when").textContent = "Booked: " + fmt.format(d) + " · 30 min with the founders";
+      document.getElementById("when").textContent = "Booked: " + fmt.format(d) + " · 30 min with Joel";
     }
   }
 

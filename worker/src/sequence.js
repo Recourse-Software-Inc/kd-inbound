@@ -65,12 +65,14 @@ export async function scheduleSeq(env, lead, seq, base = now()) {
   if (stmts.length) await env.DB.batch(stmts);
 }
 
-export async function scheduleReminders(env, lead, startTs) {
+export async function scheduleReminders(env, lead, startTs, { moved = false } = {}) {
   await cancelSeqs(env, lead.id, ["reminder"]);
   const t = now(); const stmts = [];
   const add = (step, ch, at) => stmts.push(env.DB.prepare("INSERT INTO messages (lead_id, seq, step, channel, send_at, created_at) VALUES (?,?,?,?,?,?)").bind(lead.id, "reminder", step, ch, at, t));
-  if (startTs - 24 * HOUR > t + HOUR) add("t24h", "email", startTs - 24 * HOUR);
-  else if (startTs - 30 * MIN > t) add("tagenda", "email", t + 2 * MIN); // booked for today/tomorrow: agenda now
+  // Booking confirmation with the prep link goes out right away (the calendar can't redirect people
+  // to the thank-you page), unless this is just a time change.
+  if (!moved && startTs - 30 * MIN > t) add("tagenda", "email", t + 2 * MIN);
+  if (startTs - 24 * HOUR > t + 2 * HOUR) add("t24h", "email", startTs - 24 * HOUR);
   if (lead.sms_consent && lead.phone && startTs - HOUR > t + 10 * MIN) add("t1h", "sms", startTs - HOUR);
   if (stmts.length) await env.DB.batch(stmts);
 }

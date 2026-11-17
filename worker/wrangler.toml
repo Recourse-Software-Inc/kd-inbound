@@ -19,6 +19,7 @@ enabled = true
 SITE_URL = "https://recourse-software-inc.github.io/kd-inbound"
 SITE_ORIGINS = "https://recourse-software-inc.github.io"
 API_URL = "https://kd-inbound.joelauge.workers.dev"
+GCAL_OWNER = "joel@recoursellm.com"
 FROM_EMAIL = "Joel at knowdrive <joel@knowdrive.ai>"
 REPLY_DOMAIN = "knowdrive.ai"         # Email Routing: replies+<leadId>@knowdrive.ai → this Worker
 REPLY_LOCAL = "replies"

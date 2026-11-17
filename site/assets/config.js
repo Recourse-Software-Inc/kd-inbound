@@ -4,6 +4,10 @@ window.KD_FUNNEL = {
   // Cloudflare Worker base URL (no trailing slash), e.g. https://inbound-api.knowdrive.ai
   apiBase: "https://kd-inbound.joelauge.workers.dev",
 
+  // Google Calendar appointment schedule (joel@recoursellm.com): the schedule's booking-page URL,
+  // e.g. "https://calendar.google.com/calendar/appointments/schedules/AcZssZ...". Takes priority over Cal.com.
+  gcalBookingUrl: "",
+
   // Cal.com booking link for the demo call ("username/event-slug" or "team/x/event-slug").
   calLink: "",   // e.g. "joelauge/knowdrive-demo" once the event exists on YOUR Cal.com account,
   calOrigin: "https://cal.com",

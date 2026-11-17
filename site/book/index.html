@@ -20,13 +20,13 @@
 
 <main class="wrap" style="padding-bottom:60px">
   <div class="mob-only" style="margin:0 0 16px">
-    <h1 id="mobHello" style="font-size:24px;margin:0 0 8px">You qualify. Pick 30 minutes with the founders.</h1>
+    <h1 id="mobHello" style="font-size:24px;margin:0 0 8px">You qualify. Pick 30 minutes with Joel.</h1>
     <p class="muted small" style="margin:0 0 8px">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
     <ul class="call-show" id="callShowMob" style="margin-top:6px"></ul>
   </div>
   <div class="grid-2" style="grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start" id="bookGrid">
     <div id="bookInfo">
-      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a design-partner build. Pick 30 minutes with the founders.</h1>
+      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a design-partner build. Pick 30 minutes with Joel Augé, co-founder.</h1>
       <p style="margin:18px 0 0;font:600 17px/1.35 var(--display)">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
       <p class="eyebrow" style="margin:16px 0 0">On your call</p>
       <p class="small muted" id="hostLine" style="margin:6px 0 0"></p>
@@ -70,9 +70,8 @@
   document.getElementById("callShow").innerHTML = KD.callShows(lead.needs, 3).map(li).join("");
   document.getElementById("callShowMob").innerHTML = KD.callShows(lead.needs, 1).map(li).join("");
   const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
-  if (hosts) document.getElementById("hostLine").textContent = "With " + hosts;
   const first = (lead.name || "").split(/\s+/)[0];
-  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 30 minutes with the founders."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 30 minutes with the founders."; }
+  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 30 minutes with Joel Augé, co-founder."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 30 minutes with Joel."; }
   // Fallback link carries the same prefill and lead id as the embed, so the booking still matches.
   let fallbackUrl = "";
   if (C.calFallbackUrl) {
@@ -91,7 +90,28 @@
     KD.track("kd_calendar_fallback", { reason: reason || "load" });
   }
 
-  if (!C.calLink) {
+  if (C.gcalBookingUrl) {
+    // Google Calendar appointment schedule, embedded. Google can't tell this page a booking happened,
+    // so the page asks the Worker (fed by the Calendar bridge) and moves on by itself once it sees it.
+    const cal = document.getElementById("cal");
+    const src = C.gcalBookingUrl + (C.gcalBookingUrl.includes("?") ? "&" : "?") + "gv=true";
+    cal.innerHTML = '<iframe src="' + src + '" title="Pick a time" style="border:0;width:100%;height:720px;background:#fff" loading="eager"></iframe>';
+    cal.insertAdjacentHTML("afterend", '<p class="small muted" style="margin-top:10px">Use ' + (lead.email ? '<b>' + lead.email.replace(/</g, "&lt;") + '</b>' : 'the email you applied with') + ' when you book, and this page moves to your prep steps on its own.</p>');
+    if (lead.id && lead.token) {
+      const t0 = Date.now();
+      const poll = setInterval(async () => {
+        if (Date.now() - t0 > 30 * 60000) return clearInterval(poll);
+        try {
+          const r = await KD.api("/api/lead?lid=" + encodeURIComponent(lead.id) + "&t=" + encodeURIComponent(lead.token), null, { timeout: 6000 });
+          if (r.stage === "booked" && r.bookingStart) {
+            clearInterval(poll);
+            KD.store.sset("kd_booking", { startTime: new Date(r.bookingStart).toISOString() });
+            location.href = "../confirmed/" + location.search;
+          }
+        } catch {}
+      }, 8000);
+    }
+  } else if (!C.calLink) {
     // No calendar yet: one clear action, an email with the lead's details pre-filled.
     const cal = document.getElementById("cal"); cal.style.minHeight = "0";
     const body = encodeURIComponent("Two times that work for me (with time zone):\n1. \n2. \n\n" + (lead.name || "") + (lead.company ? ", " + lead.company : ""));

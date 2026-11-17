@@ -35,6 +35,7 @@ async function route(req, env, ctx) {
   if (p === "/api/precall" && req.method === "POST") return precall(req, env, ctx);
   if (p === "/hooks/cal" && req.method === "POST") return calWebhook(req, env, ctx);
   if (p === "/hooks/twilio" && req.method === "POST") return twilioWebhook(req, env, ctx);
+  if (p === "/hooks/gcal" && req.method === "POST") return gcalWebhook(req, env, ctx);
   if (p === "/u") return unsubscribe(req, url, env);
   const short = p.match(/^\/b\/([\w-]+)\/(\w{10})$/);
   if (short && req.method === "GET") return shortRedirect(env, short[1], short[2]);
@@ -205,7 +206,7 @@ async function markBooked(env, ctx, lead, { startTime, bookingUid, eventId, sour
   }
   await cancelSeqs(env, lead.id, ["followup", "rebook", "recancel", "dq"]);
   const fresh = await getLead(env, lead.id);
-  if (fresh.stage === "booked" && fresh.booking_start) await scheduleReminders(env, fresh, fresh.booking_start);
+  if (fresh.stage === "booked" && fresh.booking_start) await scheduleReminders(env, fresh, fresh.booking_start, { moved: !won });
   await logEvent(env, lead.id, "booked", { source, startTime, bookingUid, from: lead.stage, transitioned: won });
   if (won) {
     ctx.waitUntil((async () => {
@@ -280,7 +281,7 @@ async function calWebhook(req, env, ctx) {
       // A time move, whatever order the webhooks arrived in: never a new conversion.
       await env.DB.prepare("UPDATE leads SET stage=CASE WHEN stage IN ('showed','won') THEN stage ELSE 'booked' END, booking_start=?, booking_uid=?, noshow_nudged=0, updated_at=? WHERE id=?").bind(Date.parse(pl.startTime), pl.uid || lead.booking_uid, now(), lead.id).run();
       await cancelSeqs(env, lead.id, ["followup", "rebook", "recancel"]);
-      await scheduleReminders(env, await getLead(env, lead.id), Date.parse(pl.startTime));
+      await scheduleReminders(env, await getLead(env, lead.id), Date.parse(pl.startTime), { moved: true });
     } else {
       await markBooked(env, ctx, lead, { startTime: pl.startTime, bookingUid: pl.uid, source: "cal:" + type });
     }
@@ -297,6 +298,53 @@ async function calWebhook(req, env, ctx) {
     if (noShow && ["booked", "showed"].includes(lead.stage)) await setStage(env, ctx, lead, "no_show");
   }
   return json({ ok: true });
+}
+
+// ---------------------------------------------------------------- Google Calendar appointment bookings
+// An Apps Script running as the calendar owner (integrations/google-calendar/Code.gs) posts changed
+// appointment events here every minute, signed with GCAL_HOOK_SECRET.
+async function gcalWebhook(req, env, ctx) {
+  const raw = await req.text();
+  if (!env.GCAL_HOOK_SECRET) return json({ error: "GCAL_HOOK_SECRET not configured" }, 401);
+  const sig = req.headers.get("x-kd-signature") || "";
+  if (!safeEqual(sig, await hmacHex(env.GCAL_HOOK_SECRET, raw))) return json({ error: "bad signature" }, 401);
+  const body = parseJSON(raw, {});
+  const owner = String(env.GCAL_OWNER || "").toLowerCase();
+  const results = [];
+  for (const ev of (body.events || []).slice(0, 50)) {
+    const attendee = (ev.attendees || []).find(a => a.email && a.email.toLowerCase() !== owner && !a.resource) || {};
+    const email = String(attendee.email || "").toLowerCase();
+    if (!email || !ev.id) { results.push({ id: ev.id, skipped: "no guest" }); continue; }
+    let lead = await getLeadByEmail(env, email);
+    await logEvent(env, lead && lead.id, "gcal:" + (ev.status || "updated"), { id: ev.id, start: ev.start, email });
+    if (ev.status === "cancelled") {
+      if (lead && lead.stage === "booked" && (!lead.booking_uid || lead.booking_uid === ev.id)) {
+        await env.DB.prepare("UPDATE leads SET stage='cancelled', updated_at=? WHERE id=?").bind(now(), lead.id).run();
+        await cancelSeqs(env, lead.id, ["reminder"]);
+        if (ev.cancelledByOwner) ctx.waitUntil(notifySales(env, `you cancelled ${lead.name}'s call: no automatic follow-up sent`, `Reach out personally to rebook.\nAdmin: ${env.SITE_URL.replace(/\/$/, "")}/admin/#${lead.id}`));
+        else await scheduleSeq(env, await getLead(env, lead.id), "recancel");
+      }
+      results.push({ id: ev.id, ok: "cancelled" }); continue;
+    }
+    const start = Date.parse(ev.start);
+    if (isNaN(start)) { results.push({ id: ev.id, skipped: "no start" }); continue; }
+    if (!lead) {
+      const id = uid(); const t = now();
+      await env.DB.prepare("INSERT INTO leads (id, created_at, updated_at, email, name, company, stage, tz, answers, attribution, source) VALUES (?,?,?,?,?,?,?,?,?,?,?)")
+        .bind(id, t, t, email, clip(attendee.displayName || "", 120), "", "direct", "America/Toronto", "{}", "{}", "direct-booking").run();
+      lead = await getLead(env, id);
+    }
+    if (lead.stage === "booked" && lead.booking_uid === ev.id) {
+      if (lead.booking_start !== start) { // moved
+        await env.DB.prepare("UPDATE leads SET booking_start=?, noshow_nudged=0, updated_at=? WHERE id=?").bind(start, now(), lead.id).run();
+        await scheduleReminders(env, await getLead(env, lead.id), start, { moved: true });
+      }
+      results.push({ id: ev.id, ok: "unchanged-or-moved" }); continue;
+    }
+    await markBooked(env, ctx, lead, { startTime: new Date(start).toISOString(), bookingUid: ev.id, source: "gcal" });
+    results.push({ id: ev.id, ok: "booked" });
+  }
+  return json({ ok: true, results });
 }
 
 // ---------------------------------------------------------------- stage changes (admin + webhooks)

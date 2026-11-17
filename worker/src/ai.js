@@ -52,7 +52,7 @@ ${fence(answers.usecase)}`;
 
 // Intent for each step of each sequence. The model writes the words; the intent stays fixed.
 export const INTENTS = {
-  "followup:d0": "Sent minutes after they qualified but left the calendar without booking. Thank them in one short line, reflect their use case back in one line using their own words, and say the 30-minute call with the founders includes a demo on 3-5 of their own files, loaded live. Ask them to pick a time with the booking link, and say that if no slot fits they can reply with two times that do. Under 80 words.",
+  "followup:d0": "Sent minutes after they qualified but left the calendar without booking. Thank them in one short line, reflect their use case back in one line using their own words, and say the 30-minute call with Joel includes a demo on 3-5 of their own files, loaded live. Ask them to pick a time with the booking link, and say that if no slot fits they can reply with two times that do. Under 80 words.",
   "followup:d1": "Take the outcome from FACTS that matches their first selected need and say the call will show exactly that on 3-5 of their own files, loaded live. Include one proof detail (file, version and byte range; timestamp for media). Booking link. Under 60 words.",
   "followup:d3": "Address the most likely hesitation in two or three sentences using only FACTS. If their stack lists a vector database or search tool, say the pilot runs next to it on their own content and the decision rests on measured cost per query, answer quality and citation coverage. Otherwise say the call covers what a pilot would cost and how it is measured, so they have numbers for whoever approves budget. Booking link. Under 80 words.",
   "followup:d5": "Ask one question that takes a one-digit reply: which is closest, 1) timing is off, 2) someone else needs to be on the call, 3) not sure it fits what they run today. Ask them to reply with the number. Give the booking link as the alternative in one short line. Plain numbered lines are allowed in this message only. Under 60 words.",
@@ -67,7 +67,7 @@ export const INTENTS = {
 
 const SMS_INTENTS = {
   "followup:d0": "Text from Joel at knowdrive: thanks for applying; the 30-minute call includes a demo on their own files; booking link, or reply with a time that suits them.",
-  "followup:d2": "Short check-in: their demo slot is still open, 30 minutes with the founders on 3-5 of their own files. Booking link.",
+  "followup:d2": "Short check-in: their demo slot is still open, 30 minutes with Joel on 3-5 of their own files. Booking link.",
   "rebook:r0": "We missed each other today, no problem; same plan, a demo on their own files; booking link for a new time.",
   "recancel:c0": "Saw the call was cancelled; if timing was the issue, here's the link for another slot."
 };

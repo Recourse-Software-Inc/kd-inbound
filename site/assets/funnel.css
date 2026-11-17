@@ -52,7 +52,7 @@ img, video, iframe { max-width: 100%; display: block; }
 /* header */
 .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 20px; padding-bottom: 20px; }
 .wordmark { font: 600 21px/1 var(--display); letter-spacing: -.02em; color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
-.wordmark .dot { width: 22px; height: 22px; border-radius: 6px; background: conic-gradient(from 200deg, var(--blue), var(--teal), var(--violet), var(--blue)); }
+.wordmark .mark { height: 21px; width: auto; display: block; }
 .top-note { font: 500 13px/1 var(--mono); color: var(--muted); }
 
 /* type */
@@ -95,7 +95,7 @@ h3 { font-size: 20px; font-weight: 600; }
 @media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } .section { padding: 52px 0; } }
 
 /* hero */
-.hero { padding: 40px 0 64px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+.hero { padding-top: 40px; padding-bottom: 64px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
 @media (max-width: 920px) { .hero { grid-template-columns: 1fr; gap: 32px; padding-top: 16px; } }
 .video {
   position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden;

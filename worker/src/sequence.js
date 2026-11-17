@@ -164,7 +164,7 @@ async function noShowWatch(env, t) {
 
 const SHOW = {
   citations: "every answer traced to the exact passage, file and version behind it",
-  cost: "cost per answer on content like yours, against what you run today",
+  cost: "cost per answer on your files, against what you run today",
   sovereignty: "knowdrive running in your jurisdiction or on your own hardware",
   media: "search inside recordings and video, landing on the exact timestamp",
   agent_memory: "one shared memory your agents and staff all read from",

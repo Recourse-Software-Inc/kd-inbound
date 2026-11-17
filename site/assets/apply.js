@@ -78,7 +78,7 @@
     const likelyDQ = a.building === "personal" || a.budget === "no";
     document.getElementById("contactHint").textContent = likelyDQ
       ? "We'll send you the free plan and the resources that match what you told us."
-      : "If it's a fit, you'll pick a time on the next screen.";
+      : "If it's a fit, you'll pick a time on the next screen for a live demo on your files.";
   }
 
   function valid(id, report) {

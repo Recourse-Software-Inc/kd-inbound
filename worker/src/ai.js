@@ -55,7 +55,7 @@ export const INTENTS = {
   "followup:d0": "They just qualified but did not pick a time. Thank them for applying, reflect their use case back in one line, and give the booking link. Under 90 words.",
   "followup:d1": "Short nudge. Take the outcome from FACTS that matches their first selected need and say the call will show it on content like theirs. Booking link. Under 70 words.",
   "followup:d2": "Address the likely hesitation for their situation in two sentences, using only FACTS: if they listed a current vector database, use the vector-database objection answer; otherwise time or budget approval. Booking link. Under 80 words.",
-  "followup:d3": "Describe concretely what they will see on the call: a live look at cited retrieval in the knowdrive Inspector, with file, version and byte range per passage. Booking link. Under 70 words.",
+  "followup:d3": "The call includes a full demo on their own files: they bring 3-5 files, we load them during the call and run their questions, with every passage cited to file, version and byte range. Booking link. Under 70 words.",
   "followup:d5": "Ask one direct question that is easy to reply to: is the timing off, or is something about the fit unclear? Invite a one-line reply. Include the booking link as an alternative. Under 60 words.",
   "followup:d7": "Mention that the free plan exists if they want to try it before a call (500 MB, no card), and that the call is still the fastest way to scope a pilot. Booking link. Under 70 words.",
   "followup:d10": "Polite close-out: you'll stop following up about this application; the booking link stays open if timing changes. No guilt. Under 50 words.",

@@ -18,8 +18,8 @@ Work from the brief's four questions. Fill these gaps:
 
 Summarize back in one sentence: "So if knowdrive gave you X for Y, by Z, that would be worth doing?"
 
-## 2. Demo (8 min)
-Use the brief's **best demo angle**. In the Inspector, show one cited result with the file, version and byte range, then a media result returning a timestamp. If they sent their "question your AI gets wrong", run its closest analogue. Keep it to two queries and one wow moment.
+## 2. Demo on their files (8 min)
+The promise is "a full demo on your files, during the call", so have a fresh demo store ready before you join. Load the 3–5 files they bring, then run their own questions in the Inspector: one cited result with file, version and byte range, and a timestamp result if they brought audio or video. If they sent their "question your AI gets wrong", run it first. If they brought no files, fall back to the brief's **best demo angle** on sample content.
 
 ## 3. Offer (5 min)
 - **Pilot:** a store provisioned in their jurisdiction, a representative slice of their corpus, wired into one agent or app, measured against their current stack on cost per query, answer quality and citation coverage.

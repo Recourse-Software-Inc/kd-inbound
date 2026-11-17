@@ -23,7 +23,8 @@
   <div class="grid-2" style="grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start" id="bookGrid">
     <div id="bookInfo">
       <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">Pick a time with the founders.</h1>
-      <p class="eyebrow" style="margin:22px 0 0">We'll show you</p>
+      <p style="margin:18px 0 0;font:600 17px/1.35 var(--display)">A full demo on your files, during the call.</p>
+      <p class="eyebrow" style="margin:16px 0 0">Including</p>
       <ul class="call-show" id="callShow"></ul>
       <p class="small muted" style="margin-top:18px">Can't see a time that works? <a id="altLink" href="#">Open the full calendar</a>, or email <a href="mailto:hello@knowdrive.ai">hello@knowdrive.ai</a> and we'll find one.</p>
     </div>
@@ -43,6 +44,7 @@
   #bookGrid > div:last-child{order:-1}
   #bookInfo h1{font-size:26px !important}
   #bookInfo h1, #bookInfo .eyebrow, #bookInfo .call-show{display:none}
+  #mobHello::after{content:" A full demo on your files, during the call."; display:block; font:400 15px/1.4 var(--body); color:var(--muted); margin-top:6px}
 }
 @media (min-width: 921px){ .mob-only{display:none} }
 </style>

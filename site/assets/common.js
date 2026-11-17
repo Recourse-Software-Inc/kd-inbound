@@ -142,7 +142,7 @@
   // so every lead sees their own problem reflected back, in the order they ranked it.
   const NEEDS = {
     citations: "Every answer traced to the exact passage, file and version behind it",
-    cost: "Cost per answer on content like yours, against what you run today",
+    cost: "Cost per answer on your files, against what you run today",
     sovereignty: "Running in your jurisdiction or on your own hardware",
     media: "Search inside recordings and video, landing on the exact timestamp",
     agent_memory: "One shared memory your agents and staff all read from",

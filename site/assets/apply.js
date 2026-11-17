@@ -78,9 +78,9 @@
   // The last button says what happens next, based on the same rules the server applies.
   function finalLabel() {
     const l = localScore(answers(), contact());
-    return (l.route === "qualified" ? "Submit and pick a time" : "Send me the free plan") + ' <span class="arrow" aria-hidden="true">→</span>';
+    return (l.route === "qualified" ? "Pick a time" : "Send me the free plan") + ' <span class="arrow" aria-hidden="true">→</span>';
   }
-  function refreshFinal() { if (current === path()[path().length - 1]) nextBtn.innerHTML = finalLabel(); }
+  function refreshFinal() { if (current === path()[path().length - 1]) { nextBtn.innerHTML = finalLabel(); adaptCopy(); } }
 
   function adaptCopy() {
     const a = answers();
@@ -88,10 +88,10 @@
     if (a.building === "customer_product") t.textContent = "What should knowdrive do inside your product?";
     else if (a.building === "internal") t.textContent = "Which processes or teams should knowdrive support?";
     else t.textContent = "What should knowdrive do for you?";
-    const likelyDQ = a.building === "personal" || a.budget === "no";
+    const likelyDQ = localScore(a, contact()).route !== "qualified"; // same rule as the final button
     document.getElementById("contactHint").textContent = likelyDQ
       ? "We'll send you the free plan and the resources that match what you told us."
-      : "If it's a fit, the next screen opens the founders' calendar: 30 minutes, live demo on your files.";
+      : "If it's a fit, the next screen opens the founders' calendar: 30 minutes, live demo on your files. If not, we email you the free plan.";
   }
 
   function valid(id, report) {
@@ -211,8 +211,8 @@
     form.style.display = "none"; checking.classList.add("active");
     bar.style.width = "100%"; note.textContent = "";
     const items = checking.querySelectorAll(".checklist li");
-    items.forEach((li, i) => setTimeout(() => li.classList.add("done"), 600 + i * 650));
-    const minWait = new Promise(r => setTimeout(r, 2300));
+    items.forEach((li, i) => setTimeout(() => li.classList.add("done"), 600 + i * 350));
+    const minWait = new Promise(r => setTimeout(r, 1200));
 
     let result;
     try {
@@ -235,7 +235,7 @@
 
     KD.store.sset("kd_lead", {
       id: result.leadId, token: result.token, route: result.route,
-      name: c.name, email: c.email, phone: c.phone, company: c.company,
+      name: c.name, email: c.email, phone: c.phone, smsConsent: !!c.smsConsent, company: c.company,
       building: a.building, needs: a.needs, usecase: a.usecase, offline: !!result.offline
     });
     try { sessionStorage.removeItem(SAVE); } catch {}

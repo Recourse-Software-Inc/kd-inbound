@@ -21,9 +21,9 @@
 <main class="wrap" style="padding-bottom:40px">
   <section style="max-width:760px;padding:24px 0 36px">
     <p class="eyebrow" id="eyebrow">Your starting point</p>
-    <h1 style="font-size:clamp(30px,4.4vw,46px)" id="headline">Start on the free plan today: 500 MB of your files, cited answers, no card.</h1>
-    <p class="lede" id="lede">Founder calls are for teams starting an enterprise design-partner build (plans from $5,120/month). The free plan runs the same cited retrieval on 500 MB of your files, 500 searches a month, with Claude, Cursor or any MCP client.</p>
-    <a class="btn" id="freeBtn" href="#" target="_blank" rel="noopener">Create a free account, no card <span class="arrow" aria-hidden="true">→</span></a>
+    <h1 style="font-size:clamp(30px,4.4vw,46px)" id="headline">Start on the free plan today: 500 MB of your files, every answer cited.</h1>
+    <p class="lede" id="lede">Founder calls are for teams starting an enterprise design-partner build (plans from <span data-floor>$5,120</span>/month). The free plan runs the same cited retrieval on 500 MB of your files, 500 searches a month, with Claude, Cursor or any MCP client.</p>
+    <a class="btn" id="freeBtn" href="#" target="_blank" rel="noopener">See the free plan <span class="arrow" aria-hidden="true">→</span></a>
     <p class="cta-note" id="emailNote"></p>
   </section>
 
@@ -42,14 +42,15 @@
 (function () {
   const C = KD.C;
   const lead = KD.store.sget("kd_lead") || {};
+  document.querySelectorAll("[data-floor]").forEach(n => n.textContent = "$" + Number(C.enterpriseFloorMonthly).toLocaleString("en-US"));
   const first = (lead.name || "").split(/\s+/)[0];
   document.getElementById("freeBtn").href = C.freePlanUrl;
   document.getElementById("freeBtn").addEventListener("click", () => KD.track("kd_free_plan_click", {}));
   if (first) document.getElementById("eyebrow").textContent = first + ", here's your starting point";
   if (lead.building === "personal") {
-    document.getElementById("lede").textContent = "For personal and student projects the free plan has everything you need: 500 MB, 500 searches a month, and the same cited retrieval our enterprise customers use. No card.";
+    document.getElementById("lede").textContent = "For personal and student projects the free plan covers it: 500 MB, 500 searches a month, and the same cited retrieval as the enterprise plan. No card.";
   }
-  if (lead.email) document.getElementById("emailNote").textContent = "We've also emailed these links to " + lead.email + ".";
+  if (lead.email) document.getElementById("emailNote").textContent = "We've also emailed this to " + lead.email + ".";
 
   // Put the most relevant resources first.
   const needs = lead.needs || [];

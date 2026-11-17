@@ -240,7 +240,10 @@ async function precall(req, env, ctx) {
     phone = p; consent = 1;
   }
   await env.DB.prepare("UPDATE leads SET precall=?, phone=?, sms_consent=?, updated_at=? WHERE id=?").bind(JSON.stringify(data), phone, consent, now(), lead.id).run();
-  if (consent && !lead.sms_consent && lead.booking_start) await scheduleReminders(env, await getLead(env, lead.id), lead.booking_start);
+  if (consent && !lead.sms_consent && lead.booking_start && lead.booking_start - HOUR > now() + 10 * MIN) {
+    // Only the 1-hour text is new; the email reminders are already queued or sent.
+    await env.DB.prepare("INSERT INTO messages (lead_id, seq, step, channel, send_at, created_at) VALUES (?,?,?,?,?,?)").bind(lead.id, "reminder", "t1h", "sms", lead.booking_start - HOUR, now()).run();
+  }
   await logEvent(env, lead.id, "precall", data);
   if (b.wrong || b.team) ctx.waitUntil(notifySales(env, `pre-call notes: ${lead.name} (${lead.company})`, `Question their AI gets wrong:\n${data.wrong || "-"}\n\nJoining: ${data.team || "-"}`));
   return json({ ok: true });

@@ -153,7 +153,7 @@
     if (!list.length) list.push(NEEDS.citations, NEEDS.cost);
     return list.slice(0, max || 3).concat([OUTCOME]);
   }
-  const OUTCOME = "Leave knowing whether a design-partner build fits, and what it costs (enterprise from $5,120/month)";
+  const OUTCOME = "Leave knowing whether a design-partner build fits, and what it costs (enterprise from $" + Number(C.enterpriseFloorMonthly || 5120).toLocaleString("en-US") + "/month)";
 
   window.KD = { C, store, NEEDS, callShows, attribution, track, api, videoInto, normPhone, uid: () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)) };
 

@@ -48,7 +48,7 @@
   #bookGrid{grid-template-columns:1fr !important; gap:20px !important}
   #bookGrid > div:last-child{order:-1}
   #bookInfo h1{font-size:26px !important}
-  #bookInfo h1, #bookInfo .eyebrow, #bookInfo .call-show{display:none}
+  #bookInfo h1, #bookInfo .eyebrow, #bookInfo .call-show, #bookInfo > p:first-of-type{display:none}
 
 }
 @media (min-width: 921px){ .mob-only{display:none} }
@@ -68,37 +68,55 @@
   }
   const li = t => "<li>" + t.replace(/</g, "&lt;") + "</li>";
   document.getElementById("callShow").innerHTML = KD.callShows(lead.needs, 3).map(li).join("");
-  document.getElementById("callShowMob").innerHTML = KD.callShows(lead.needs, 2).map(li).join("");
+  document.getElementById("callShowMob").innerHTML = KD.callShows(lead.needs, 1).map(li).join("");
   const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
   if (hosts) document.getElementById("hostLine").textContent = "With " + hosts;
   const first = (lead.name || "").split(/\s+/)[0];
   if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 30 minutes with the founders."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 30 minutes with the founders."; }
   // Fallback link carries the same prefill and lead id as the embed, so the booking still matches.
-  const fb = new URL(C.calFallbackUrl);
-  if (lead.name) fb.searchParams.set("name", lead.name);
-  if (lead.email) fb.searchParams.set("email", lead.email);
-  if (lead.id) fb.searchParams.set("metadata[leadId]", lead.id);
-  const fallbackUrl = fb.toString();
+  let fallbackUrl = "";
+  if (C.calFallbackUrl) {
+    const fb = new URL(C.calFallbackUrl);
+    if (lead.name) fb.searchParams.set("name", lead.name);
+    if (lead.email) fb.searchParams.set("email", lead.email);
+    if (lead.id) fb.searchParams.set("metadata[leadId]", lead.id);
+    fallbackUrl = fb.toString();
+  }
+  const mail = "mailto:hello@knowdrive.ai?subject=" + encodeURIComponent("Times for my knowdrive demo" + (first ? " (" + lead.name + ")" : ""));
+  function showFallback(reason) {
+    const f = document.getElementById("calFallback") || (() => { const d = document.createElement("div"); d.id = "calFallback"; d.className = "cal-fallback"; document.getElementById("cal").prepend(d); return d; })();
+    f.innerHTML = '<p style="margin:30px 0 16px">' + (reason || "The calendar didn\u2019t load.") + '</p>' +
+      (fallbackUrl ? '<a class="btn" href="' + fallbackUrl + '" target="_blank" rel="noopener">Open it on cal.com \u2192</a><p class="small muted" style="margin-top:16px">' : '<p class="muted">') +
+      'Or email <a href="' + mail + '">hello@knowdrive.ai</a> two times that work and we\u2019ll send the invite.</p>';
+    KD.track("kd_calendar_fallback", { reason: reason || "load" });
+  }
 
-  // Cal.com embed loader (official snippet)
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  if (!C.calLink) {
+    // No calendar yet: one clear action, an email with the lead's details pre-filled.
+    const cal = document.getElementById("cal"); cal.style.minHeight = "0";
+    const body = encodeURIComponent("Two times that work for me (with time zone):\n1. \n2. \n\n" + (lead.name || "") + (lead.company ? ", " + lead.company : ""));
+    cal.innerHTML = '<div class="cal-fallback"><p style="margin:0 0 16px">Send us two times that work and we\u2019ll send the invite the same business day.</p><a class="btn" href="' + mail + '&body=' + body + '">Email two times that work \u2192</a></div>';
+    document.querySelectorAll("#bookInfo > p.small.muted:last-of-type").forEach(n => { if (/No slot fits/.test(n.textContent)) n.remove(); });
+    KD.track("kd_calendar_fallback", { reason: "no_calendar" });
+  } else {
+    // Cal.com embed loader (official snippet)
+    (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
 
-  Cal("init", "kd", { origin: C.calOrigin });
-  const config = { theme: "dark", layout: "month_view" };
-  if (lead.name) config.name = lead.name;
-  if (lead.email) config.email = lead.email;
-  if (lead.id) config["metadata[leadId]"] = lead.id;
-  if (lead.usecase) config.notes = lead.usecase.slice(0, 500);
-  Cal.ns.kd("inline", { elementOrSelector: "#cal", calLink: C.calLink, config });
-  Cal.ns.kd("ui", { theme: "dark", hideEventTypeDetails: false, layout: "month_view", styles: { branding: { brandColor: "#4f8cff" } }, cssVarsPerTheme: { dark: { "cal-brand": "#4f8cff" } } });
+    Cal("init", "kd", { origin: C.calOrigin });
+    const config = { theme: "dark", layout: "month_view" };
+    if (lead.name) config.name = lead.name;
+    if (lead.email) config.email = lead.email;
+    if (lead.id) config["metadata[leadId]"] = lead.id;
+    if (lead.usecase) config.notes = lead.usecase.slice(0, 500);
+    Cal.ns.kd("inline", { elementOrSelector: "#cal", calLink: C.calLink, config });
+    Cal.ns.kd("ui", { theme: "dark", hideEventTypeDetails: false, layout: "month_view", styles: { branding: { brandColor: "#4f8cff" } }, cssVarsPerTheme: { dark: { "cal-brand": "#4f8cff" } } });
 
-  let loaded = false;
-  Cal.ns.kd("on", { action: "linkReady", callback: () => { loaded = true; const f = document.getElementById("calFallback"); if (f) f.remove(); } });
-  setTimeout(() => {
-    if (loaded) return;
-    const f = document.getElementById("calFallback");
-    if (f) f.innerHTML = '<p style="margin:30px 0 16px">This browser blocked the calendar (usually an ad blocker). Your details carry over.</p><a class="btn" href="' + fallbackUrl + '" target="_blank" rel="noopener">Pick a time on cal.com →</a>';
-  }, 5000);
+    let loaded = false;
+    Cal.ns.kd("on", { action: "linkReady", callback: () => { loaded = true; const f = document.getElementById("calFallback"); if (f) f.remove(); } });
+    // A wrong or deleted event fires linkFailed: show the fallback straight away instead of a Cal error.
+    Cal.ns.kd("on", { action: "linkFailed", callback: () => { loaded = true; const fr = document.querySelector("#cal iframe"); if (fr) fr.style.display = "none"; showFallback(); } });
+    setTimeout(() => { if (!loaded) showFallback("The calendar didn\u2019t load (often an ad blocker)."); }, 5000);
+  }
 
   let booked = false;
   function onBooked(data) {
@@ -112,8 +130,10 @@
     // Hint the Worker right away; the Cal.com webhook remains the source of truth.
     KD.api("/api/booked", { leadId: lead.id, token: lead.token, email: lead.email, startTime, bookingUid: data && data.uid, eventId }, { timeout: 4000, keepalive: true }).catch(() => {}).finally(go);
   }
-  Cal.ns.kd("on", { action: "bookingSuccessfulV2", callback: e => onBooked(e.detail && e.detail.data) });
-  Cal.ns.kd("on", { action: "bookingSuccessful", callback: e => onBooked(e.detail && e.detail.data && (e.detail.data.booking || e.detail.data)) });
+  if (window.Cal && Cal.ns && Cal.ns.kd) {
+    Cal.ns.kd("on", { action: "bookingSuccessfulV2", callback: e => onBooked(e.detail && e.detail.data) });
+    Cal.ns.kd("on", { action: "bookingSuccessful", callback: e => onBooked(e.detail && e.detail.data && (e.detail.data.booking || e.detail.data)) });
+  }
 })();
 </script>
 </body>

@@ -9,7 +9,7 @@ export const PLANS = {
   // d0 email goes out 24/7 within minutes (speed-to-lead); the rest respect weekday daytime.
   // 6 emails + 2 texts over 10 days.
   followup: [
-    { step: "d0", at: 2 * MIN, ch: ["email"], noWindow: true },
+    { step: "d0", at: 15 * MIN, ch: ["email"], noWindow: true }, // after they had time to book on the page
     { step: "d0", at: 45 * MIN, ch: ["sms"] },
     { step: "d1", at: 1 * DAY, ch: ["email"] },
     { step: "d2", at: 2 * DAY, ch: ["sms"] },
@@ -28,7 +28,7 @@ export const PLANS = {
     { step: "c3", at: 3 * DAY, ch: ["email"] }
   ],
   dq: [
-    { step: "d0", at: 2 * MIN, ch: ["email"], noWindow: true },
+    { step: "d0", at: 15 * MIN, ch: ["email"], noWindow: true }, // after they had time to book on the page
     { step: "d30", at: 30 * DAY, ch: ["email"] }
   ]
 };
@@ -161,10 +161,10 @@ async function callAlerts(env, t) {
   }
 }
 
-// Cal.com only reports a no-show if the host marks it. 2 h after the start time, ask Joel to mark the
-// outcome; at 24 h with no outcome, treat it as a no-show and start the rebook sequence.
+// Cal.com only reports a no-show if the host marks it. Once the call should be over (start + 40 min),
+// ask Joel to mark the outcome; at start + 3 h with no outcome, treat it as a no-show and start rebook.
 async function noShowWatch(env, t) {
-  const { results: ask } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=0 LIMIT 20").bind(t - 15 * MIN).all();
+  const { results: ask } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=0 LIMIT 20").bind(t - 40 * MIN).all();
   for (const l of ask) {
     await env.DB.prepare("UPDATE leads SET noshow_nudged=1 WHERE id=?").bind(l.id).run();
     await notifySales(env, `mark the outcome: ${l.name} (${l.company})`, `The demo call was scheduled for ${new Date(l.booking_start).toISOString()}. Mark Showed / No-show / Won / Lost:\n${env.SITE_URL.replace(/\/$/, "")}/admin/#${l.id}\n\nIf nothing is marked within 3 hours of the start time, it will be treated as a no-show and a rebook sequence will start.`);

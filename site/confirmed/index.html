@@ -44,7 +44,6 @@
     <h2 style="font-size:28px;margin-bottom:6px">Your 30 minutes</h2>
     <p class="small muted" id="hostLine" style="margin:0 0 6px"></p>
     <ul class="call-show" id="callShow"></ul>
-    <p class="muted" style="margin:14px 0 0">By minute 30 you'll have seen knowdrive answer your questions from your own files, every answer cited.</p>
   </section>
 
   <section style="padding:30px 0">
@@ -59,7 +58,7 @@
           <span class="small" id="prepMsg" style="margin-left:12px" aria-live="polite"></span>
         </form>
       </div></div>
-      <div class="item"><div class="n">2</div><div><h3>Bring 3–5 files for your demo</h3><p>Non-sensitive files that look like your real content: PDFs, Word files, a deck, a recording or a video. Have them on your desktop when the call starts. We load them during the call and run your questions against them; nothing is shared unless you choose to upload it.</p></div></div>
+      <div class="item"><div class="n">2</div><div><h3>Bring 3–5 files for your demo</h3><p>Non-sensitive files that look like your real content: PDFs, Word files, a deck, a recording or a video. Have them on your desktop. During the call you upload the ones you choose and we run your questions against them.</p></div></div>
       <div class="item"><div class="n">3</div><div><h3>Bring whoever signs off</h3><p>Forward the invite to whoever signs off on infrastructure or security. They get their questions answered directly, and we can agree a next step on the call.</p></div></div>
     </div>
   </section>
@@ -68,7 +67,7 @@
   <section style="padding:24px 0">
     <h2 style="font-size:28px">Common questions</h2>
     <details class="faq"><summary>We need an NDA first.</summary><p>Reply to the confirmation email and we'll sort it out before the call.</p></details>
-    <details class="faq"><summary>How do I reschedule?</summary><p>Use the reschedule link in your confirmation email. We're taking on a small number of enterprise design partners, so please move the call rather than skip it.</p></details>
+    <details class="faq"><summary>How do I reschedule?</summary><p>Use the reschedule link in your confirmation email.</p></details>
   </section>
 </main>
 
@@ -105,13 +104,11 @@
     }
   }
 
-  if (document.getElementById("hosts")) document.getElementById("hosts").innerHTML = (C.hosts || []).map(h =>
-    '<div class="panel" style="padding:18px"><b style="font-family:var(--display)">' + h.name.replace(/</g, "&lt;") + '</b><div class="small muted">' + h.role.replace(/</g, "&lt;") + '</div></div>').join("");
 
   if (lead.email) document.getElementById("whenSub").textContent = "Invite and video link sent to " + lead.email + ".";
   const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
   if (hosts) document.getElementById("hostLine").textContent = "With " + hosts;
-  if (!lead.phone) document.getElementById("smsForm").hidden = false;
+  if (!lead.phone || !lead.smsConsent) { document.getElementById("smsForm").hidden = false; if (lead.phone) document.getElementById("phone").value = lead.phone; }
   const smsForm = document.getElementById("smsForm");
   smsForm.addEventListener("submit", async e => {
     e.preventDefault();

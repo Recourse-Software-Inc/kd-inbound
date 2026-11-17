@@ -5,10 +5,10 @@ window.KD_FUNNEL = {
   apiBase: "https://kd-inbound.joelauge.workers.dev",
 
   // Cal.com booking link for the demo call ("username/event-slug" or "team/x/event-slug").
-  calLink: "recourse/knowdrive-demo",
+  calLink: "",   // e.g. "joelauge/knowdrive-demo" once the event exists on YOUR Cal.com account,
   calOrigin: "https://cal.com",
   // Plain fallback if the embed is blocked (ad blockers, strict privacy browsers).
-  calFallbackUrl: "https://cal.com/recourse/knowdrive-demo",
+  calFallbackUrl: "",
 
   // Shown on the budget question. Matches the published Enterprise floor on knowdrive.ai.
   enterpriseFloorMonthly: 5120,

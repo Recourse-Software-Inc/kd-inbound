@@ -17,7 +17,7 @@ The source system runs nine proven formats at once and lets the qualified-lead s
 | 5 | Podcast clip | `podcast` | A 30–45 s cut from The Brain Podcast: "Attention as a service." | Joel explains reading the exact passage behind each answer and why cost per query drops when content is vectorized once. Burned-in captions. | "Link in the description" |
 | 6 | Professional | `professional` | Polished 30 s: Inspector screen recording + voiceover. "This is every passage your agent read, and where each one lives." | Show a cited result with the byte range highlighted, then audio/video search returning a timestamp. | "Apply for a design-partner build" |
 | 7 | Sketchbook | `sketchbook` | Hand-drawn on paper: "Why your RAG bill keeps growing." | Draw re-chunking → re-embedding → re-indexing loops. Cross them out. Draw "vectorize once" with arrows to many readers (agents, staff, apps). | "See if you qualify" |
-| 8 | Client win | `client-win` | "The RCMP is a customer of record." | Keep to what can be said publicly: customer of record, sovereign deployment on CPU. Add more wins only with written permission. | "Apply" |
+| 8 | Client win | `client-win` | A customer result in one line (problem → outcome → one number). | Only with the customer's written permission to be named or described. Until then, skip this format. | "Apply" |
 | 9 | Testimonial | `testimonial` | Design partner on camera (once you have permission): "We can finally show our customers the source." | Their problem → what changed → one number (cost per query, citation coverage, or time to answer). | "Apply for a design-partner build" |
 
 ## Production notes

@@ -10,7 +10,7 @@ export const FACTS = `
 - Replaces a separately built vector database, file store and chunking pipeline with one service.
 - Security: material is isolated per store, encrypted at rest, and never used to train AI models.
 - Architecture: VORAS (Vectorize Once, Read at Any Scale). Runs on ordinary Arm CPUs, so it can run in the customer's jurisdiction (e.g. Canada, EU) or on their own hardware, behind any model including local open models.
-- Customers: the RCMP is a customer of record (no details about how they use it may be shared).
+- Customers: never name, describe or hint at any customer. If asked, say Joel can talk about references on the call.
 - Pricing: Free plan (500 MB, 500 searches/month, no card). Launch $19/month. Scale $249/month. Enterprise starts at $5,120/month: flat org fee plus compute at cost plus per-GB storage overage. Searches beyond plan: $0.001 each.
 - The fit call: 30 minutes on video with the founders. Covers sources, agents, where answers break today, a live look at cited retrieval in the knowdrive Inspector, jurisdiction and deployment options, and what a pilot would cost.
 - Design-partner build: fit call → pilot on the customer's own corpus in their jurisdiction → wire into their agents via MCP or REST → measure cost per query, answer quality and citation coverage against their current stack → hand-off with deployment package and enablement days.

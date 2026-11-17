@@ -27,6 +27,7 @@ export default {
 async function route(req, env, ctx) {
   const url = new URL(req.url);
   const p = url.pathname;
+  if (p === "/" && req.method === "GET") return Response.redirect(env.SITE_URL, 302); // the API has no page of its own
   if (p === "/health") return json({ ok: true, ts: now() });
   if (p === "/api/lead" && req.method === "POST") return createLead(req, env, ctx);
   if (p === "/api/lead" && req.method === "GET") return getLeadPublic(url, env);

@@ -30,12 +30,12 @@ The source system runs nine proven formats at once and lets the qualified-lead s
 
 ## Ad-copy primary text (LinkedIn / Meta)
 
-> If your agents or search answer from company data, read this.
+> Every AI answer, with a receipt.
 >
-> Most teams run a vector database, a file store and a chunking pipeline built separately. Every re-index costs money, answers drift, and when someone asks "where did that come from?" there's no trail.
+> Your agents and staff answer from company documents, recordings and video every day. When a customer or an auditor asks "where did that come from?", most teams can't point to the source.
 >
-> knowdrive is one service: content vectorized once, every result cited to file, version and byte range, running on ordinary CPUs rather than GPUs, in your jurisdiction. Works with Claude, Codex, Cursor and any MCP client.
+> knowdrive returns the exact passage behind each answer, cited to file, version and byte range. Content is vectorized once, so you can change models without rebuilding, and it runs on ordinary CPUs rather than GPUs, in your jurisdiction.
 >
-> We're onboarding a small number of enterprise design partners. Enterprise plans start at $5,120/month.
+> We're taking on a small number of enterprise design partners. Enterprise plans start at $5,120/month.
 >
-> → 2-minute application, then a 30-minute fit call with the founders.
+> → 2-minute application, then a 30-minute call with the founders.

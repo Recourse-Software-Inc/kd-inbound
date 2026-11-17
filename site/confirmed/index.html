@@ -33,10 +33,15 @@
     <p class="small muted" style="margin-top:10px">How cited retrieval works, what a pilot looks like, and what we'll ask you about.</p>
   </section>
 
+  <section style="padding:30px 0 0">
+    <p class="eyebrow">On your call we'll show</p>
+    <ul class="call-show" id="callShow" style="margin-top:0"></ul>
+  </section>
+
   <section style="padding:30px 0">
     <h2 style="font-size:28px">Three things that make the call worth it</h2>
     <div class="todo" style="margin-top:18px">
-      <div class="item"><div class="n">1</div><div><h3>Tell us the question your AI gets wrong</h3>
+      <div class="item"><div class="n">1</div><div><h3>Send us the question your AI gets wrong</h3>
         <p>One real example lets us show cited retrieval on a problem you care about.</p>
         <form id="prep" style="margin-top:14px" novalidate>
           <div class="field"><label for="wrong">A question your agents or search get wrong today</label><textarea id="wrong" name="wrong" maxlength="800" style="min-height:90px"></textarea></div>
@@ -76,12 +81,13 @@
   if (qp.get("lid") && qp.get("t")) {
     try {
       const r = await KD.api("/api/lead?lid=" + encodeURIComponent(qp.get("lid")) + "&t=" + encodeURIComponent(qp.get("t")), null, { timeout: 5000 });
-      lead = { id: r.id, token: qp.get("t"), name: r.name, email: r.email, phone: r.phone, company: r.company };
+      lead = { id: r.id, token: qp.get("t"), name: r.name, email: r.email, phone: r.phone, company: r.company, needs: r.needs };
       if (r.bookingStart) booking = { startTime: new Date(r.bookingStart).toISOString() };
       KD.store.sset("kd_lead", lead);
     } catch {}
   }
   document.querySelectorAll("[data-floor]").forEach(n => n.textContent = "$" + Number(C.enterpriseFloorMonthly).toLocaleString("en-US"));
+  document.getElementById("callShow").innerHTML = KD.callShows(lead.needs, 3).map(t => "<li>" + t.replace(/</g, "&lt;") + "</li>").join("");
   if (C.confirmVideo) KD.videoInto(document.getElementById("cv"), C.confirmVideo, "Watch-before-your-call video");
   else document.getElementById("videoSec").remove(); // no placeholder: an empty video slot reads as broken
 

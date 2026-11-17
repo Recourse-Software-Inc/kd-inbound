@@ -225,3 +225,7 @@ a.card:hover { border-color: var(--teal); color: var(--text); transform: transla
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
 @media (max-width: 480px) { .top-note { font-size: 11px; text-align: right; } }
+.panel h3 { margin-bottom: 8px; }
+.call-show { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
+.call-show li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; color: var(--muted); font-size: 15.5px; }
+.call-show li::before { content: "\2713"; color: var(--teal); }

@@ -53,8 +53,8 @@ ${fence(answers.usecase)}`;
 // Intent for each step of each sequence. The model writes the words; the intent stays fixed.
 export const INTENTS = {
   "followup:d0": "They just qualified but did not pick a time. Thank them for applying, reflect their use case back in one line, and give the booking link. Under 90 words.",
-  "followup:d1": "Short nudge. Name the one knowdrive capability most relevant to their use case (the 'angle') and say the call will show it on content like theirs. Booking link. Under 70 words.",
-  "followup:d2": "Address the likely hesitation for their situation (time, budget approval, or 'we already have a vector database') in two sentences, using only FACTS. Booking link. Under 80 words.",
+  "followup:d1": "Short nudge. Take the outcome from FACTS that matches their first selected need and say the call will show it on content like theirs. Booking link. Under 70 words.",
+  "followup:d2": "Address the likely hesitation for their situation in two sentences, using only FACTS: if they listed a current vector database, use the vector-database objection answer; otherwise time or budget approval. Booking link. Under 80 words.",
   "followup:d3": "Describe concretely what they will see on the call: a live look at cited retrieval in the knowdrive Inspector, with file, version and byte range per passage. Booking link. Under 70 words.",
   "followup:d5": "Ask one direct question that is easy to reply to: is the timing off, or is something about the fit unclear? Invite a one-line reply. Include the booking link as an alternative. Under 60 words.",
   "followup:d7": "Mention that the free plan exists if they want to try it before a call (500 MB, no card), and that the call is still the fastest way to scope a pilot. Booking link. Under 70 words.",

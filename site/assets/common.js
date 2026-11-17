@@ -138,7 +138,23 @@
     try { await api("/api/lead", Object.assign({ retry: true }, u)); localStorage.removeItem("kd_unsent_lead"); } catch {}
   }
 
-  window.KD = { C, store, attribution, track, api, videoInto, normPhone, uid: () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)) };
+  // What each stated need gets shown on the call. Used by the booking and thank-you pages
+  // so every lead sees their own problem reflected back, in the order they ranked it.
+  const NEEDS = {
+    citations: "Every answer traced to the exact passage, file and version behind it",
+    cost: "Cost per answer on content like yours, against what you run today",
+    sovereignty: "Running in your jurisdiction or on your own hardware",
+    media: "Search inside recordings and video, landing on the exact timestamp",
+    agent_memory: "One shared memory your agents and staff all read from",
+    consolidate: "Replacing your vector database, file store and chunking pipeline with one service"
+  };
+  function callShows(needs, max) {
+    const list = (needs || []).filter(n => NEEDS[n]).map(n => NEEDS[n]);
+    if (!list.length) list.push(NEEDS.citations, NEEDS.cost);
+    return list.slice(0, max || 3);
+  }
+
+  window.KD = { C, store, NEEDS, callShows, attribution, track, api, videoInto, normPhone, uid: () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)) };
 
   loadPixels();
   document.addEventListener("DOMContentLoaded", () => { stickyCta(); carryParams(); footerYear(); setTimeout(retryUnsent, 1500); });

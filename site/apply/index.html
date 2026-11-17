@@ -77,15 +77,15 @@
       </fieldset>
 
       <fieldset class="q" data-q="needs" data-type="multi">
-        <legend>What has to be true for this to be worth it?</legend>
+        <legend>Which of these would you need to see?</legend>
         <p class="hint">Select all that apply.</p>
         <div class="opts">
-          <label class="opt"><input type="checkbox" name="needs" value="citations"><span>Every answer cited and auditable</span></label>
-          <label class="opt"><input type="checkbox" name="needs" value="cost"><span>Lower retrieval and re-indexing cost</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="citations"><span>Every answer traceable to its source</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="cost"><span>Lower cost per answer</span></label>
           <label class="opt"><input type="checkbox" name="needs" value="sovereignty"><span>Data stays in our jurisdiction or on our hardware</span></label>
           <label class="opt"><input type="checkbox" name="needs" value="media"><span>Search across audio and video, alongside documents</span></label>
-          <label class="opt"><input type="checkbox" name="needs" value="agent_memory"><span>Shared memory across our agents</span></label>
-          <label class="opt"><input type="checkbox" name="needs" value="consolidate"><span>One system in place of vector DB + file store + chunking</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="agent_memory"><span>One shared memory across our agents and staff</span></label>
+          <label class="opt"><input type="checkbox" name="needs" value="consolidate"><span>One service in place of our vector DB, file store and chunking</span></label>
         </div>
       </fieldset>
 
@@ -112,7 +112,7 @@
 
       <div class="q" data-q="usecase" data-type="text">
         <p class="qtitle" id="ucTitle">In two or three sentences, what should knowdrive do for you?</p>
-        <p class="hint">Which sources, which agents or people use the answers, and what goes wrong today.</p>
+        <p class="hint">Which sources, who uses the answers, and what goes wrong today. We'll use this to plan what we show you.</p>
         <div class="field">
           <label class="sr-only" for="usecase">Use case</label>
           <textarea id="usecase" name="usecase" maxlength="1500" placeholder="e.g. Our support agents answer from 40k PDFs and call recordings. Answers are often wrong and we can't show customers the source."></textarea>

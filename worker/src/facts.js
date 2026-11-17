@@ -12,6 +12,15 @@ export const FACTS = `
 - Architecture: VORAS (Vectorize Once, Read at Any Scale). Runs on ordinary CPUs rather than GPUs, so it can run in the customer's jurisdiction (e.g. Canada, EU) or on their own hardware, behind any model including local open models.
 - Customers: never name, describe or hint at any customer. If asked, say Joel can talk about references on the call.
 - Pricing: Free plan (500 MB, 500 searches/month, no card). Launch $19/month. Scale $249/month. Enterprise starts at $5,120/month: flat org fee plus compute at cost plus per-GB storage overage. Searches beyond plan: $0.001 each.
+- Core promise (use this wording family): "Every AI answer, with a receipt." The exact passage behind each answer, cited to file, version and byte range, so the team can stand behind it with a customer, an auditor or their own people.
+- Outcomes by need (match these to what the lead selected):
+  - citations: "Where did this come from?" has an answer; every result points to the unchanged source.
+  - cost: agents pull the exact passage they need, so the context window goes to reasoning and smaller models handle work that used to need the biggest ones; runs on ordinary CPUs rather than GPUs.
+  - sovereignty: runs in their jurisdiction or on their own hardware; isolated per store, encrypted at rest, never used for training.
+  - media: search inside recordings and video, landing on the exact timestamp.
+  - agent_memory: one shared memory every agent and staff member reads from, over MCP or REST.
+  - consolidate: one service in place of a vector database, file store and chunking pipeline; content vectorized once, so changing models means no re-chunking or re-embedding.
+- Objection "we already run a vector database": most teams do; the pilot runs alongside it on their own content, so the decision rests on measured cost, quality and citation coverage.
 - The fit call: 30 minutes on video with the founders. Covers sources, agents, where answers break today, a live look at cited retrieval in the knowdrive Inspector, jurisdiction and deployment options, and what a pilot would cost.
 - Design-partner build: fit call → pilot on the customer's own corpus in their jurisdiction → wire into their agents via MCP or REST → measure cost per query, answer quality and citation coverage against their current stack → hand-off with deployment package and enablement days.
 `.trim();

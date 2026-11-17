@@ -91,7 +91,8 @@ async function compose(env, lead, msg) {
     free: env.FREE_PLAN_URL || "https://knowdrive.ai/pricing",
     apply: env.SITE_URL.replace(/\/$/, "") + "/apply/",
     confirmed: env.SITE_URL.replace(/\/$/, "") + "/confirmed/?lid=" + encodeURIComponent(lead.id) + "&t=" + tok,
-    site: env.SITE_URL
+    site: env.SITE_URL,
+    show: showLine(answers.needs)
   };
   // AI for the persuasion sequences; fixed templates for reminders and the DQ resources email.
   if (["followup", "rebook", "recancel"].includes(msg.seq) && env.AI_FOLLOWUPS !== "0") {
@@ -160,3 +161,13 @@ async function noShowWatch(env, t) {
     await logEvent(env, l.id, "auto_no_show", { booking_start: l.booking_start });
   }
 }
+
+const SHOW = {
+  citations: "every answer traced to the exact passage, file and version behind it",
+  cost: "cost per answer on content like yours, against what you run today",
+  sovereignty: "knowdrive running in your jurisdiction or on your own hardware",
+  media: "search inside recordings and video, landing on the exact timestamp",
+  agent_memory: "one shared memory your agents and staff all read from",
+  consolidate: "one service in place of your vector database, file store and chunking pipeline"
+};
+function showLine(needs) { const n = (needs || []).find(k => SHOW[k]); return SHOW[n || "citations"]; }

@@ -4,11 +4,11 @@ window.KD_FUNNEL = {
   // Cloudflare Worker base URL (no trailing slash), e.g. https://inbound-api.knowdrive.ai
   apiBase: "https://kd-inbound.joelauge.workers.dev",
 
-  // Cal.com booking link for the fit call ("username/event-slug" or "team/x/event-slug").
-  calLink: "recourse/knowdrive-fit-call",
+  // Cal.com booking link for the demo call ("username/event-slug" or "team/x/event-slug").
+  calLink: "recourse/knowdrive-demo",
   calOrigin: "https://cal.com",
   // Plain fallback if the embed is blocked (ad blockers, strict privacy browsers).
-  calFallbackUrl: "https://cal.com/recourse/knowdrive-fit-call",
+  calFallbackUrl: "https://cal.com/recourse/knowdrive-demo",
 
   // Shown on the budget question. Matches the published Enterprise floor on knowdrive.ai.
   enterpriseFloorMonthly: 5120,
@@ -22,8 +22,8 @@ window.KD_FUNNEL = {
   siteUrl: "https://knowdrive.ai",
   resources: [
     { tag: "Start free", title: "Free plan: 500 MB and 500 searches a month", body: "No credit card. Connect Claude, Cursor or any MCP client and test it on your own files.", url: "https://knowdrive.ai/pricing", cta: "Create a free account" },
-    { tag: "Watch", title: "“RAG is dead” — the Inspector demo", body: "See every retrieved passage, its source file, version and byte range, live.", url: "", cta: "Watch the demo" },
-    { tag: "Read", title: "VORAS whitepaper", body: "Vectorize Once, Read at Any Scale. Includes an honesty-boundary section labelling every claim by evidence level.", url: "", cta: "Read the whitepaper" },
+    { tag: "Watch", title: "Inspector demo: the passage behind each answer", body: "See every retrieved passage with its source file, version and byte range.", url: "", cta: "Watch the demo" },
+    { tag: "Read", title: "VORAS whitepaper", body: "Vectorize Once, Read at Any Scale. Includes an honesty-boundary section labelling every claim by evidence level.", url: "", cta: "Read the whitepaper (PDF)" },
     { tag: "Benchmark", title: "Open retrieval benchmark", body: "Same corpus, managed-cloud deployments, cost per query. MIT licensed and reproducible.", url: "", cta: "View on GitHub" }
   ],
 

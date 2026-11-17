@@ -22,41 +22,45 @@
   <div class="banner" role="status">
     <div class="check" aria-hidden="true">✓</div>
     <div>
-      <b id="when">Your fit call is booked.</b>
-      <div class="small muted" id="whenSub">The calendar invite and video link are in your inbox.</div>
+      <b id="when">Your call is booked · 30 min with the founders</b>
+      <div class="small muted" id="whenSub">Invite and video link are in your inbox.</div>
     </div>
   </div>
+
+  <form id="smsForm" class="panel" style="margin-top:14px;padding:18px" novalidate hidden>
+    <div class="field" style="margin-bottom:8px"><label for="phone">Text me a reminder 1 hour before the call</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 416 555 0100"></div>
+    <label class="consent"><input type="checkbox" id="smsConsent"><span>Text me from Recourse Software Inc. (knowdrive) about this call: up to 3 reminder or rescheduling texts. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
+    <button class="btn" type="submit" id="smsBtn" style="min-height:44px;font-size:15px">Text me the reminder</button>
+    <span class="small" id="smsMsg" style="margin-left:12px" aria-live="polite"></span>
+  </form>
+
   <section style="padding:40px 0 10px" id="videoSec">
-    <p class="eyebrow">Before your call · 4 minutes</p>
-    <h1 style="font-size:clamp(30px,4.2vw,44px)">Watch this before the call.</h1>
+    <p class="eyebrow">From Joel · 90 seconds</p>
+    <h1 style="font-size:clamp(30px,4.2vw,44px)">What we'll do with your files on the call.</h1>
     <div class="video" id="cv" style="margin-top:18px"></div>
-    <p class="small muted" style="margin-top:10px">How cited retrieval works, what a pilot looks like, and what we'll ask you about.</p>
   </section>
 
   <section style="padding:30px 0 0">
-    <h2 style="font-size:28px;margin-bottom:6px">A full demo on your files, during the call</h2>
-    <p class="eyebrow" style="margin-top:14px">Including</p>
-    <ul class="call-show" id="callShow" style="margin-top:0"></ul>
+    <h2 style="font-size:28px;margin-bottom:6px">Your 30 minutes</h2>
+    <p class="small muted" id="hostLine" style="margin:0 0 6px"></p>
+    <ul class="call-show" id="callShow"></ul>
+    <p class="muted" style="margin:14px 0 0">By minute 30 you'll have seen knowdrive answer your questions from your own files, every answer cited.</p>
   </section>
 
   <section style="padding:30px 0">
-    <h2 style="font-size:28px">Three things that make the call worth it</h2>
+    <h2 style="font-size:28px">Before your call: 3 steps</h2>
     <div class="todo" style="margin-top:18px">
       <div class="item"><div class="n">1</div><div><h3>Send us the question your AI gets wrong</h3>
-        <p>One real example lets us show cited retrieval on a problem you care about.</p>
+        <p>One real example lets us build the demo around a problem you care about.</p>
         <form id="prep" style="margin-top:14px" novalidate>
-          <div class="field"><label for="wrong">A question your agents or search get wrong today</label><textarea id="wrong" name="wrong" maxlength="800" style="min-height:90px"></textarea></div>
-          <div class="field"><label for="team">Anyone joining you? <span class="muted">(name and role)</span></label><input id="team" name="team" maxlength="300" placeholder="e.g. Priya, Head of Platform"></div>
-          <div id="smsAsk" hidden>
-            <div class="field"><label for="phone">Mobile for a reminder text one hour before</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 416 555 0100"></div>
-            <label class="consent"><input type="checkbox" id="smsConsent"><span>Text me from Recourse Software Inc. (knowdrive) about this call: up to 3 reminder or rescheduling texts. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
-          </div>
-          <button class="btn" type="submit" id="prepBtn">Send to the team</button>
+          <div class="field"><label for="wrong">A question your agents or search get wrong today</label><textarea id="wrong" name="wrong" maxlength="800" style="min-height:90px" placeholder="e.g. Which version of the contract set the 2024 rate cap?"></textarea></div>
+          <div class="field"><label for="team">Who's joining you? <span class="muted">(name and role)</span></label><input id="team" name="team" maxlength="300" placeholder="e.g. Priya, Head of Platform"></div>
+          <button class="btn" type="submit" id="prepBtn">Send to the founders</button>
           <span class="small" id="prepMsg" style="margin-left:12px" aria-live="polite"></span>
         </form>
       </div></div>
-      <div class="item"><div class="n">2</div><div><h3>Bring 3–5 files for your demo</h3><p>Non-sensitive documents, a recording or a video that look like your real content. We load them during the call and run your questions against them. Nothing is shared unless you choose to upload it.</p></div></div>
-      <div class="item"><div class="n">3</div><div><h3>Bring whoever owns the budget or the stack</h3><p>If someone else signs off on infrastructure or security, invite them now; forward the calendar invite. Calls with the decision-maker present end with a real next step.</p></div></div>
+      <div class="item"><div class="n">2</div><div><h3>Bring 3–5 files for your demo</h3><p>Non-sensitive files that look like your real content: PDFs, Word files, a deck, a recording or a video. Have them on your desktop when the call starts. We load them during the call and run your questions against them; nothing is shared unless you choose to upload it.</p></div></div>
+      <div class="item"><div class="n">3</div><div><h3>Bring whoever signs off</h3><p>Forward the invite to whoever signs off on infrastructure or security. They get their questions answered directly, and we can agree a next step on the call.</p></div></div>
     </div>
   </section>
 
@@ -64,7 +68,7 @@
   <section style="padding:24px 0">
     <h2 style="font-size:28px">Common questions</h2>
     <details class="faq"><summary>We need an NDA first.</summary><p>Reply to the confirmation email and we'll sort it out before the call.</p></details>
-    <details class="faq"><summary>How do I reschedule?</summary><p>Use the reschedule link in your confirmation email. Please move it rather than skip it; another applicant can take the slot.</p></details>
+    <details class="faq"><summary>How do I reschedule?</summary><p>Use the reschedule link in your confirmation email. We're taking on a small number of enterprise design partners, so please move the call rather than skip it.</p></details>
   </section>
 </main>
 
@@ -97,14 +101,29 @@
     const d = new Date(booking.startTime);
     if (!isNaN(d)) {
       const fmt = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-      document.getElementById("when").textContent = "Booked: " + fmt.format(d);
+      document.getElementById("when").textContent = "Booked: " + fmt.format(d) + " · 30 min with the founders";
     }
   }
 
   if (document.getElementById("hosts")) document.getElementById("hosts").innerHTML = (C.hosts || []).map(h =>
     '<div class="panel" style="padding:18px"><b style="font-family:var(--display)">' + h.name.replace(/</g, "&lt;") + '</b><div class="small muted">' + h.role.replace(/</g, "&lt;") + '</div></div>').join("");
 
-  if (!lead.phone) document.getElementById("smsAsk").hidden = false;
+  if (lead.email) document.getElementById("whenSub").textContent = "Invite and video link sent to " + lead.email + ".";
+  const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
+  if (hosts) document.getElementById("hostLine").textContent = "With " + hosts;
+  if (!lead.phone) document.getElementById("smsForm").hidden = false;
+  const smsForm = document.getElementById("smsForm");
+  smsForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const m = document.getElementById("smsMsg"), b = document.getElementById("smsBtn");
+    const phone = KD.normPhone(smsForm.phone.value);
+    if (!lead.id || !lead.token) { m.style.color = "var(--red)"; m.textContent = "Open this page from your confirmation email to set this up."; return; }
+    if (!/^\+\d{8,15}$/.test(phone)) { m.style.color = "var(--red)"; m.textContent = "Add a mobile number with country code, e.g. +1 416 555 0100."; return; }
+    if (!document.getElementById("smsConsent").checked) { m.style.color = "var(--red)"; m.textContent = "Tick the box so we're allowed to text you."; return; }
+    b.disabled = true; m.style.color = "var(--muted)"; m.textContent = "Saving…";
+    try { await KD.api("/api/precall", { leadId: lead.id, token: lead.token, phone, smsConsent: true }); m.style.color = "var(--teal)"; m.textContent = "Done. We'll text you an hour before."; KD.track("kd_sms_optin", {}); }
+    catch (err) { b.disabled = false; m.style.color = "var(--red)"; m.textContent = err.data && err.data.field === "phone" ? err.data.error : "Couldn't save. Try again in a moment."; }
+  });
 
   const prep = document.getElementById("prep");
   prep.addEventListener("submit", async e => {
@@ -112,19 +131,15 @@
     const msg = document.getElementById("prepMsg");
     const btn = document.getElementById("prepBtn");
     const wrong = prep.wrong.value.trim(), team = prep.team.value.trim();
-    const phone = KD.normPhone(prep.phone ? prep.phone.value : "");
-    const smsConsent = document.getElementById("smsConsent").checked;
     if (!lead.id || !lead.token) { msg.style.color = "var(--red)"; msg.textContent = "Open this page from your reminder email, or reply to your confirmation email with this."; return; }
-    if (!wrong && !team && !smsConsent) { msg.style.color = "var(--red)"; msg.textContent = "Add at least one answer first."; return; }
-    if (smsConsent && !/^\+\d{8,15}$/.test(phone)) { msg.style.color = "var(--red)"; msg.textContent = "Add a mobile number with country code, e.g. +1 416 555 0100."; return; }
+    if (!wrong && !team) { msg.style.color = "var(--red)"; msg.textContent = "Add your question or who's joining first."; return; }
     btn.disabled = true; msg.style.color = "var(--muted)"; msg.textContent = "Sending…";
     try {
-      await KD.api("/api/precall", { leadId: lead.id, token: lead.token, email: lead.email, wrong, team, phone, smsConsent });
-      msg.style.color = "var(--teal)"; msg.textContent = "Got it. We'll prepare around this.";
+      await KD.api("/api/precall", { leadId: lead.id, token: lead.token, wrong, team });
+      msg.style.color = "var(--teal)"; msg.textContent = "Got it. We'll build the demo around this question.";
       KD.track("kd_precall_submitted", {});
-    } catch (err) {
-      btn.disabled = false; msg.style.color = "var(--red)";
-      msg.textContent = err.data && err.data.field === "phone" ? err.data.error : "Couldn't send. Reply to your confirmation email with this instead.";
+    } catch {
+      btn.disabled = false; msg.style.color = "var(--red)"; msg.textContent = "Couldn't send. Reply to your confirmation email with this instead.";
     }
   });
   KD.track("kd_confirmed_view", {});

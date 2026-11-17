@@ -4,7 +4,7 @@ The source system runs nine proven formats at once and lets the qualified-lead s
 
 **Audience:** heads of AI/ML, CTOs and VPs of Engineering, platform and data leads at companies shipping retrieval, search or agents. LinkedIn is the primary channel (job title + company size targeting). Meta and YouTube are for retargeting and lookalikes built from the qualified-lead signal.
 
-**Offer in every ad:** apply for a design-partner build → 30-minute fit call with the founders.
+**Offer in every ad:** apply for a design-partner build → 30-minute call with the founders, including a live demo on your files.
 
 **Voice rules:** direct proof points, no hype adjectives, and no "It's not X, it's Y" contrasts. The brand is always lowercase **knowdrive**.
 

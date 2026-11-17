@@ -141,18 +141,19 @@
   // What each stated need gets shown on the call. Used by the booking and thank-you pages
   // so every lead sees their own problem reflected back, in the order they ranked it.
   const NEEDS = {
-    citations: "Every answer traced to the exact passage, file and version behind it",
-    cost: "Cost per answer on your files, against what you run today",
-    sovereignty: "Running in your jurisdiction or on your own hardware",
-    media: "Search inside recordings and video, landing on the exact timestamp",
-    agent_memory: "One shared memory your agents and staff all read from",
-    consolidate: "Replacing your vector database, file store and chunking pipeline with one service"
+    citations: "See each answer traced to the exact passage, file and version",
+    cost: "See cost per answer on your files against what you run today",
+    sovereignty: "See it run in your jurisdiction or on your own hardware",
+    media: "See search land on the exact timestamp in your recordings and video",
+    agent_memory: "See one shared memory your agents and staff all read from",
+    consolidate: "See one service replace your vector database, file store and chunking pipeline"
   };
   function callShows(needs, max) {
     const list = (needs || []).filter(n => NEEDS[n]).map(n => NEEDS[n]);
     if (!list.length) list.push(NEEDS.citations, NEEDS.cost);
-    return list.slice(0, max || 3);
+    return list.slice(0, max || 3).concat([OUTCOME]);
   }
+  const OUTCOME = "Leave knowing whether a design-partner build fits, and what it costs (enterprise from $5,120/month)";
 
   window.KD = { C, store, NEEDS, callShows, attribution, track, api, videoInto, normPhone, uid: () => (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2)) };
 

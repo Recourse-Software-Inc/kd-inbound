@@ -6,13 +6,16 @@ import { sendEmail, sendSms, notifySales } from "./messaging.js";
 
 // D0–D10 AI follow-up for qualified leads who haven't booked (the in-ad cadence: D0, D1, D2, D3, D5, D7, D10).
 export const PLANS = {
+  // d0 email goes out 24/7 within minutes (speed-to-lead); the rest respect weekday daytime.
+  // 6 emails + 2 texts over 10 days.
   followup: [
-    { step: "d0", at: 10 * MIN, ch: ["email", "sms"] },
+    { step: "d0", at: 2 * MIN, ch: ["email"], noWindow: true },
+    { step: "d0", at: 45 * MIN, ch: ["sms"] },
     { step: "d1", at: 1 * DAY, ch: ["email"] },
-    { step: "d2", at: 2 * DAY, ch: ["email", "sms"] },
+    { step: "d2", at: 2 * DAY, ch: ["sms"] },
     { step: "d3", at: 3 * DAY, ch: ["email"] },
     { step: "d5", at: 5 * DAY, ch: ["email"] },
-    { step: "d7", at: 7 * DAY, ch: ["email", "sms"] },
+    { step: "d7", at: 7 * DAY, ch: ["email"] },
     { step: "d10", at: 10 * DAY, ch: ["email"] }
   ],
   rebook: [
@@ -67,6 +70,7 @@ export async function scheduleReminders(env, lead, startTs) {
   const t = now(); const stmts = [];
   const add = (step, ch, at) => stmts.push(env.DB.prepare("INSERT INTO messages (lead_id, seq, step, channel, send_at, created_at) VALUES (?,?,?,?,?,?)").bind(lead.id, "reminder", step, ch, at, t));
   if (startTs - 24 * HOUR > t + HOUR) add("t24h", "email", startTs - 24 * HOUR);
+  else if (startTs - 30 * MIN > t) add("tagenda", "email", t + 2 * MIN); // booked for today/tomorrow: agenda now
   if (lead.sms_consent && lead.phone && startTs - HOUR > t + 10 * MIN) add("t1h", "sms", startTs - HOUR);
   if (stmts.length) await env.DB.batch(stmts);
 }
@@ -107,6 +111,7 @@ export async function runDue(env, limit = 12) {
   const t = now();
   const budgetEnd = t + 4 * MIN; // stop picking up work well before the next cron tick
   await noShowWatch(env, t);
+  await callAlerts(env, t);
   const { results } = await env.DB.prepare("SELECT * FROM messages WHERE status='pending' AND send_at<=? ORDER BY send_at LIMIT ?").bind(t, limit).all();
   let sent = 0;
   for (const msg of results) {
@@ -145,15 +150,26 @@ export async function runDue(env, limit = 12) {
   return { due: results.length, sent };
 }
 
+// A qualified lead who left the calendar without booking: ask a human to call within the hour.
+async function callAlerts(env, t) {
+  const { results } = await env.DB.prepare(`SELECT * FROM leads l WHERE stage='qualified' AND qualified_at BETWEEN ? AND ? AND phone IS NOT NULL
+    AND NOT EXISTS (SELECT 1 FROM events e WHERE e.lead_id=l.id AND e.type='call_alert') LIMIT 10`).bind(t - 2 * HOUR, t - 15 * MIN).all();
+  for (const l of results) {
+    if (intoWindow(t, "America/Toronto", { start: 9, end: 18 }) > t) continue; // only alert during your business hours
+    await logEvent(env, l.id, "call_alert", {});
+    await notifySales(env, `CALL NOW: ${l.name} (${l.company}) qualified but hasn't booked`, `${l.name} · ${l.phone} · ${l.email}\n${l.ai_summary || ""}\n\nThey saw the calendar ${Math.round((t - l.qualified_at) / MIN)} minutes ago and left without booking. A call in the next hour is the best chance to book them.\nAdmin: ${env.SITE_URL.replace(/\/$/, "")}/admin/#${l.id}`);
+  }
+}
+
 // Cal.com only reports a no-show if the host marks it. 2 h after the start time, ask Joel to mark the
 // outcome; at 24 h with no outcome, treat it as a no-show and start the rebook sequence.
 async function noShowWatch(env, t) {
-  const { results: ask } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=0 LIMIT 20").bind(t - 2 * HOUR).all();
+  const { results: ask } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=0 LIMIT 20").bind(t - 15 * MIN).all();
   for (const l of ask) {
     await env.DB.prepare("UPDATE leads SET noshow_nudged=1 WHERE id=?").bind(l.id).run();
-    await notifySales(env, `mark the outcome: ${l.name} (${l.company})`, `The fit call was scheduled for ${new Date(l.booking_start).toISOString()}. Mark Showed / No-show / Won / Lost:\n${env.SITE_URL.replace(/\/$/, "")}/admin/#${l.id}\n\nIf nothing is marked within 24 h of the start time, it will be treated as a no-show and a rebook sequence will start.`);
+    await notifySales(env, `mark the outcome: ${l.name} (${l.company})`, `The demo call was scheduled for ${new Date(l.booking_start).toISOString()}. Mark Showed / No-show / Won / Lost:\n${env.SITE_URL.replace(/\/$/, "")}/admin/#${l.id}\n\nIf nothing is marked within 3 hours of the start time, it will be treated as a no-show and a rebook sequence will start.`);
   }
-  const { results: auto } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=1 LIMIT 20").bind(t - DAY).all();
+  const { results: auto } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=1 LIMIT 20").bind(t - 3 * HOUR).all();
   for (const l of auto) {
     await env.DB.prepare("UPDATE leads SET stage='no_show', noshow_nudged=2, updated_at=? WHERE id=? AND stage='booked'").bind(t, l.id).run();
     await cancelSeqs(env, l.id, ["reminder"]);

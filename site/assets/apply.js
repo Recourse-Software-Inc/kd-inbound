@@ -33,12 +33,18 @@
   function contact() {
     return {
       name: form.name.value.trim(),
-      company: form.company.value.trim(),
+      company: companyFromEmail(form.email.value), // derived from the work-email domain; one less field
       email: form.email.value.trim().toLowerCase(),
       phone: KD.normPhone(form.phone.value),
       smsConsent: form.smsConsent.checked,
       website: form.website.value // honeypot
     };
+  }
+
+  function companyFromEmail(e) {
+    const d = String(e || "").split("@")[1] || "";
+    const base = d.split(".").slice(-2, -1)[0] || "";
+    return base ? base.charAt(0).toUpperCase() + base.slice(1) : "";
   }
 
   // Order + branching. Personal projects skip the qualification questions.
@@ -57,7 +63,7 @@
     note.textContent = "Step " + (i + 1) + " of " + p.length;
     backBtn.style.display = i === 0 ? "none" : "";
     const last = i === p.length - 1;
-    nextBtn.innerHTML = last ? 'See if it’s a fit <span class="arrow" aria-hidden="true">→</span>' : 'Continue <span class="arrow" aria-hidden="true">→</span>';
+    nextBtn.innerHTML = last ? finalLabel() : 'Continue <span class="arrow" aria-hidden="true">→</span>';
     adaptCopy();
     errBox.style.display = "none";
     const step = byId[id];
@@ -69,16 +75,23 @@
     KD.track("kd_apply_step", { step: id, index: i + 1 });
   }
 
+  // The last button says what happens next, based on the same rules the server applies.
+  function finalLabel() {
+    const l = localScore(answers(), contact());
+    return (l.route === "qualified" ? "Submit and pick a time" : "Send me the free plan") + ' <span class="arrow" aria-hidden="true">→</span>';
+  }
+  function refreshFinal() { if (current === path()[path().length - 1]) nextBtn.innerHTML = finalLabel(); }
+
   function adaptCopy() {
     const a = answers();
     const t = document.getElementById("ucTitle");
-    if (a.building === "customer_product") t.textContent = "In two or three sentences, what should knowdrive do inside your product?";
-    else if (a.building === "internal") t.textContent = "In two or three sentences, which processes or teams should knowdrive support?";
-    else t.textContent = "In two or three sentences, what would you want knowdrive to do?";
+    if (a.building === "customer_product") t.textContent = "What should knowdrive do inside your product?";
+    else if (a.building === "internal") t.textContent = "Which processes or teams should knowdrive support?";
+    else t.textContent = "What should knowdrive do for you?";
     const likelyDQ = a.building === "personal" || a.budget === "no";
     document.getElementById("contactHint").textContent = likelyDQ
       ? "We'll send you the free plan and the resources that match what you told us."
-      : "If it's a fit, you'll pick a time on the next screen for a live demo on your files.";
+      : "If it's a fit, the next screen opens the founders' calendar: 30 minutes, live demo on your files.";
   }
 
   function valid(id, report) {
@@ -94,10 +107,9 @@
       const c = contact(); let ok = true;
       const set = (el, bad) => { el.closest(".field").classList.toggle("invalid", bad && report); if (bad) ok = false; };
       set(form.name, c.name.length < 2);
-      set(form.company, c.company.length < 2);
       set(form.email, !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c.email));
       set(form.phone, !!c.phone && !/^\+\d{8,15}$/.test(c.phone));
-      if (report && form.smsConsent.checked && !c.phone) { set(form.phone, true); }
+      if (report && form.smsConsent.checked && !c.phone) { set(form.phone, true); form.phone.closest(".field").querySelector(".err").textContent = "Add a mobile number for texts, or untick the box."; }
       if (!ok && report) { const bad = step.querySelector(".invalid input"); if (bad) bad.focus(); }
       return ok;
     }
@@ -134,7 +146,11 @@
   });
   let pickedByPointer = false;
   form.addEventListener("pointerdown", e => { if (e.target.closest(".opt")) pickedByPointer = true; });
-  form.addEventListener("input", e => { const f = e.target.closest(".field"); if (f) f.classList.remove("invalid"); });
+  form.addEventListener("input", e => {
+    const f = e.target.closest(".field"); if (f) f.classList.remove("invalid");
+    if (e.target === form.phone) { const has = form.phone.value.trim().length > 0; document.getElementById("smsConsentRow").hidden = !has; if (!has) form.smsConsent.checked = false; }
+    if (e.target === form.email) refreshFinal();
+  });
 
   // Keyboard: number keys pick options; Enter continues (Shift+Enter = newline in textarea).
   document.addEventListener("keydown", e => {
@@ -161,7 +177,8 @@
     const d = KD.store.sget(SAVE); if (!d) return;
     const setVal = (n, v) => { const els = form.querySelectorAll("[name=" + n + "]"); els.forEach(el => { if (el.type === "radio" || el.type === "checkbox") el.checked = Array.isArray(v) ? v.includes(el.value) : el.value === v; else el.value = v || ""; }); };
     Object.entries(d.a || {}).forEach(([k, v]) => setVal(k, v));
-    ["name", "company", "email", "phone"].forEach(k => { if (d.c && d.c[k]) form[k].value = d.c[k]; });
+    ["name", "email", "phone"].forEach(k => { if (d.c && d.c[k]) form[k].value = d.c[k]; });
+    if (d.c && d.c.phone) document.getElementById("smsConsentRow").hidden = false;
     if (d.c && d.c.smsConsent) form.smsConsent.checked = true;
     if (d.current && byId[d.current] && path().includes(d.current)) current = d.current;
   }
@@ -207,7 +224,7 @@
         checking.classList.remove("active"); form.style.display = ""; sending = false;
         show("contact", "back");
         const el = form[err.data.field]; if (el) { el.closest(".field").classList.add("invalid"); el.focus(); }
-        return flash(err.data.error || "Please check your details.");
+        return flash(err.data.error || "We couldn't accept one of your details. Check the highlighted field.");
       }
       // network/server trouble: route on the local score so nobody is stranded
       const l = localScore(a, c);

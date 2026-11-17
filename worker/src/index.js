@@ -64,7 +64,10 @@ async function createLead(req, env, ctx) {
     smsConsent: !!c.smsConsent
   };
   if (contact.name.length < 2) return json({ error: "Please add your name.", field: "name" }, 400);
-  if (contact.company.length < 2) return json({ error: "Please add your company.", field: "company" }, 400);
+  if (contact.company.length < 2) { // the form no longer asks; use the email domain
+    const base = (contact.email.split("@")[1] || "").split(".").slice(-2, -1)[0] || "";
+    contact.company = base ? base.charAt(0).toUpperCase() + base.slice(1) : "-";
+  }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(contact.email) || contact.email.length > 200) return json({ error: "Please use a valid email address.", field: "email" }, 400);
   if (contact.phone && !/^\+\d{8,15}$/.test(contact.phone)) return json({ error: "Include the country code, e.g. +1 416 555 0100.", field: "phone" }, 400);
   if (!contact.phone) contact.smsConsent = false;
@@ -227,7 +230,9 @@ async function precall(req, env, ctx) {
   if (!(await checkLeadToken(env, b.leadId, b.token))) return json({ error: "invalid" }, 403);
   const lead = await getLead(env, b.leadId);
   if (!lead) return json({ error: "not found" }, 404);
-  const data = { wrong: clip(b.wrong, 800), team: clip(b.team, 300), at: now() };
+  // Merge: the SMS opt-in and the question form post separately, so never blank out earlier answers.
+  const prev = parseJSON(lead.precall, {}) || {};
+  const data = { wrong: b.wrong ? clip(b.wrong, 800) : (prev.wrong || ""), team: b.team ? clip(b.team, 300) : (prev.team || ""), at: now() };
   let phone = lead.phone, consent = lead.sms_consent;
   const p = String(b.phone || "").replace(/[^\d+]/g, "");
   if (b.smsConsent) {
@@ -237,7 +242,7 @@ async function precall(req, env, ctx) {
   await env.DB.prepare("UPDATE leads SET precall=?, phone=?, sms_consent=?, updated_at=? WHERE id=?").bind(JSON.stringify(data), phone, consent, now(), lead.id).run();
   if (consent && !lead.sms_consent && lead.booking_start) await scheduleReminders(env, await getLead(env, lead.id), lead.booking_start);
   await logEvent(env, lead.id, "precall", data);
-  ctx.waitUntil(notifySales(env, `pre-call notes: ${lead.name} (${lead.company})`, `Question their AI gets wrong:\n${data.wrong || "-"}\n\nJoining: ${data.team || "-"}`));
+  if (b.wrong || b.team) ctx.waitUntil(notifySales(env, `pre-call notes: ${lead.name} (${lead.company})`, `Question their AI gets wrong:\n${data.wrong || "-"}\n\nJoining: ${data.team || "-"}`));
   return json({ ok: true });
 }
 

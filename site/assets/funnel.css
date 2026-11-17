@@ -229,3 +229,4 @@ a.card:hover { border-color: var(--teal); color: var(--text); transform: transla
 .call-show { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; }
 .call-show li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; color: var(--muted); font-size: 15.5px; }
 .call-show li::before { content: "\2713"; color: var(--teal); }
+@media (max-width: 720px) { [data-hero-cta] .btn { width: 100%; } }

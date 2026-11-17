@@ -78,7 +78,7 @@
 
       <fieldset class="q" data-q="needs" data-type="multi">
         <legend>Which of these would you need to see?</legend>
-        <p class="hint">Select all that apply.</p>
+        <p class="hint">Select all that apply. We'll show these on your files.</p>
         <div class="opts">
           <label class="opt"><input type="checkbox" name="needs" value="citations"><span>Every answer traceable to its source</span></label>
           <label class="opt"><input type="checkbox" name="needs" value="cost"><span>Lower cost per answer</span></label>
@@ -111,8 +111,8 @@
       </fieldset>
 
       <div class="q" data-q="usecase" data-type="text">
-        <p class="qtitle" id="ucTitle">In two or three sentences, what should knowdrive do for you?</p>
-        <p class="hint">Which sources, who uses the answers, and what goes wrong today. We'll use this to plan what we show you.</p>
+        <p class="qtitle" id="ucTitle">What should knowdrive do for you?</p>
+        <p class="hint">Which sources, who uses the answers, what goes wrong today. One or two sentences; we use it to plan your demo.</p>
         <div class="field">
           <label class="sr-only" for="usecase">Use case</label>
           <textarea id="usecase" name="usecase" maxlength="1500" placeholder="e.g. Our support agents answer from 40k PDFs and call recordings. Answers are often wrong and we can't show customers the source."></textarea>
@@ -122,14 +122,11 @@
 
       <div class="q" data-q="contact" data-type="contact">
         <p class="qtitle">Last step: where do we reach you?</p>
-        <p class="hint" id="contactHint">If it's a fit, you'll pick a time on the next screen for a live demo on your files.</p>
-        <div class="grid-2" style="gap:0 14px">
-          <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required><span class="err">Please add your name.</span></div>
-          <div class="field"><label for="company">Company</label><input id="company" name="company" autocomplete="organization" required><span class="err">Please add your company.</span></div>
-        </div>
-        <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required><span class="err">Please use a valid email address.</span></div>
+        <p class="hint" id="contactHint">If it's a fit, the next screen opens the founders' calendar: 30 minutes, live demo on your files.</p>
+        <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required><span class="err">Please add your name.</span></div>
+        <div class="field"><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required><span class="err">Enter a work email, like name@company.com.</span></div>
         <div class="field"><label for="phone">Mobile <span class="muted">(optional, for texts about your application and call)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+1 416 555 0100"><span class="err">Include the country code, e.g. +1 416 555 0100.</span></div>
-        <label class="consent"><input type="checkbox" id="smsConsent" name="smsConsent"><span>Text me from Recourse Software Inc. (knowdrive) about this application and my call: up to 5 automated messages, plus replies to my texts. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
+        <label class="consent" id="smsConsentRow" hidden><input type="checkbox" id="smsConsent" name="smsConsent"><span>Text me from Recourse Software Inc. (knowdrive) about this application and my call: up to 5 automated messages, plus replies to my texts. Msg &amp; data rates may apply. Reply STOP to opt out.</span></label>
         <p class="small muted" style="margin:6px 0 0">We'll email you about this application from Recourse Software Inc. Every email has a one-click unsubscribe. <a data-privacy href="#" target="_blank" rel="noopener">Privacy</a>.</p>
         <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
       </div>
@@ -144,11 +141,11 @@
 
     <div class="checking" id="checking" aria-live="polite">
       <div class="spinner" aria-hidden="true"></div>
-      <h2 style="font-size:26px">Checking your fit…</h2>
+      <h2 style="font-size:26px">Reviewing your answers…</h2>
       <ul class="checklist">
         <li>Reading your use case</li>
-        <li>Matching your stack and volume</li>
-        <li>Preparing your next step</li>
+        <li>Checking volume, timeline and budget</li>
+        <li>Loading your next step</li>
       </ul>
     </div>
   </main>

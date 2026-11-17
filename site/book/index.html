@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Book your fit call · knowdrive</title>
+<title>Pick 30 minutes · knowdrive design-partner build</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#07090f">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,14 +19,19 @@
 </header>
 
 <main class="wrap" style="padding-bottom:60px">
-  <h1 class="mob-only" id="mobHello" style="font-size:24px;margin:0 0 14px">Pick a time for your fit call.</h1>
+  <div class="mob-only" style="margin:0 0 16px">
+    <h1 id="mobHello" style="font-size:24px;margin:0 0 8px">You qualify. Pick 30 minutes with the founders.</h1>
+    <p class="muted small" style="margin:0 0 8px">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
+    <ul class="call-show" id="callShowMob" style="margin-top:6px"></ul>
+  </div>
   <div class="grid-2" style="grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start" id="bookGrid">
     <div id="bookInfo">
-      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">Pick a time with the founders.</h1>
-      <p style="margin:18px 0 0;font:600 17px/1.35 var(--display)">A full demo on your files, during the call.</p>
-      <p class="eyebrow" style="margin:16px 0 0">Including</p>
+      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a design-partner build. Pick 30 minutes with the founders.</h1>
+      <p style="margin:18px 0 0;font:600 17px/1.35 var(--display)">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
+      <p class="eyebrow" style="margin:16px 0 0">On your call</p>
+      <p class="small muted" id="hostLine" style="margin:6px 0 0"></p>
       <ul class="call-show" id="callShow"></ul>
-      <p class="small muted" style="margin-top:18px">Can't see a time that works? <a id="altLink" href="#">Open the full calendar</a>, or email <a href="mailto:hello@knowdrive.ai">hello@knowdrive.ai</a> and we'll find one.</p>
+      <p class="small muted" style="margin-top:18px">No slot fits? Email <a href="mailto:hello@knowdrive.ai?subject=Times%20for%20a%20design-partner%20call">hello@knowdrive.ai</a> two times that work and we'll send the invite.</p>
     </div>
     <div>
       <div class="cal-box" id="cal" aria-label="Booking calendar">
@@ -44,7 +49,7 @@
   #bookGrid > div:last-child{order:-1}
   #bookInfo h1{font-size:26px !important}
   #bookInfo h1, #bookInfo .eyebrow, #bookInfo .call-show{display:none}
-  #mobHello::after{content:" A full demo on your files, during the call."; display:block; font:400 15px/1.4 var(--body); color:var(--muted); margin-top:6px}
+
 }
 @media (min-width: 921px){ .mob-only{display:none} }
 </style>
@@ -61,16 +66,19 @@
       KD.store.sset("kd_lead", lead);
     } catch {}
   }
-  document.getElementById("callShow").innerHTML = KD.callShows(lead.needs, 3).map(t => "<li>" + t.replace(/</g, "&lt;") + "</li>").join("");
+  const li = t => "<li>" + t.replace(/</g, "&lt;") + "</li>";
+  document.getElementById("callShow").innerHTML = KD.callShows(lead.needs, 3).map(li).join("");
+  document.getElementById("callShowMob").innerHTML = KD.callShows(lead.needs, 2).map(li).join("");
+  const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
+  if (hosts) document.getElementById("hostLine").textContent = "With " + hosts;
   const first = (lead.name || "").split(/\s+/)[0];
-  if (first) { document.getElementById("hello").textContent = first + ", pick a time with the founders."; document.getElementById("mobHello").textContent = first + ", pick a time for your fit call."; }
+  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 30 minutes with the founders."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 30 minutes with the founders."; }
   // Fallback link carries the same prefill and lead id as the embed, so the booking still matches.
   const fb = new URL(C.calFallbackUrl);
   if (lead.name) fb.searchParams.set("name", lead.name);
   if (lead.email) fb.searchParams.set("email", lead.email);
   if (lead.id) fb.searchParams.set("metadata[leadId]", lead.id);
   const fallbackUrl = fb.toString();
-  document.getElementById("altLink").href = fallbackUrl;
 
   // Cal.com embed loader (official snippet)
   (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
@@ -89,8 +97,8 @@
   setTimeout(() => {
     if (loaded) return;
     const f = document.getElementById("calFallback");
-    if (f) f.innerHTML = '<p style="margin:30px 0 16px">The calendar didn’t load here (often an ad or tracking blocker).</p><a class="btn" href="' + fallbackUrl + '" target="_blank" rel="noopener">Open the booking page →</a>';
-  }, 9000);
+    if (f) f.innerHTML = '<p style="margin:30px 0 16px">This browser blocked the calendar (usually an ad blocker). Your details carry over.</p><a class="btn" href="' + fallbackUrl + '" target="_blank" rel="noopener">Pick a time on cal.com →</a>';
+  }, 5000);
 
   let booked = false;
   function onBooked(data) {

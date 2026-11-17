@@ -21,8 +21,8 @@ export const FACTS = `
   - agent_memory: one shared memory every agent and staff member reads from, over MCP or REST.
   - consolidate: one service in place of a vector database, file store and chunking pipeline; content vectorized once, so changing models means no re-chunking or re-embedding.
 - Objection "we already run a vector database": most teams do; the pilot runs alongside it on their own content, so the decision rests on measured cost, quality and citation coverage.
-- The fit call: 30 minutes on video with the founders, with a full demo on the lead's own files during the call (they bring 3-5 non-sensitive files; they are loaded live and the lead's questions are run against them in the knowdrive Inspector). Also covers sources, agents, where answers break today, jurisdiction and deployment options, and what a pilot would cost.
-- Design-partner build: fit call → pilot on the customer's own corpus in their jurisdiction → wire into their agents via MCP or REST → measure cost per query, answer quality and citation coverage against their current stack → hand-off with deployment package and enablement days.
+- The call (never "fit call"): 30 minutes on video with the founders, with a full demo on the lead's own files during the call (they bring 3-5 non-sensitive files; they are loaded live and the lead's questions are run against them in the knowdrive Inspector). Also covers sources, agents, where answers break today, jurisdiction and deployment options, and what a pilot would cost.
+- Design-partner build: demo call → pilot on the customer's own corpus in their jurisdiction → wire into their agents via MCP or REST → measure cost per query, answer quality and citation coverage against their current stack → hand-off with deployment package and enablement days.
 `.trim();
 
 export const VOICE = `
@@ -31,7 +31,7 @@ Rules:
 - Concrete proof points over adjectives. No hype words (revolutionary, game-changing, cutting-edge, seamless, unlock, supercharge, leverage).
 - Never use contrast constructions of the form "It's not X. It's Y." / "This isn't X — it's Y." or any variant. State the positive claim directly.
 - Write the brand as "knowdrive" (lowercase).
-- One idea per message. One clear call to action: the booking link.
+- One idea per message. One ask per message: usually the booking link; where the intent asks for a reply, the reply is the ask and the link is a short alternative line.
 - No exclamation marks except at most one in a greeting. No emojis.
 - Never invent facts, customers, numbers, features, discounts or deadlines. Use only the FACTS block.
 - Never pretend to be human if asked directly; say the note was drafted by an assistant and Joel reads every reply.

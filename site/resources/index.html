@@ -21,9 +21,9 @@
 <main class="wrap" style="padding-bottom:40px">
   <section style="max-width:760px;padding:24px 0 36px">
     <p class="eyebrow" id="eyebrow">Your starting point</p>
-    <h1 style="font-size:clamp(30px,4.4vw,46px)" id="headline">The fastest way to put knowdrive to work is the free plan.</h1>
-    <p class="lede" id="lede">Based on what you shared, a founder call isn't the best use of your time yet. You can get the same cited retrieval today on 500 MB of your own files, with no card.</p>
-    <a class="btn" id="freeBtn" href="#" target="_blank" rel="noopener">Create a free account <span class="arrow" aria-hidden="true">→</span></a>
+    <h1 style="font-size:clamp(30px,4.4vw,46px)" id="headline">Start on the free plan today: 500 MB of your files, cited answers, no card.</h1>
+    <p class="lede" id="lede">Founder calls are for teams starting an enterprise design-partner build (plans from $5,120/month). The free plan runs the same cited retrieval on 500 MB of your files, 500 searches a month, with Claude, Cursor or any MCP client.</p>
+    <a class="btn" id="freeBtn" href="#" target="_blank" rel="noopener">Create a free account, no card <span class="arrow" aria-hidden="true">→</span></a>
     <p class="cta-note" id="emailNote"></p>
   </section>
 
@@ -31,7 +31,7 @@
     <div class="grid-2" id="cards"></div>
   </section>
 
-  <p class="small muted" style="margin-top:28px">Have a production use case and a budget owner now? <a href="../apply/" data-carry>Re-apply</a>.</p>
+  <p class="small muted" style="margin-top:28px">When you have a production use case and a budget owner, <a href="../apply/" data-carry>apply again for a design-partner build</a>.</p>
 </main>
 
 <footer class="wrap foot">
@@ -54,7 +54,8 @@
   // Put the most relevant resources first.
   const needs = lead.needs || [];
   const weight = r => (needs.includes("cost") && /benchmark/i.test(r.tag)) || (needs.includes("citations") && /watch/i.test(r.tag)) || (needs.includes("sovereignty") && /read/i.test(r.tag)) ? 1 : 0;
-  const list = (C.resources || []).filter(r => r.url).sort((a, b) => weight(b) - weight(a));
+  // Skip cards with no link, and any card that just repeats the main button.
+  const list = (C.resources || []).filter(r => r.url && r.url !== C.freePlanUrl).sort((a, b) => weight(b) - weight(a));
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   document.getElementById("cards").innerHTML = list.map(r =>
     '<a class="card" href="' + esc(r.url) + '" target="_blank" rel="noopener" data-res="' + esc(r.tag) + '">' +

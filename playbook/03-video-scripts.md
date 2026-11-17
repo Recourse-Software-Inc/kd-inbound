@@ -10,7 +10,7 @@ Both use the same look as the source ad. You talk to camera for the hook. The re
 
 **What knowdrive does (Inspector screen recording):** "knowdrive stores documents, audio and video once. Every result comes back as the exact passage, cited to its file, version and byte range, or a timestamp for media. It runs on ordinary CPUs rather than GPUs, so it can run in Canada, the EU or on your own hardware. And it works with Claude, Codex, Cursor or any MCP client."
 
-**How a design-partner build runs (diagram):** walk the five steps: fit call, pilot on your corpus, wire it into your agents, measure against what you run today, hand-off.
+**How a design-partner build runs (diagram):** walk the five steps: founder call with a live demo on your files, pilot on your corpus, wire it into your agents, measure against what you run today, hand-off.
 
 **Who it's for (to camera):** "This is for teams shipping retrieval or agents to customers or staff, with a real need for an audit trail or data residency. Enterprise plans start at $5,120 a month. If you're earlier than that, the application will point you to the free plan, which is the same retrieval with no card."
 

@@ -16,8 +16,8 @@ database_id = "254c9daf-af76-4b81-95fb-5d2fec76d33e"
 enabled = true
 
 [vars]
-SITE_URL = "https://recourse-software-inc.github.io/kd-inbound"
-SITE_ORIGINS = "https://recourse-software-inc.github.io"
+SITE_URL = "https://onboarding.knowdrive.ai"
+SITE_ORIGINS = "https://onboarding.knowdrive.ai,https://recourse-software-inc.github.io"
 API_URL = "https://kd-inbound.joelauge.workers.dev"
 GCAL_SYNC_URL = "https://script.google.com/macros/s/AKfycbyL4GQFVur16-iFTJqJMWMFlBbf2yJPlX93uPJr5uQIX2lN5TVlfdEd1NdsWpMw7SpnSA/exec"
 GCAL_OWNER = "joel@recoursellm.com"

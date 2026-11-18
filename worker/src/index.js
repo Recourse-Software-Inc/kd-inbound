@@ -5,7 +5,7 @@ import { json, html, cors, uid, now, MIN, HOUR, DAY, leadToken, shortBookLink, c
 import { cleanAnswers, ruleScore, decide } from "./score.js";
 import { scoreUseCase, handleReply, callBrief } from "./ai.js";
 import { sendSignal } from "./signals.js";
-import { scheduleSeq, scheduleReminders, cancelSeqs, pauseSeqs, runDue, bookUrl } from "./sequence.js";
+import { scheduleSeq, scheduleReminders, cancelSeqs, pauseSeqs, runDue, bookUrl, compose } from "./sequence.js";
 import { sendEmail, notifySales } from "./messaging.js";
 import { handleEmail } from "./email-inbound.js";
 
@@ -507,6 +507,29 @@ async function admin(req, url, env, ctx) {
     await env.DB.prepare("UPDATE messages SET status='cancelled' WHERE lead_id=? AND status='pending'").bind(String(b.id || "")).run();
     await logEvent(env, b.id, "automation_stopped", {});
     return json({ ok: true });
+  }
+  if (p === "/key-check" && req.method === "GET") {
+    // Shape of configured keys only (never the value), for diagnosing paste problems.
+    const shape = v => { v = String(v || ""); return { set: !!v, length: v.length, prefix: v.slice(0, 7), nonAscii: /[^\x21-\x7E]/.test(v.trim()), edgeWhitespace: v !== v.trim(), quotes: /^["']|["']$/.test(v.trim()) }; };
+    const m = String(env.ANTHROPIC_API_KEY || "").match(/sk-ant-[A-Za-z0-9_-]+/g) || [];
+    return json({ ANTHROPIC_API_KEY: Object.assign(shape(env.ANTHROPIC_API_KEY), { keyLikeTokens: m.length, firstTokenLength: m[0] ? m[0].length : 0 }), RESEND_API_KEY: shape(env.RESEND_API_KEY) });
+  }
+  if (p === "/rescore" && req.method === "GET") {
+    // Score a lead's stored answers again without changing the lead: /api/admin/rescore?id=…&engine=jev|claude
+    const lead = await getLead(env, url.searchParams.get("id"));
+    if (!lead) return json({ error: "not found" }, 404);
+    const answers = JSON.parse(lead.answers || "{}");
+    const contact = { email: lead.email, company: lead.company || "", name: lead.name || "" };
+    const e2 = url.searchParams.get("engine") === "claude" ? Object.assign({}, env, { JEV_API_KEY: "" }) : env;
+    const t0 = Date.now(); const r = await scoreUseCase(e2, answers, contact);
+    return json({ ms: Date.now() - t0, result: r, jevKey: !!env.JEV_API_KEY });
+  }
+  if (p === "/preview" && req.method === "GET") {
+    // Write (but don't send) a sequence message for a lead: /api/admin/preview?id=…&seq=followup&step=d1&channel=email
+    const lead = await getLead(env, url.searchParams.get("id"));
+    if (!lead) return json({ error: "not found" }, 404);
+    const msg = { seq: url.searchParams.get("seq") || "followup", step: url.searchParams.get("step") || "d0", channel: url.searchParams.get("channel") || "email" };
+    return json(await compose(env, lead, msg) || { error: "no copy for that step" });
   }
   if (p === "/test-email" && req.method === "POST") {
     // Sends one test message to SALES_NOTIFY_EMAIL through the same path as lead emails.

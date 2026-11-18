@@ -35,7 +35,7 @@ export async function sendEmail(env, lead, { subject, text, to, inReplyTo }) {
   };
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { authorization: "Bearer " + env.RESEND_API_KEY, "content-type": "application/json" },
+    headers: { authorization: "Bearer " + String(env.RESEND_API_KEY).trim(), "content-type": "application/json" },
     body: JSON.stringify(body)
   });
   if (!res.ok) return { ok: false, error: "resend " + res.status + " " + (await res.text()).slice(0, 200) };
@@ -51,7 +51,7 @@ export async function sendSms(env, lead, text, { optOut = true } = {}) {
   if (env.TWILIO_MESSAGING_SERVICE) form.set("MessagingServiceSid", env.TWILIO_MESSAGING_SERVICE); else form.set("From", env.TWILIO_FROM);
   const res = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${env.TWILIO_SID}/Messages.json`, {
     method: "POST",
-    headers: { authorization: "Basic " + btoa(env.TWILIO_SID + ":" + env.TWILIO_TOKEN), "content-type": "application/x-www-form-urlencoded" },
+    headers: { authorization: "Basic " + btoa(String(env.TWILIO_SID).trim() + ":" + String(env.TWILIO_TOKEN).trim()), "content-type": "application/x-www-form-urlencoded" },
     body: form
   });
   if (!res.ok) return { ok: false, error: "twilio " + res.status + " " + (await res.text()).slice(0, 200) };
@@ -63,7 +63,7 @@ export async function notifySales(env, subject, text) {
   if (!env.SALES_NOTIFY_EMAIL || !env.RESEND_API_KEY) return;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { authorization: "Bearer " + env.RESEND_API_KEY, "content-type": "application/json" },
+    headers: { authorization: "Bearer " + String(env.RESEND_API_KEY).trim(), "content-type": "application/json" },
     body: JSON.stringify({ from: env.FROM_EMAIL || "knowdrive inbound <joel@knowdrive.ai>", to: env.SALES_NOTIFY_EMAIL.split(",").map(s => s.trim()), subject: "[inbound] " + subject, text })
   });
   if (!res.ok) console.error("notifySales", res.status);

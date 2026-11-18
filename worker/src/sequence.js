@@ -87,7 +87,7 @@ export async function bookUrl(env, lead, seq, step, channel) {
   return u.toString();
 }
 
-async function compose(env, lead, msg) {
+export async function compose(env, lead, msg) {
   const answers = parseJSON(lead.answers, {});
   const key = msg.seq + ":" + msg.step;
   const book = msg.channel === "sms" ? await shortBookLink(env, lead.id) : await bookUrl(env, lead, msg.seq, msg.step, msg.channel);

@@ -508,6 +508,11 @@ async function admin(req, url, env, ctx) {
     await logEvent(env, b.id, "automation_stopped", {});
     return json({ ok: true });
   }
+  if (p === "/test-email" && req.method === "POST") {
+    // Sends one test message to SALES_NOTIFY_EMAIL through the same path as lead emails.
+    const r = await sendEmail(env, { id: "test", email: env.SALES_NOTIFY_EMAIL, name: "Joel" }, { subject: "knowdrive inbound: test email", text: "This is a test from the inbound system. If you can read it, sending works.\n\nJoel", to: env.SALES_NOTIFY_EMAIL });
+    return json(r, r.ok ? 200 : 502);
+  }
   if (p === "/run-due" && req.method === "POST") return json(await runDue(env));
   return json({ error: "not found" }, 404);
 }

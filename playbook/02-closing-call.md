@@ -2,10 +2,10 @@
 
 The Worker emails you a **pre-call brief** the moment someone books. It covers who they are, the likely pain, the best demo angle, four discovery questions, objections and a suggested pilot shape. If they filled in the thank-you page form, you also get the question their AI gets wrong today. Read both before you join.
 
-The call is 30 minutes on video.
+The call is 60 minutes on video.
 
 ## 0. Frame (1 min)
-"Thanks for booking. Here's how I'd like to use the 30 minutes: I'll ask about what you're running and where it breaks, then show you cited retrieval on content like yours. At the end we'll decide together whether a pilot makes sense. If it doesn't, I'll tell you. Sound good?"
+"Thanks for booking. Here's how I'd like to use the 60 minutes: I'll ask about what you're running and where it breaks, then show you cited retrieval on content like yours. At the end we'll decide together whether a pilot makes sense. If it doesn't, I'll tell you. Sound good?"
 
 ## 1. Discovery (10 min)
 Work from the brief's four questions. Fill these gaps:

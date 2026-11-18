@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Pick 30 minutes · knowdrive design-partner build</title>
+<title>Pick 60 minutes · knowdrive design-partner build</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#07090f">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,13 +20,13 @@
 
 <main class="wrap" style="padding-bottom:60px">
   <div class="mob-only" style="margin:0 0 16px">
-    <h1 id="mobHello" style="font-size:24px;margin:0 0 8px">You qualify. Pick 30 minutes with Joel.</h1>
+    <h1 id="mobHello" style="font-size:24px;margin:0 0 8px">You qualify. Pick 60 minutes with Joel.</h1>
     <p class="muted small" style="margin:0 0 8px">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
     <ul class="call-show" id="callShowMob" style="margin-top:6px"></ul>
   </div>
   <div class="grid-2" style="grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start" id="bookGrid">
     <div id="bookInfo">
-      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a design-partner build. Pick 30 minutes with Joel Augé, co-founder.</h1>
+      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a design-partner build. Pick 60 minutes with Joel Augé, co-founder.</h1>
       <p style="margin:18px 0 0;font:600 17px/1.35 var(--display)">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
       <p class="eyebrow" style="margin:16px 0 0">On your call</p>
       <p class="small muted" id="hostLine" style="margin:6px 0 0"></p>
@@ -71,7 +71,7 @@
   document.getElementById("callShowMob").innerHTML = KD.callShows(lead.needs, 1).map(li).join("");
   const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
   const first = (lead.name || "").split(/\s+/)[0];
-  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 30 minutes with Joel Augé, co-founder."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 30 minutes with Joel."; }
+  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 60 minutes with Joel Augé, co-founder."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 60 minutes with Joel."; }
   // Fallback link carries the same prefill and lead id as the embed, so the booking still matches.
   let fallbackUrl = "";
   if (C.calFallbackUrl) {

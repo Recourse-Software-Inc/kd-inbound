@@ -18,7 +18,7 @@ Both use the same look as the source ad. You talk to camera for the hook. The re
 
 ## B. Thank-you page "watch before your call" (about 4:00) → `confirmVideo`
 
-1. **Confirm and thank (15 s):** "You're booked. Here's how to get the most out of the 30 minutes."
+1. **Confirm and thank (15 s):** "You're booked. Here's how to get the most out of the 60 minutes."
 2. **What happens on the call (45 s):** discovery, live Inspector demo on content like theirs, jurisdiction and deployment, and what a pilot would cost.
 3. **Pre-frame the solution (90 s):** show one cited result end to end. Explain vectorize-once economics in plain terms: you pay to understand content once, then every agent and person reads from it.
 4. **FAQs (60 s):** where data lives; nothing used to train models; works with their current models; what a pilot looks like.

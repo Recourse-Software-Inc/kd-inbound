@@ -21,7 +21,7 @@ export const FACTS = `
   - agent_memory: one shared memory every agent and staff member reads from, over MCP or REST.
   - consolidate: one service in place of a vector database, file store and chunking pipeline; content vectorized once, so changing models means no re-chunking or re-embedding.
 - Objection "we already run a vector database": most teams do; the pilot runs alongside it on their own content, so the decision rests on measured cost, quality and citation coverage.
-- The call (never "fit call"): 30 minutes on video with Joel Augé (co-founder; he runs every demo himself), with a full demo on the lead's own files during the call (they bring 3-5 non-sensitive files; they are loaded live and the lead's questions are run against them in the knowdrive Inspector). Also covers sources, agents, where answers break today, jurisdiction and deployment options, and what a pilot would cost.
+- The call (never "fit call"): 60 minutes on video with Joel Augé (co-founder; he runs every demo himself), with a full demo on the lead's own files during the call (they bring 3-5 non-sensitive files; they are loaded live and the lead's questions are run against them in the knowdrive Inspector). Also covers sources, agents, where answers break today, jurisdiction and deployment options, and what a pilot would cost.
 - Design-partner build: demo call → pilot on the customer's own corpus in their jurisdiction → wire into their agents via MCP or REST → measure cost per query, answer quality and citation coverage against their current stack → hand-off with deployment package and enablement days.
 `.trim();
 

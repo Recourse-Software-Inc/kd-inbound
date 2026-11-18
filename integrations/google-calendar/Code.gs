@@ -9,7 +9,7 @@
  */
 const CONFIG = {
   WORKER_URL: 'https://kd-inbound.joelauge.workers.dev/hooks/gcal',
-  TITLE_PREFIX: 'knowdrive demo',          // the appointment schedule's title; bookings are named "<title> (<guest>)"
+  TITLE_PREFIX: 'knowdrive.ai demo walk-through', // the appointment schedule's title; bookings start with it
   CALENDAR_ID: 'primary'
 };
 

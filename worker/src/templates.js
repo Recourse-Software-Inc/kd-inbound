@@ -1,7 +1,7 @@
 // Fallback copy used when the AI writer is off, slow, or its draft fails validation.
 // Same intents as ai.js INTENTS. {first} {company} {book} {free} {site} are filled in by fill().
 export const EMAIL = {
-  "followup:d0": { subject: "times for your demo", body: "Hi {first},\n\nThanks for applying. You're through to a 30-minute call with me, and the demo runs on your own files: bring 3-5, we load them while you watch, and every answer comes back cited to file, version and byte range.\n\nPick a time: {book}\n\nIf none of the slots work, reply with two times that do and I'll send the invite.\n\nJoel" },
+  "followup:d0": { subject: "times for your demo", body: "Hi {first},\n\nThanks for applying. You're through to a 60-minute call with me, and the demo runs on your own files: bring 3-5, we load them while you watch, and every answer comes back cited to file, version and byte range.\n\nPick a time: {book}\n\nIf none of the slots work, reply with two times that do and I'll send the invite.\n\nJoel" },
   "followup:d1": { subject: "on your own files", body: "Hi {first},\n\nYou told us you need to see {show}. On the call I'll show exactly that on 3-5 of your own files, loaded while you watch.\n\n30 minutes: {book}\n\nJoel" },
   "followup:d3": { subject: "what a pilot measures", body: "Hi {first},\n\nMost teams we talk to already run a vector database or a search stack. A pilot runs next to it on your own content, and the decision rests on three measured numbers: cost per query, answer quality and citation coverage. The call is where we scope that pilot and what it would cost, so you have numbers for whoever approves it.\n\nPick a time: {book}\n\nJoel" },
   "followup:d5": { subject: "timing or fit", body: "Hi {first},\n\nOne question, since you haven't picked a time yet. Which is closest?\n\n1. Timing is off\n2. Someone else needs to be on the call\n3. Not sure it fits what we run today\n\nReply with the number and I'll take it from there. Or pick a time: {book}\n\nJoel" },
@@ -20,8 +20,8 @@ export const EMAIL = {
 
 // Plain ASCII only (GSM-7): no en dashes, curly quotes or emoji, or each text costs 2-3x.
 export const SMS = {
-  "followup:d0": "Hi {first}, Joel from knowdrive. Thanks for applying. Your 30-min call includes a demo on your files. Pick a time: {book} or reply with one that suits.",
-  "followup:d2": "Hi {first}, Joel at knowdrive. Your demo slot is still open: 30 min with me, run on 3-5 of your own files. Pick a time: {book}",
+  "followup:d0": "Hi {first}, Joel from knowdrive. Thanks for applying. Your 60-min call includes a demo on your files. Pick a time: {book} or reply with one that suits.",
+  "followup:d2": "Hi {first}, Joel at knowdrive. Your demo slot is still open: 60 min with me, run on 3-5 of your own files. Pick a time: {book}",
   "rebook:r0": "Hi {first}, Joel at knowdrive. We missed each other today, no problem. Same plan, a demo on your own files. New time: {book}",
   "recancel:c0": "Hi {first}, Joel at knowdrive. Saw the call was cancelled. If timing was the issue, pick another slot: {book}",
   "reminder:t1h": "Hi {first}, your knowdrive demo starts in about an hour. Join from your calendar invite. Running late or need to move it? Reply here. - Joel",

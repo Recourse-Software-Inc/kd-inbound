@@ -22,7 +22,7 @@
   <div class="banner" role="status">
     <div class="check" aria-hidden="true">✓</div>
     <div>
-      <b id="when">Your call is booked · 30 min with Joel</b>
+      <b id="when">Your call is booked · 60 min with Joel</b>
       <div class="small muted" id="whenSub">Invite and video link are in your inbox.</div>
     </div>
   </div>
@@ -41,7 +41,7 @@
   </section>
 
   <section style="padding:30px 0 0">
-    <h2 style="font-size:28px;margin-bottom:6px">Your 30 minutes</h2>
+    <h2 style="font-size:28px;margin-bottom:6px">Your 60 minutes</h2>
     <p class="small muted" id="hostLine" style="margin:0 0 6px"></p>
     <ul class="call-show" id="callShow"></ul>
   </section>
@@ -100,7 +100,7 @@
     const d = new Date(booking.startTime);
     if (!isNaN(d)) {
       const fmt = new Intl.DateTimeFormat(undefined, { weekday: "long", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", timeZoneName: "short" });
-      document.getElementById("when").textContent = "Booked: " + fmt.format(d) + " · 30 min with Joel";
+      document.getElementById("when").textContent = "Booked: " + fmt.format(d) + " · 60 min with Joel";
     }
   }
 

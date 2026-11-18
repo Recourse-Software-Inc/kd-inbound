@@ -163,10 +163,10 @@ async function callAlerts(env, t) {
   }
 }
 
-// Cal.com only reports a no-show if the host marks it. Once the call should be over (start + 40 min),
+// Cal.com only reports a no-show if the host marks it. Once the call should be over (start + 70 min),
 // ask Joel to mark the outcome; at start + 3 h with no outcome, treat it as a no-show and start rebook.
 async function noShowWatch(env, t) {
-  const { results: ask } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=0 LIMIT 20").bind(t - 40 * MIN).all();
+  const { results: ask } = await env.DB.prepare("SELECT * FROM leads WHERE stage='booked' AND booking_start < ? AND noshow_nudged=0 LIMIT 20").bind(t - 70 * MIN).all();
   for (const l of ask) {
     await env.DB.prepare("UPDATE leads SET noshow_nudged=1 WHERE id=?").bind(l.id).run();
     await notifySales(env, `mark the outcome: ${l.name} (${l.company})`, `The demo call was scheduled for ${new Date(l.booking_start).toISOString()}. Mark Showed / No-show / Won / Lost:\n${env.SITE_URL.replace(/\/$/, "")}/admin/#${l.id}\n\nIf nothing is marked within 3 hours of the start time, it will be treated as a no-show and a rebook sequence will start.`);

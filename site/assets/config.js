@@ -6,7 +6,7 @@ window.KD_FUNNEL = {
 
   // Google Calendar appointment schedule (joel@recoursellm.com): the schedule's booking-page URL,
   // e.g. "https://calendar.google.com/calendar/appointments/schedules/AcZssZ...". Takes priority over Cal.com.
-  gcalBookingUrl: "",
+  gcalBookingUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0gf1kPAv3yWcLxJZsAnNlWdsy6bORUrgOAj4_p88FemB0vtVAiXtIcO2rGv6tEx-c1QDEpR6eP",
 
   // Cal.com booking link for the demo call ("username/event-slug" or "team/x/event-slug").
   calLink: "",   // e.g. "joelauge/knowdrive-demo" once the event exists on YOUR Cal.com account,

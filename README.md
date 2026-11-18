@@ -51,7 +51,7 @@ Optional spam protection: create a Cloudflare Turnstile widget, put the site key
 Demos run on a **Google Calendar appointment schedule** on joel@recoursellm.com. Setup: `integrations/google-calendar/README.md`. Cal.com (below) is still supported if `gcalBookingUrl` is empty.
 
 #### Cal.com (alternative)
-- Create a 30-minute event, e.g. `recourse/knowdrive-demo`, and put it in `site/assets/config.js` (`calLink`, `calFallbackUrl`). **Mark the event hidden** so it isn't listed on your public Cal profile; bookings should come through the application. Anyone who books it directly still gets recorded, as a `direct` lead flagged to you, but it's never counted as a conversion.
+- Create a 60-minute event, e.g. `recourse/knowdrive-demo`, and put it in `site/assets/config.js` (`calLink`, `calFallbackUrl`). **Mark the event hidden** so it isn't listed on your public Cal profile; bookings should come through the application. Anyone who books it directly still gets recorded, as a `direct` lead flagged to you, but it's never counted as a conversion.
 - Settings → Developer → Webhooks: URL `https://<API_URL>/hooks/cal`, secret = `CAL_WEBHOOK_SECRET`. Triggers: Booking Created, Rescheduled, Cancelled, No-show updated.
 - Optional: in the event's advanced settings, redirect on booking to `<SITE_URL>/confirmed/`. That covers people who book straight from an email client.
 

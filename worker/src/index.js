@@ -181,11 +181,21 @@ function leadDigest(env, lead, a, rule, ai) {
   ].join("\n");
 }
 
+let lastGcalSync = 0;
 async function getLeadPublic(url, env) {
   const id = url.searchParams.get("lid");
   if (!(await checkLeadToken(env, id, url.searchParams.get("t")))) return json({ error: "invalid link" }, 403);
-  const lead = await getLead(env, id);
+  let lead = await getLead(env, id);
   if (!lead) return json({ error: "not found" }, 404);
+  // The booking page sets sync=1 once the person is using the calendar: ask the Calendar bridge to look now
+  // instead of waiting for its one-minute trigger, then read the lead again.
+  if (url.searchParams.get("sync") && lead.stage !== "booked" && env.GCAL_SYNC_URL && Date.now() - lastGcalSync > 2500) {
+    lastGcalSync = Date.now();
+    const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 9000);
+    try { await fetch(env.GCAL_SYNC_URL + (env.GCAL_SYNC_URL.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(env.GCAL_HOOK_SECRET || ""), { signal: ctrl.signal, redirect: "follow" }); }
+    catch (e) { console.error("gcal sync", e && e.message); } finally { clearTimeout(tm); }
+    lead = (await getLead(env, id)) || lead;
+  }
   const a = parseJSON(lead.answers, {});
   return json({ id: lead.id, name: lead.name, email: lead.email, company: lead.company, phone: lead.phone, stage: lead.stage, bookingStart: lead.booking_start, building: a.building, needs: a.needs, usecase: a.usecase });
 }

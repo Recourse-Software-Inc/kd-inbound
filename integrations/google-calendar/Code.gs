@@ -22,6 +22,15 @@ function install() {
   sync(); // first run only stores a sync token
 }
 
+// Web app entry: the Worker calls this while someone is on the booking page, so a new booking
+// shows up in seconds instead of at the next one-minute run. Deploy > Web app, execute as me, anyone.
+function doGet(e) {
+  const secret = PropertiesService.getScriptProperties().getProperty('HOOK_SECRET');
+  if (!secret || !e || !e.parameter || e.parameter.k !== secret) return ContentService.createTextOutput('no');
+  sync();
+  return ContentService.createTextOutput('ok');
+}
+
 function sync() {
   const props = PropertiesService.getScriptProperties();
   const lock = LockService.getScriptLock();

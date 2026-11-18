@@ -12,6 +12,15 @@
 <link rel="stylesheet" href="../assets/funnel.css">
 <script src="../assets/config.js"></script>
 <script src="../assets/common.js"></script>
+<style>
+.book-status{display:none;align-items:center;gap:10px;margin:0 0 10px;padding:12px 14px;border-radius:10px;background:rgba(91,140,255,.12);border:1px solid rgba(91,140,255,.35);color:#e6ebf5;font-size:15px;line-height:1.4}
+.book-status.show{display:flex}
+.book-status.done{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.4)}
+.book-status .spin{flex:none;width:16px;height:16px;border-radius:50%;border:2px solid rgba(230,235,245,.25);border-top-color:#e6ebf5;animation:kdspin .8s linear infinite}
+.book-status .ok{flex:none;color:#4ade80;font-weight:700}
+@keyframes kdspin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.book-status .spin{animation:none}}
+</style>
 </head>
 <body>
 <header class="wrap top">
@@ -95,21 +104,37 @@
     // so the page asks the Worker (fed by the Calendar bridge) and moves on by itself once it sees it.
     const cal = document.getElementById("cal");
     const src = C.gcalBookingUrl + (C.gcalBookingUrl.includes("?") ? "&" : "?") + "gv=true";
-    cal.innerHTML = '<iframe src="' + src + '" title="Pick a time" style="border:0;width:100%;height:720px;background:#fff" loading="eager"></iframe>';
-    cal.insertAdjacentHTML("afterend", '<p class="small muted" style="margin-top:10px">Use ' + (lead.email ? '<b>' + lead.email.replace(/</g, "&lt;") + '</b>' : 'the email you applied with') + ' when you book, and this page moves to your prep steps on its own.</p>');
+    cal.innerHTML = '<div id="bookStatus" class="book-status" role="status" aria-live="polite"></div><iframe id="gcal" src="' + src + '" title="Pick a time" style="border:0;width:100%;height:720px;background:#fff" loading="eager"></iframe>';
+    cal.insertAdjacentHTML("afterend", '<p class="small muted" style="margin-top:10px">Use ' + (lead.email ? '<b>' + lead.email.replace(/</g, "&lt;") + '</b>' : 'the email you applied with') + ' when you book. Keep this page open: it moves to your prep steps once your booking comes through.</p>');
+    const status = document.getElementById("bookStatus");
+    const say = (html, cls) => { status.innerHTML = html; status.className = "book-status show " + (cls || ""); };
     if (lead.id && lead.token) {
       const t0 = Date.now();
-      const poll = setInterval(async () => {
-        if (Date.now() - t0 > 30 * 60000) return clearInterval(poll);
+      let engaged = 0, timer = null;
+      const check = async () => {
+        if (Date.now() - t0 > 30 * 60000) return;
         try {
-          const r = await KD.api("/api/lead?lid=" + encodeURIComponent(lead.id) + "&t=" + encodeURIComponent(lead.token), null, { timeout: 6000 });
+          const r = await KD.api("/api/lead?lid=" + encodeURIComponent(lead.id) + "&t=" + encodeURIComponent(lead.token) + (engaged ? "&sync=1" : ""), null, { timeout: 8000 });
           if (r.stage === "booked" && r.bookingStart) {
-            clearInterval(poll);
             KD.store.sset("kd_booking", { startTime: new Date(r.bookingStart).toISOString() });
-            location.href = "../confirmed/" + location.search;
+            say('<span class="ok">\u2713</span> Booking received. Opening your prep steps\u2026', "done");
+            setTimeout(() => { location.href = "../confirmed/" + location.search; }, 600);
+            return;
           }
         } catch {}
-      }, 8000);
+        if (engaged && Date.now() - engaged > 3 * 60000) say('<span class="spin"></span> Still waiting on Google. Your calendar invite is your confirmation, so you can close this page if it arrived. Otherwise keep it open.');
+        timer = setTimeout(check, engaged ? 3000 : 8000);
+      };
+      timer = setTimeout(check, 8000);
+      // Clicking into Google's calendar moves focus into the iframe. From then on, tell the person what happens next and check faster.
+      const engage = () => {
+        if (document.activeElement && document.activeElement.id === "gcal" && !engaged) {
+          engaged = Date.now();
+          say('<span class="spin"></span> After you confirm your time, hold on a few seconds. This page moves to your prep steps on its own.');
+          clearTimeout(timer); timer = setTimeout(check, 3000);
+        }
+      };
+      window.addEventListener("blur", () => setTimeout(engage, 0));
     }
   } else if (!C.calLink) {
     // No calendar yet: one clear action, an email with the lead's details pre-filled.

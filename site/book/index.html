@@ -26,7 +26,7 @@
   </div>
   <div class="grid-2" style="grid-template-columns:.8fr 1.2fr;gap:36px;align-items:start" id="bookGrid">
     <div id="bookInfo">
-      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a design-partner build. Pick 60 minutes with Joel Augé, co-founder.</h1>
+      <h1 style="font-size:clamp(30px,4vw,42px)" id="hello">You qualify for a 1-on-1 build session. Pick 60 minutes with Joel Augé, co-founder.</h1>
       <p style="margin:18px 0 0;font:600 17px/1.35 var(--display)">A live demo on 3–5 of your files, with every answer cited to its passage.</p>
       <p class="eyebrow" style="margin:16px 0 0">On your call</p>
       <p class="small muted" id="hostLine" style="margin:6px 0 0"></p>
@@ -71,7 +71,7 @@
   document.getElementById("callShowMob").innerHTML = KD.callShows(lead.needs, 1).map(li).join("");
   const hosts = (C.hosts || []).map(h => h.name + ", " + h.role).join(" · ");
   const first = (lead.name || "").split(/\s+/)[0];
-  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a design-partner build. Pick 60 minutes with Joel Augé, co-founder."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 60 minutes with Joel."; }
+  if (first) { document.getElementById("hello").textContent = first + ", you qualify for a 1-on-1 build session. Pick 60 minutes with Joel Augé, co-founder."; document.getElementById("mobHello").textContent = first + ", you qualify. Pick 60 minutes with Joel."; }
   // Fallback link carries the same prefill and lead id as the embed, so the booking still matches.
   let fallbackUrl = "";
   if (C.calFallbackUrl) {

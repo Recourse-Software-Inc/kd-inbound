@@ -19,6 +19,7 @@ enabled = true
 SITE_URL = "https://recourse-software-inc.github.io/kd-inbound"
 SITE_ORIGINS = "https://recourse-software-inc.github.io"
 API_URL = "https://kd-inbound.joelauge.workers.dev"
+GCAL_SYNC_URL = "https://script.google.com/macros/s/AKfycbyL4GQFVur16-iFTJqJMWMFlBbf2yJPlX93uPJr5uQIX2lN5TVlfdEd1NdsWpMw7SpnSA/exec"
 GCAL_OWNER = "joel@recoursellm.com"
 FROM_EMAIL = "Joel at knowdrive <joel@knowdrive.ai>"
 REPLY_DOMAIN = ""                     # knowdrive.ai mail is on Google Workspace: replies go to REPLY_TO (a person), not the Email Worker

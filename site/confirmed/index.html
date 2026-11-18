@@ -128,11 +128,11 @@
     const msg = document.getElementById("prepMsg");
     const btn = document.getElementById("prepBtn");
     const wrong = prep.wrong.value.trim(), team = prep.team.value.trim();
-    if (!lead.id || !lead.token) { msg.style.color = "var(--red)"; msg.textContent = "Open this page from your reminder email, or reply to your confirmation email with this."; return; }
+    if (!lead.id || !(lead.token || lead.watch)) { msg.style.color = "var(--red)"; msg.textContent = "Open this page from your reminder email, or reply to your confirmation email with this."; return; }
     if (!wrong && !team) { msg.style.color = "var(--red)"; msg.textContent = "Add your question or who's joining first."; return; }
     btn.disabled = true; msg.style.color = "var(--muted)"; msg.textContent = "Sending…";
     try {
-      await KD.api("/api/precall", { leadId: lead.id, token: lead.token, wrong, team });
+      await KD.api("/api/precall", { leadId: lead.id, token: lead.token || "", watch: lead.watch || "", wrong, team });
       msg.style.color = "var(--teal)"; msg.textContent = "Got it. We'll build the demo around this question.";
       KD.track("kd_precall_submitted", {});
     } catch {

@@ -31,6 +31,7 @@ async function route(req, env, ctx) {
   if (p === "/health") return json({ ok: true, ts: now() });
   if (p === "/api/lead" && req.method === "POST") return createLead(req, env, ctx);
   if (p === "/api/lead" && req.method === "GET") return getLeadPublic(url, env);
+  if (p === "/api/booking-status" && req.method === "GET") return bookingStatus(url, env);
   if (p === "/api/booked" && req.method === "POST") return bookedHint(req, env, ctx);
   if (p === "/api/precall" && req.method === "POST") return precall(req, env, ctx);
   if (p === "/hooks/cal" && req.method === "POST") return calWebhook(req, env, ctx);
@@ -137,7 +138,9 @@ async function createLead(req, env, ctx) {
   }
   const route = LATE.includes(lead.stage) || lead.stage === "qualified" ? "qualified" : "dq";
   // Only a brand-new lead gets a token in the browser; re-applicants are matched by email at booking.
-  return json({ route, leadId: existing ? "" : id, token: existing ? "" : await leadToken(env, id) });
+  // Re-applicants don't get the lead's token (anyone can type an email), only a watch token that reports
+  // whether a booking arrives after this application. It reveals nothing else about the lead.
+  return json({ route, leadId: id, token: existing ? "" : await leadToken(env, id), watch: existing && route !== "dq" ? await watchToken(env, id, t) : "" });
 }
 
 // Keep only known attribution fields, each clipped, so the stored JSON is always valid.
@@ -182,6 +185,29 @@ function leadDigest(env, lead, a, rule, ai) {
 }
 
 let lastGcalSync = 0;
+// Ask the Calendar bridge to look for new bookings now (throttled per isolate).
+async function gcalSyncNow(env) {
+  if (!env.GCAL_SYNC_URL || Date.now() - lastGcalSync < 2500) return false;
+  lastGcalSync = Date.now();
+  const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 9000);
+  try { await fetch(env.GCAL_SYNC_URL + (env.GCAL_SYNC_URL.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(env.GCAL_HOOK_SECRET || ""), { signal: ctrl.signal, redirect: "follow" }); return true; }
+  catch (e) { console.error("gcal sync", e && e.message); return false; } finally { clearTimeout(tm); }
+}
+async function watchToken(env, id, ts) { return ts + "." + (await hmacHex(env.TOKEN_SECRET, "watch:" + id + ":" + ts)).slice(0, 24); }
+async function checkWatch(env, id, w) {
+  w = String(w || ""); const ts = Number(w.split(".")[0]);
+  return id && ts && Date.now() - ts < DAY && safeEqual(await watchToken(env, id, ts), w) ? ts : 0;
+}
+async function bookingStatus(url, env) {
+  const id = url.searchParams.get("lid") || "";
+  const ts = await checkWatch(env, id, url.searchParams.get("w"));
+  if (!ts) return json({ error: "invalid link" }, 403);
+  const find = () => env.DB.prepare("SELECT data FROM events WHERE lead_id=? AND type='booked' AND ts>? ORDER BY ts DESC LIMIT 1").bind(id, ts).first();
+  let ev = await find();
+  if (!ev && url.searchParams.get("sync") && await gcalSyncNow(env)) ev = await find();
+  const d = ev ? parseJSON(ev.data, {}) : null;
+  return json({ booked: !!ev, bookingStart: d && d.startTime ? Date.parse(d.startTime) : null });
+}
 async function getLeadPublic(url, env) {
   const id = url.searchParams.get("lid");
   if (!(await checkLeadToken(env, id, url.searchParams.get("t")))) return json({ error: "invalid link" }, 403);
@@ -189,13 +215,7 @@ async function getLeadPublic(url, env) {
   if (!lead) return json({ error: "not found" }, 404);
   // The booking page sets sync=1 once the person is using the calendar: ask the Calendar bridge to look now
   // instead of waiting for its one-minute trigger, then read the lead again.
-  if (url.searchParams.get("sync") && lead.stage !== "booked" && env.GCAL_SYNC_URL && Date.now() - lastGcalSync > 2500) {
-    lastGcalSync = Date.now();
-    const ctrl = new AbortController(); const tm = setTimeout(() => ctrl.abort(), 9000);
-    try { await fetch(env.GCAL_SYNC_URL + (env.GCAL_SYNC_URL.includes("?") ? "&" : "?") + "k=" + encodeURIComponent(env.GCAL_HOOK_SECRET || ""), { signal: ctrl.signal, redirect: "follow" }); }
-    catch (e) { console.error("gcal sync", e && e.message); } finally { clearTimeout(tm); }
-    lead = (await getLead(env, id)) || lead;
-  }
+  if (url.searchParams.get("sync") && lead.stage !== "booked" && await gcalSyncNow(env)) lead = (await getLead(env, id)) || lead;
   const a = parseJSON(lead.answers, {});
   return json({ id: lead.id, name: lead.name, email: lead.email, company: lead.company, phone: lead.phone, stage: lead.stage, bookingStart: lead.booking_start, building: a.building, needs: a.needs, usecase: a.usecase });
 }
@@ -238,7 +258,10 @@ async function bookedHint(req, env, ctx) {
 
 async function precall(req, env, ctx) {
   const b = await body(req);
-  if (!(await checkLeadToken(env, b.leadId, b.token))) return json({ error: "invalid" }, 403);
+  const full = await checkLeadToken(env, b.leadId, b.token);
+  // A watch token (re-application) may add call notes but never change contact details.
+  if (!full && !(await checkWatch(env, b.leadId, b.watch))) return json({ error: "invalid" }, 403);
+  if (!full) { b.phone = ""; b.smsConsent = false; }
   const lead = await getLead(env, b.leadId);
   if (!lead) return json({ error: "not found" }, 404);
   // Merge: the SMS opt-in and the question form post separately, so never blank out earlier answers.

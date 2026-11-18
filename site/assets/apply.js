@@ -234,7 +234,7 @@
     await minWait;
 
     KD.store.sset("kd_lead", {
-      id: result.leadId, token: result.token, route: result.route,
+      id: result.leadId, token: result.token, watch: result.watch || "", route: result.route,
       name: c.name, email: c.email, phone: c.phone, smsConsent: !!c.smsConsent, company: c.company,
       building: a.building, needs: a.needs, usecase: a.usecase, offline: !!result.offline
     });

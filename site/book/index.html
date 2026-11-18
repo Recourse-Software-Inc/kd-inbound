@@ -108,13 +108,15 @@
     cal.insertAdjacentHTML("afterend", '<p class="small muted" style="margin-top:10px">Use ' + (lead.email ? '<b>' + lead.email.replace(/</g, "&lt;") + '</b>' : 'the email you applied with') + ' when you book. Keep this page open: it moves to your prep steps once your booking comes through.</p>');
     const status = document.getElementById("bookStatus");
     const say = (html, cls) => { status.innerHTML = html; status.className = "book-status show " + (cls || ""); };
-    if (lead.id && lead.token) {
+    if (lead.id && (lead.token || lead.watch)) {
       const t0 = Date.now();
       let engaged = 0, timer = null;
       const check = async () => {
         if (Date.now() - t0 > 30 * 60000) return;
         try {
-          const r = await KD.api("/api/lead?lid=" + encodeURIComponent(lead.id) + "&t=" + encodeURIComponent(lead.token) + (engaged ? "&sync=1" : ""), null, { timeout: 8000 });
+          const r = lead.token
+            ? await KD.api("/api/lead?lid=" + encodeURIComponent(lead.id) + "&t=" + encodeURIComponent(lead.token) + (engaged ? "&sync=1" : ""), null, { timeout: 8000 })
+            : await KD.api("/api/booking-status?lid=" + encodeURIComponent(lead.id) + "&w=" + encodeURIComponent(lead.watch) + (engaged ? "&sync=1" : ""), null, { timeout: 8000 }).then(x => ({ stage: x.booked ? "booked" : "", bookingStart: x.bookingStart }));
           if (r.stage === "booked" && r.bookingStart) {
             KD.store.sset("kd_booking", { startTime: new Date(r.bookingStart).toISOString() });
             say('<span class="ok">\u2713</span> Booking received. Opening your prep steps\u2026', "done");

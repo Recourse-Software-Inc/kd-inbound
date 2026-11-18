@@ -73,11 +73,13 @@ function post_(events, secret) {
   if (res.getResponseCode() >= 300) throw new Error('Worker said ' + res.getResponseCode() + ': ' + res.getContentText().slice(0, 300));
 }
 
+// Uses the Calendar advanced service (enabled in appsscript.json), which also switches the
+// Calendar API on for the script's Google Cloud project automatically.
 function api_(path, params) {
-  const qs = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&');
-  const url = 'https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(CONFIG.CALENDAR_ID) + '/' + path + '?' + qs;
-  const res = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() }, muteHttpExceptions: true });
-  if (res.getResponseCode() === 410) return { __gone: true };
-  if (res.getResponseCode() >= 300) throw new Error('Calendar API ' + res.getResponseCode() + ': ' + res.getContentText().slice(0, 300));
-  return JSON.parse(res.getContentText());
+  try {
+    return Calendar.Events.list(CONFIG.CALENDAR_ID, params);
+  } catch (e) {
+    if (e.message && (e.message.indexOf('410') !== -1 || e.message.indexOf('Sync token is no longer valid') !== -1)) return { __gone: true };
+    throw e;
+  }
 }

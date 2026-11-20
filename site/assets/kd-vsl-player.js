@@ -93,7 +93,7 @@
     .center { position: absolute; left: var(--px, 50%); top: var(--py, 50%); transform: translate(-50%, -50%); z-index: 1; display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6cqw, 18px); }
     .big { position: relative; width: clamp(54px, 9.2cqw, 116px); aspect-ratio: 1; border-radius: 50%; border: 0; padding: 0; background: var(--kd-accent); color: var(--kd-bg); display: grid; place-items: center; cursor: pointer;
       transition: transform .28s cubic-bezier(.2,.9,.3,1.4), box-shadow .28s; box-shadow: 0 20px 54px -10px rgba(108,92,231,.85), 0 0 0 clamp(6px, .9cqw, 11px) rgba(185,175,250,.18); }
-    .big .i { width: 46%; height: 46%; margin-left: 7%; }
+    .big .i { width: 46%; height: 46%; }   /* no sideways nudge: the triangle is already drawn so its centre of mass sits on the icon's centre */
     .big::before, .big::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--kd-accent); opacity: 0; animation: kdping 2.8s cubic-bezier(.2,.6,.3,1) infinite; pointer-events: none; }
     .big::after { animation-delay: 1.4s; }
     @keyframes kdping { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(1.95); opacity: 0; } }

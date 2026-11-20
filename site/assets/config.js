@@ -72,6 +72,9 @@ window.KD_FUNNEL = {
   metaPixelId: "",
   linkedinPartnerId: "",
   ga4MeasurementId: "",
+  // Google Ads (Recourse Software Inc.)
+  googleAdsId: "AW-18535114464",
+  googleAdsLeadLabel: "LLb5CMG4sLwdEODNnYZF",
 
   // Optional Cloudflare Turnstile site key (pair with TURNSTILE_SECRET on the Worker) to stop form spam.
   turnstileSiteKey: "",

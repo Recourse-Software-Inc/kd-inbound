@@ -57,6 +57,17 @@
       window.dataLayer = window.dataLayer || []; window.gtag = function () { window.dataLayer.push(arguments); };
       window.gtag("js", new Date()); window.gtag("config", C.ga4MeasurementId);
     }
+    if (C.googleAdsId) {
+      if (!window.gtag) {
+        const s = document.createElement("script"); s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=" + C.googleAdsId;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag("js", new Date());
+      }
+      window.gtag("config", C.googleAdsId);
+    }
   }
 
   // Browser-side event; server sends the same event_id so platforms de-duplicate.
@@ -64,7 +75,19 @@
     params = params || {};
     try { if (window.fbq) window.fbq(name.startsWith("kd_") ? "trackCustom" : "track", name, params, eventId ? { eventID: eventId } : undefined); } catch {}
     // GA4 can't de-duplicate against server events, so conversions (Lead, Schedule…) are server-only there.
-    try { if (window.gtag && name.startsWith("kd_")) window.gtag("event", name, params); } catch {}
+    // send_to keeps these in GA4: without it the Google Ads tag would receive every kd_ event as well.
+    try { if (window.gtag && C.ga4MeasurementId && name.startsWith("kd_")) window.gtag("event", name, Object.assign({ send_to: C.ga4MeasurementId }, params)); } catch {}
+    // Google Ads: count a qualified application (the step right before Joel's calendar).
+    try {
+      if (window.gtag && C.googleAdsId && C.googleAdsLeadLabel &&
+          name === "Lead" && params.content_name === "qualified") {
+        window.gtag("event", "conversion", {
+          send_to: C.googleAdsId + "/" + C.googleAdsLeadLabel,
+          transaction_id: eventId || undefined,
+          transport_type: "beacon"
+        });
+      }
+    } catch {}
   }
 
   async function api(path, body, opts) {

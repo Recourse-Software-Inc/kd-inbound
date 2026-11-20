@@ -65,7 +65,9 @@ Twilio number or Messaging Service. Set `TWILIO_SID`, `TWILIO_TOKEN`, and `TWILI
 | LinkedIn | `LINKEDIN_TOKEN`, `LINKEDIN_CONV_QUALIFIED`, `_BOOKED`, `_SHOWED`, `_WON` | Create Conversions API conversion rules in Campaign Manager and paste their IDs. Set `LINKEDIN_VERSION` to a current API version |
 | Google | `GA4_MEASUREMENT_ID`, `GA4_API_SECRET` | Mark `qualify_lead`, `book_call` and `close_convert_lead` as key events and import them into Google Ads. Or upload `/admin/` → Google Ads CSV as offline conversions |
 
-Browser pixels are optional (`metaPixelId`, `linkedinPartnerId` and `ga4MeasurementId` in `config.js`). If you use them, add your cookie-consent banner.
+Browser pixels are optional (`metaPixelId`, `linkedinPartnerId`, `ga4MeasurementId`, and `googleAdsId` with `googleAdsLeadLabel`, in `config.js`). If you use them, add your cookie-consent banner.
+
+The Google Ads tag (`googleAdsId`) loads on every funnel page and counts one conversion, `googleAdsLeadLabel`, when an application qualifies and is sent to `/book/`. The page cannot see the Google Calendar booking itself, so that is the last step it can count. The conversion carries the application's event id as its transaction id. No other funnel event is sent to Google Ads. If you also upload the `/admin/` Google Ads CSV, do not count its qualified-lead row as a second primary conversion.
 
 ### 6. Site (GitHub Pages)
 `.github/workflows/pages.yml` publishes `site/` on every push to `main`. In repo Settings → Pages, set **Source: GitHub Actions**. Then edit `site/assets/config.js`: `apiBase`, Cal link, video URLs and resource links (resources without a URL are hidden).

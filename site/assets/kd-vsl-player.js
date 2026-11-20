@@ -78,7 +78,7 @@
       animation: kdspin 10s linear infinite; box-shadow: 0 44px 100px -34px rgba(0,0,0,.9); }
     .playing .ring { animation-play-state: paused; background: rgba(185,175,250,.2); }
     @keyframes kdspin { to { --kd-a: 360deg; } }
-    .frame { position: relative; border-radius: var(--kd-radius); overflow: hidden; background: #05050a; aspect-ratio: var(--ar, 16/9); container-type: inline-size; outline: none; isolation: isolate; user-select: none; -webkit-user-select: none; }
+    .frame { position: relative; border-radius: var(--kd-radius); overflow: hidden; background: #05050a; aspect-ratio: var(--ar, 16/9); container-type: inline-size; outline: none; isolation: isolate; user-select: none; -webkit-user-select: none; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }   /* manipulation: two quick taps on the controls must not zoom the page on a phone */
     .frame:fullscreen { border-radius: 0; aspect-ratio: auto; width: 100vw; height: 100vh; }
     .frame:-webkit-full-screen { border-radius: 0; aspect-ratio: auto; width: 100vw; height: 100vh; }
     video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #05050a; display: block; }
@@ -90,7 +90,7 @@
     .poster { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: #05050a center / cover no-repeat; cursor: pointer; transition: opacity .5s, visibility .5s; }
     .poster::after { content: ""; position: absolute; inset: 0; background: radial-gradient(110% 90% at 50% 50%, rgba(11,11,18,0) 32%, rgba(11,11,18,.5) 100%), linear-gradient(to top, rgba(11,11,18,.82), rgba(11,11,18,0) 36%); }
     .started .poster { opacity: 0; visibility: hidden; pointer-events: none; }
-    .center { position: absolute; left: var(--px, 50%); top: var(--py, 50%); transform: translate(-50%, -50%); z-index: 1; display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6cqw, 18px); }
+    .center { position: absolute; left: var(--px, 50%); top: var(--py, 50%); transform: translate(-50%, -50%); z-index: 1; width: max-content; display: flex; flex-direction: column; align-items: center; gap: clamp(10px, 1.6cqw, 18px); }
     .big { position: relative; width: clamp(54px, 9.2cqw, 116px); aspect-ratio: 1; border-radius: 50%; border: 0; padding: 0; background: var(--kd-accent); color: var(--kd-bg); display: grid; place-items: center; cursor: pointer;
       transition: transform .28s cubic-bezier(.2,.9,.3,1.4), box-shadow .28s; box-shadow: 0 20px 54px -10px rgba(108,92,231,.85), 0 0 0 clamp(6px, .9cqw, 11px) rgba(185,175,250,.18); }
     .big .i { width: 46%; height: 46%; }   /* no sideways nudge: the triangle is already drawn so its centre of mass sits on the icon's centre */
@@ -99,7 +99,7 @@
     @keyframes kdping { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(1.95); opacity: 0; } }
     .poster:hover .big, .big:focus-visible { transform: scale(1.08); box-shadow: 0 24px 60px -8px rgba(108,92,231,1), 0 0 0 clamp(8px, 1.1cqw, 14px) rgba(185,175,250,.24); }
     .resume { appearance: none; border: 1.5px solid rgba(247,247,251,.34); background: rgba(11,11,18,.62); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); color: var(--kd-ink); border-radius: 999px; padding: 8px 16px;
-      font-weight: 700; font-size: clamp(12px, 1.3cqw, 15px); cursor: pointer; display: none; }
+      font-weight: 700; font-size: clamp(12px, 1.3cqw, 15px); cursor: pointer; display: none; white-space: nowrap; }
     .resume:hover { border-color: var(--kd-accent); }
     .can-resume .resume { display: inline-block; }
     .meta { position: absolute; left: clamp(16px, 3cqw, 38px); right: clamp(16px, 3cqw, 38px); bottom: clamp(14px, 2.6cqw, 32px); z-index: 1; display: flex; flex-direction: column; gap: clamp(3px, .5cqw, 7px); pointer-events: none; }
@@ -201,7 +201,7 @@
     .again .i { width: 18px; height: 18px; }
 
     /* chapters under the frame: the video's nine pips, with names */
-    .chapters { position: relative; display: flex; justify-content: flex-start; justify-content: safe center; gap: 8px; margin-top: clamp(12px, 1.6vw, 18px); padding: 3px; overflow-x: auto; scrollbar-width: none; }
+    .chapters { position: relative; touch-action: manipulation; display: flex; justify-content: flex-start; justify-content: safe center; gap: 8px; margin-top: clamp(12px, 1.6vw, 18px); padding: 3px; overflow-x: auto; scrollbar-width: none; }
     .chapters::-webkit-scrollbar { display: none; }
     .ch { appearance: none; position: relative; flex: none; display: flex; align-items: center; height: 46px; padding: 0 7px; border-radius: 14px; border: 1.5px solid rgba(182,179,201,.3); background: var(--kd-panel); color: var(--kd-muted);
       font-weight: 700; font-size: 14px; cursor: pointer; overflow: hidden; transition: border-color .25s, color .25s, background .25s; }
@@ -215,8 +215,8 @@
     .ch::after { content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; transform-origin: left center; transform: scaleX(var(--p, 0)); background: var(--kd-accent); }
 
     @container (max-width: 640px) {
-      .center { flex-direction: row-reverse; }
-      .resume { padding: 6px 12px; }
+      /* small frame: the play button stays on its mark and the resume pill hangs off its left side, on one line */
+      .resume { position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); padding: 6px 12px; }
       .now, .vol input, .pipb { display: none; }
       .c { width: 38px; height: 38px; }
       .time { font-size: 12.5px; margin: 0 6px 0 2px; }
@@ -235,6 +235,11 @@
       .again { padding: 8px 12px; font-size: 13px; gap: 6px; }
       .again .i { width: 15px; height: 15px; }
       .alt { font-size: 12.5px; }
+      /* the speed and quality menu has to fit inside a frame about 200 px tall */
+      .menu { bottom: 54px; padding: 6px; min-width: 0; }
+      .menu h4 { margin: 3px 8px; font-size: 10.5px; }
+      .opts { padding: 0 4px 5px; }
+      .opt { padding: 6px 10px; }
     }
     @container (max-width: 420px) { .meta b { display: none; } }
     @media (prefers-reduced-motion: reduce) {
@@ -253,6 +258,7 @@
     disconnectedCallback() {
       cancelAnimationFrame(this._raf);
       clearTimeout(this._idleT);
+      if (this._onHide) window.removeEventListener("pagehide", this._onHide);
       if (this._onFs) {
         document.removeEventListener("fullscreenchange", this._onFs);
         document.removeEventListener("webkitfullscreenchange", this._onFs);
@@ -389,6 +395,7 @@
         this.textTrack = t.track;
         this.textTrack.mode = "hidden";
         this.textTrack.addEventListener("cuechange", () => this._cue());
+        this.video.textTracks.addEventListener("change", () => this._tame());
       }
     }
 
@@ -453,7 +460,7 @@
       on(v, "loadedmetadata", () => {
         if (isFinite(v.duration) && v.duration > 0) this.dur = v.duration;
         if (v.videoWidth) this.frame.style.setProperty("--ar", `${v.videoWidth}/${v.videoHeight}`);
-        if (this.textTrack) this.textTrack.mode = "hidden";
+        this._tame();
         if (this._pending) { const p = this._pending; this._pending = null; v.currentTime = p.t; if (p.play) this.play(); }
         this._layoutSegs();
         this._update();
@@ -476,7 +483,13 @@
         this._save();
       });
       on(v, "ended", () => { root.classList.add("ended"); root.classList.remove("idle"); this._emit("ended", { watched: Math.round(this.watched) }); store.set(this.cfg.key + ":t", "0"); });
-      on(v, "timeupdate", () => { if (v.paused) this._update(); });
+      on(v, "timeupdate", () => { this._tame(); if (v.paused) this._update(); });
+      // the system player (an iPhone's full screen, picture-in-picture) draws its own captions; hand over on the way in and take back on the way out
+      on(v, "webkitbeginfullscreen", () => this._handOver(true));
+      on(v, "webkitendfullscreen", () => this._handOver(false));
+      on(v, "webkitpresentationmodechanged", () => this._handOver(v.webkitPresentationMode !== "inline"));
+      this._onHide = () => this._save();
+      window.addEventListener("pagehide", this._onHide);
       on(v, "seeking", () => { root.classList.remove("ended"); this._update(); });
       on(v, "seeked", () => { this._update(); if (v.paused) this._paintGlow(v); });
       on(v, "progress", () => this._update());
@@ -486,8 +499,8 @@
       on(v, "volumechange", () => this._volume());
       on(v, "ratechange", () => this._buildMenu());
       on(v, "error", () => this._failed());
-      on(v, "enterpictureinpicture", () => this.pipB.setAttribute("aria-pressed", "true"));
-      on(v, "leavepictureinpicture", () => this.pipB.setAttribute("aria-pressed", "false"));
+      on(v, "enterpictureinpicture", () => { this.pipB.setAttribute("aria-pressed", "true"); this._handOver(true); });
+      on(v, "leavepictureinpicture", () => { this.pipB.setAttribute("aria-pressed", "false"); this._handOver(false); });
       this._onFs = () => {
         const full = this.shadowRoot.fullscreenElement === this.frame || document.webkitFullscreenElement === this || document.webkitFullscreenElement === this.frame;
         this._icon(this.fsB, full ? "fsExit" : "fs", full ? "Exit full screen" : "Full screen");
@@ -719,6 +732,22 @@
       if (!quiet) store.set("kd-vsl:cc", this.capsOn ? "1" : "0");
       this._cue();
     }
+    /* The caption line is drawn by this player, over the picture, so the browser's own captions must stay off there.
+       iOS Safari switches a captions track to "showing" by itself once the video plays, which put a second, clipped
+       line along the bottom edge. In the system player ours cannot be seen, so there the browser's are allowed. */
+    _away() {
+      const v = this.video;
+      return !!v.webkitDisplayingFullscreen || (!!v.webkitPresentationMode && v.webkitPresentationMode !== "inline") || document.pictureInPictureElement === v;
+    }
+    _tame() {
+      const tt = this.textTrack;
+      if (tt && tt.mode !== "hidden" && !this._away()) tt.mode = "hidden";
+    }
+    _handOver(away) {
+      const tt = this.textTrack;
+      if (!tt) return;
+      if (away) { if (this.capsOn) tt.mode = "showing"; } else tt.mode = "hidden";
+    }
     _cue() {
       const cues = this.textTrack && this.textTrack.activeCues;
       const text = this.capsOn && cues && cues.length ? cues[cues.length - 1].text : "";
@@ -737,18 +766,24 @@
       if (open) { this._buildMenu(); clearTimeout(this._idleT); } else this._sleepSoon();
     }
     _fullscreen() {
-      const el = this.frame, d = document;
+      const el = this.frame, d = document, v = this.video;
       const full = this.shadowRoot.fullscreenElement || d.webkitFullscreenElement;
-      if (full) (d.exitFullscreen || d.webkitExitFullscreen).call(d);
-      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-      else if (this.video.webkitEnterFullscreen) { this._start(); this.video.webkitEnterFullscreen(); }
+      if (full) return void (d.exitFullscreen || d.webkitExitFullscreen).call(d);
+      const req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (req && (d.fullscreenEnabled || d.webkitFullscreenEnabled)) {
+        const p = req.call(el);
+        if (p && p.catch) p.catch(() => {});
+      } else if (v.webkitEnterFullscreen) {
+        // a phone that cannot put a page element full screen: the video goes to the system player instead
+        this._start();
+        try { v.webkitEnterFullscreen(); } catch (e) { v.addEventListener("loadedmetadata", () => { try { v.webkitEnterFullscreen(); } catch (e2) { /* not allowed without a tap: the viewer can press it again */ } }, { once: true }); }
+      }
     }
     _wake() {
       this.root.classList.remove("idle");
       this._sleepSoon();
     }
-    _sleepSoon(ms = 2600) {
+    _sleepSoon(ms = this._touch ? 4500 : 2600) {   // a thumb needs longer than a mouse to get from waking the controls to pressing one
       clearTimeout(this._idleT);
       this._idleT = setTimeout(() => {
         const v = this.video;

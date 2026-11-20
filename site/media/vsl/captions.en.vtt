@@ -1,0 +1,297 @@
+WEBVTT
+
+1
+00:00:00.130 --> 00:00:03.110
+Stop. Before your team builds a RAG pipeline,
+
+2
+00:00:03.130 --> 00:00:04.490
+please watch this video.
+
+3
+00:00:04.510 --> 00:00:06.060
+RAG is five tools.
+
+4
+00:00:06.080 --> 00:00:10.540
+It's a loader, a splitter, an embedder, a vector database,
+
+5
+00:00:10.560 --> 00:00:11.980
+and then a re-ranker.
+
+6
+00:00:12.000 --> 00:00:16.430
+You assemble them and then you have to maintain each and every one.
+
+7
+00:00:16.450 --> 00:00:18.060
+KnowDrive is one thing.
+
+8
+00:00:18.080 --> 00:00:21.050
+It's a store you read from and you write to.
+
+9
+00:00:21.070 --> 00:00:24.710
+Here are the nine differences that make KnowDrive different.
+
+10
+00:00:24.730 --> 00:00:27.080
+One, there's zero pipeline.
+
+11
+00:00:27.100 --> 00:00:30.560
+You can just upload files and you can search them.
+
+12
+00:00:30.580 --> 00:00:34.490
+Video, audio, images, text files, documents, URLs,
+
+13
+00:00:34.510 --> 00:00:36.470
+they're all just searchable.
+
+14
+00:00:36.490 --> 00:00:39.500
+There's no re-ranker, no chunker, no embedder.
+
+15
+00:00:39.520 --> 00:00:41.120
+There's just KnowDrive.
+
+16
+00:00:41.140 --> 00:00:42.940
+It's all handled for you.
+
+17
+00:00:42.960 --> 00:00:46.250
+You don't have to build it and you don't have to babysit it.
+
+18
+00:00:46.270 --> 00:00:49.240
+Two, files stay files in KnowDrive.
+
+19
+00:00:49.260 --> 00:00:53.560
+A typical vector database kind of chunks file pieces
+
+20
+00:00:53.580 --> 00:00:55.740
+and leaves orphaned chunks.
+
+21
+00:00:55.760 --> 00:00:58.300
+We call a piece of a file an atom.
+
+22
+00:00:58.320 --> 00:01:02.690
+Every atom stays connected to its source file, path, and version.
+
+23
+00:01:02.710 --> 00:01:05.510
+You can read the original, list its atoms,
+
+24
+00:01:05.530 --> 00:01:07.590
+re-tag or revert the file.
+
+25
+00:01:07.610 --> 00:01:12.740
+Three, context cost stays flat across any corpus size.
+
+26
+00:01:12.760 --> 00:01:17.330
+A search hands back a ranked window that you can page through
+
+27
+00:01:17.350 --> 00:01:21.760
+and the files and bytes stay outside of the context window.
+
+28
+00:01:21.780 --> 00:01:26.390
+That same call pattern works whether there's 17,000 files,
+
+29
+00:01:26.410 --> 00:01:30.540
+170,000 files, or 1.7 million files.
+
+30
+00:01:30.560 --> 00:01:31.740
+It doesn't matter.
+
+31
+00:01:31.760 --> 00:01:35.000
+Four, multimodal in one store.
+
+32
+00:01:35.020 --> 00:01:41.510
+Text, image, video, audio is all on the same atoms search layer.
+
+33
+00:01:41.530 --> 00:01:45.690
+So no pipeline for individual modalities.
+
+34
+00:01:45.710 --> 00:01:48.860
+Five, governance is built in.
+
+35
+00:01:48.880 --> 00:01:51.710
+Tags, access control for each store,
+
+36
+00:01:51.730 --> 00:01:55.020
+scoped tokens that you can mint yourself.
+
+37
+00:01:55.040 --> 00:01:58.270
+Most RAG setups tack this on at the end
+
+38
+00:01:58.290 --> 00:02:01.360
+as an additional layer to manage.
+
+39
+00:02:01.380 --> 00:02:03.660
+Six, it's made for agents.
+
+40
+00:02:03.680 --> 00:02:06.180
+MCP first, REST for large files.
+
+41
+00:02:06.200 --> 00:02:10.540
+It describes its own capabilities and skills to the agents
+
+42
+00:02:10.560 --> 00:02:14.880
+and it can use a corpus with no custom retrieval code.
+
+43
+00:02:14.900 --> 00:02:17.340
+Seven, you can change your mind.
+
+44
+00:02:17.360 --> 00:02:21.440
+You can update a file, re-tag it, delete it, revert it in place
+
+45
+00:02:21.460 --> 00:02:23.820
+without having a whole new build.
+
+46
+00:02:23.840 --> 00:02:27.340
+Most RAG indexes are write-once in practice.
+
+47
+00:02:27.360 --> 00:02:28.940
+Eight, this is a big one.
+
+48
+00:02:28.960 --> 00:02:32.450
+Corpus-wide queries on any model.
+
+49
+00:02:32.470 --> 00:02:37.980
+Normal RAG makes you pick a narrow top-k that misses the breadth
+
+50
+00:02:38.000 --> 00:02:42.890
+or a stuffed context window that costs more and caps out.
+
+51
+00:02:42.910 --> 00:02:48.700
+KnowDrive's atoms layer draws only the atoms it needs for a response.
+
+52
+00:02:48.720 --> 00:02:52.080
+So one question can span the entirety of the corpus
+
+53
+00:02:52.100 --> 00:02:55.130
+and still fit into a tiny context window.
+
+54
+00:02:55.150 --> 00:02:59.430
+Corpus size is finally decoupled from context window size.
+
+55
+00:02:59.450 --> 00:03:03.650
+So the same store that can serve a thousand tiny Qwen models
+
+56
+00:03:03.670 --> 00:03:07.290
+can also serve very large frontier models.
+
+57
+00:03:07.310 --> 00:03:09.180
+Nine, it's multiplayer.
+
+58
+00:03:09.200 --> 00:03:12.440
+A normal RAG pipeline is built for one project
+
+59
+00:03:12.460 --> 00:03:14.460
+and tuned for one model.
+
+60
+00:03:14.480 --> 00:03:16.460
+A KnowDrive store is shared.
+
+61
+00:03:16.480 --> 00:03:22.650
+So every agent, every team is reading and writing to the same store,
+
+62
+00:03:22.670 --> 00:03:26.030
+whether it's Codex, Claude Code or Cursor
+
+63
+00:03:26.050 --> 00:03:28.860
+or your own vibe-coded IDE.
+
+64
+00:03:28.880 --> 00:03:32.860
+They can all access the exact same store of knowledge.
+
+65
+00:03:32.880 --> 00:03:34.250
+So that's the difference.
+
+66
+00:03:34.270 --> 00:03:35.990
+Normal RAG is a retrieval pipeline
+
+67
+00:03:36.010 --> 00:03:39.470
+that you have to cobble together and then maintain.
+
+68
+00:03:39.490 --> 00:03:42.190
+KnowDrive is a managed knowledge store
+
+69
+00:03:42.210 --> 00:03:45.020
+with enterprise-grade entitlements
+
+70
+00:03:45.040 --> 00:03:47.487
+that you just read and write to.
+
+71
+00:03:47.507 --> 00:03:49.730
+Start free at knowdrive.ai.
+
+72
+00:03:49.750 --> 00:03:51.500
+Get your 500 megs for free.
+
+73
+00:03:51.560 --> 00:03:54.250
+Use it with a couple of friends and put in a hundred files
+
+74
+00:03:54.270 --> 00:03:55.600
+and just play around.

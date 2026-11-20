@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>knowdrive · Every AI answer, cited to its exact source</title>
-<meta name="description" content="Every AI answer cited to the exact passage, file, version and byte range. Runs on ordinary CPUs in your jurisdiction. Apply for a demo on your files.">
-<meta property="og:title" content="knowdrive · Every AI answer, with a receipt">
-<meta property="og:description" content="Every AI answer cited to the exact passage, file, version and byte range. Apply for a demo on your files.">
+<title>knowdrive · Before your team builds a RAG pipeline, watch this</title>
+<meta name="description" content="RAG is five tools you assemble and maintain. knowdrive is one store you read from and write to. Nine differences in four minutes. Apply for a demo on your files.">
+<meta property="og:title" content="knowdrive · Before your team builds a RAG pipeline, watch this">
+<meta property="og:description" content="RAG vs knowdrive: nine differences in four minutes. Apply for a demo on your files.">
 <meta name="theme-color" content="#07090f">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sora:wght@500;600&display=swap" rel="stylesheet">
@@ -34,10 +34,13 @@
 <main>
   <section class="wrap hero">
     <div class="hero-copy">
-      <h1>Every AI answer, <span class="grad">with a receipt</span>.</h1>
-      <p class="lede">Your agents and staff answer from company documents, recordings and video every day. knowdrive returns the exact passage behind each answer, cited to file, version and byte range, so you can stand behind it with a customer, an auditor or your own team.</p>
+      <h1>Before your team builds a RAG pipeline, <br class="wide"><span class="grad">watch this</span>.</h1>
+      <p class="lede">RAG is five tools you assemble and maintain. <br class="wide">knowdrive is one store you read from and write to.</p>
       <div data-hero-cta>
-        <a class="btn" href="apply/" data-carry data-cta="hero">Apply for a demo on your files <span class="arrow" aria-hidden="true">→</span></a>
+        <div class="cta-row">
+          <a class="btn" href="apply/" data-carry data-cta="hero">Apply for a demo on your files <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn ghost" data-free href="https://knowdrive.ai/pricing" data-cta="hero_free">Start free</a>
+        </div>
         <p class="cta-note">Nine questions, about two minutes. If it's a fit, you pick a time with Joel Augé, our co-founder, straight after. If not, you get the free plan.</p>
       </div>
     </div>
@@ -48,12 +51,28 @@
 
   <section class="section">
     <div class="wrap">
-      <h2>What changes for your team</h2>
-      <div class="grid-2" style="margin-top:24px">
-        <div class="panel"><h3>&ldquo;Where did this come from?&rdquo; has an answer</h3><p class="muted" style="margin:0">Every result points to the unchanged source: file, version, and byte range or timestamp. Your record stays the record you're accountable for.</p></div>
-        <div class="panel"><h3>Change models without rebuilding</h3><p class="muted" style="margin:0">Your content is vectorized once. Move between Claude, GPT or a local open model and nothing gets re-chunked or re-embedded.</p></div>
-        <div class="panel"><h3>Lower cost per answer</h3><p class="muted" style="margin:0">Agents pull the exact passage they need, so the context window goes to reasoning and smaller models handle work that used to need the biggest ones. Runs on ordinary CPUs rather than GPUs.</p></div>
-        <div class="panel"><h3>Data stays where you're accountable for it</h3><p class="muted" style="margin:0">In your jurisdiction or on your own hardware. Each store is isolated, encrypted at rest and never used to train models.</p></div>
+      <h2>The nine differences</h2>
+      <p class="muted diffs-lede">Pick one to jump to that part of the video.</p>
+      <!-- data-ch is the chapter index in config.js (vslVideo.chapters); the wording follows the video, in its order -->
+      <ol class="diffs">
+        <li class="panel diff" data-ch="1"><div class="diff-head"><span class="diff-n">1</span><h3>Zero pipeline</h3></div><p>Upload files and search them. No re-ranker, no chunker, no embedder. You don't build it and you don't babysit it.</p><button class="diff-go" type="button" aria-label="Watch difference one, at 0:24">Watch · 0:24</button></li>
+        <li class="panel diff" data-ch="2"><div class="diff-head"><span class="diff-n">2</span><h3>Files stay files</h3></div><p>A piece of a file is an atom. Every atom stays connected to its source file, path and version.</p><button class="diff-go" type="button" aria-label="Watch difference two, at 0:45">Watch · 0:45</button></li>
+        <li class="panel diff" data-ch="3"><div class="diff-head"><span class="diff-n">3</span><h3>Flat context cost</h3></div><p>A search hands back a ranked window you can page through. The files and bytes stay outside the context window.</p><button class="diff-go" type="button" aria-label="Watch difference three, at 1:07">Watch · 1:07</button></li>
+        <li class="panel diff" data-ch="4"><div class="diff-head"><span class="diff-n">4</span><h3>Multimodal, one store</h3></div><p>Text, image, video and audio on the same atoms search layer. No pipeline for each modality.</p><button class="diff-go" type="button" aria-label="Watch difference four, at 1:31">Watch · 1:31</button></li>
+        <li class="panel diff" data-ch="5"><div class="diff-head"><span class="diff-n">5</span><h3>Governance built in</h3></div><p>Tags, access control for each store, and scoped tokens you mint yourself.</p><button class="diff-go" type="button" aria-label="Watch difference five, at 1:45">Watch · 1:45</button></li>
+        <li class="panel diff" data-ch="6"><div class="diff-head"><span class="diff-n">6</span><h3>Made for agents</h3></div><p>MCP first, REST for large files. It describes its own capabilities and skills, so there is no custom retrieval code.</p><button class="diff-go" type="button" aria-label="Watch difference six, at 2:01">Watch · 2:01</button></li>
+        <li class="panel diff" data-ch="7"><div class="diff-head"><span class="diff-n">7</span><h3>Change your mind</h3></div><p>Update a file, re-tag it, delete it or revert it, in place, without a whole new build.</p><button class="diff-go" type="button" aria-label="Watch difference seven, at 2:14">Watch · 2:14</button></li>
+        <li class="panel diff" data-ch="8"><div class="diff-head"><span class="diff-n">8</span><h3>Corpus-wide queries</h3></div><p>One question can span the whole corpus and still fit into a tiny context window, on any model.</p><button class="diff-go" type="button" aria-label="Watch difference eight, at 2:27">Watch · 2:27</button></li>
+        <li class="panel diff" data-ch="9"><div class="diff-head"><span class="diff-n">9</span><h3>Multiplayer</h3></div><p>One shared store for every agent and every team: Codex, Claude Code, Cursor or your own IDE.</p><button class="diff-go" type="button" aria-label="Watch difference nine, at 3:07">Watch · 3:07</button></li>
+      </ol>
+
+      <h2 class="versus-title">That's the whole difference</h2>
+      <div class="grid-2 versus">
+        <div class="panel"><div class="versus-tag">Normal RAG</div><p>A retrieval pipeline you assemble and maintain.</p></div>
+        <div class="panel kd"><div class="versus-tag">knowdrive</div><p>A managed knowledge store you just read from and write to.</p></div>
+      </div>
+      <div class="versus-cta">
+        <a class="btn" href="apply/" data-carry data-cta="differences">Apply for a demo on your files <span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -118,6 +137,16 @@
     p.addEventListener("kdvsl:milestone", e => KD.track("kd_vsl_progress", { [e.detail.kind]: e.detail.value }));  // 30 seconds watched, then 25/50/75/95 percent
     p.addEventListener("kdvsl:ended", e => KD.track("kd_vsl_complete", { watched_seconds: e.detail.watched }));
     p.addEventListener("kdvsl:cta", e => KD.track("kd_cta_click", { placement: e.detail.where === "end-card-alt" ? "vsl_end_free_plan" : "vsl_end" }));
+    // the nine cards jump the video to their part, and the one being talked about lights up
+    const cards = [...document.querySelectorAll(".diff[data-ch]")];
+    const calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    cards.forEach(card => card.addEventListener("click", () => {
+      p.seekChapter(+card.dataset.ch);
+      p.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
+      KD.track("kd_vsl_jump", { chapter: +card.dataset.ch });
+    }));
+    p.addEventListener("kdvsl:chapter", e => cards.forEach(card => card.classList.toggle("on", +card.dataset.ch === e.detail.index)));
+    p.addEventListener("kdvsl:ended", () => cards.forEach(card => card.classList.remove("on")));
     slot.classList.add("ready");
   }
 
@@ -141,6 +170,7 @@
   }
   document.querySelectorAll("[data-floor]").forEach(n => n.textContent = "$" + Number(C.enterpriseFloorMonthly).toLocaleString("en-US"));
   document.querySelectorAll("[data-privacy]").forEach(a => a.href = C.privacyUrl);
+  document.querySelectorAll("[data-free]").forEach(a => a.href = C.freePlanUrl);
   document.querySelectorAll("[data-cta]").forEach(a => a.addEventListener("click", () => KD.track("kd_cta_click", { placement: a.dataset.cta })));
   KD.track("ViewContent", { content_name: "landing" });
 </script>

@@ -72,6 +72,8 @@ Browser pixels are optional (`metaPixelId`, `linkedinPartnerId` and `ga4Measurem
 
 **Landing video.** `vslVideo` in `config.js` is an object: it puts the knowdrive player (`site/assets/kd-vsl-player.js`, one file, no dependencies) at the top of the landing page and lets the video lead the hero. Its files live in `site/media/vsl/`: the render as HEVC, two H.264 fallbacks (the player picks what the browser can play and switches on its own if one fails), `poster.jpg`, `thumbs.jpg` (scrubber preview) and `captions.en.vtt`. To move the files to a bucket, change `base` to its URL. After a re-cut, replace the files and update `duration` and the chapter times in `config.js`; GitHub refuses files over 100 MB. The player reports `kd_vsl_play`, `kd_vsl_progress` (30 seconds watched, then 25/50/75/95 percent), `kd_vsl_complete` and end-card clicks (`kd_cta_click`, placement `vsl_end` or `vsl_end_free_plan`) through `KD.track`, so they reach the browser pixels when those are set. Set `vslVideo` to `""` to go back to the sample cited result, or to a URL string for a plain embed.
 
+The landing page's words follow this video: the headline and subhead are its opening lines, "The nine differences" cards are its nine points in its order (each card's `data-ch` is the chapter it jumps to, and the time on it is that chapter's start), and "That's the whole difference" is its close. A different video needs those rewritten with it.
+
 ## Operating it
 - **`/admin/`** (paste `ADMIN_TOKEN`) shows the funnel KPIs, a per-creative table (applied → qualified → booked → showed → won), every lead with the AI read, its message timeline, and stage buttons.
 - **Edit what the AI may say:** `worker/src/facts.js`. Anything outside it is handed to you.

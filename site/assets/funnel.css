@@ -107,6 +107,35 @@ h3 { font-size: 20px; font-weight: 600; }
 .video .play { width: 72px; height: 72px; border-radius: 50%; background: rgba(255,255,255,.1); display: grid; place-items: center; margin: 0 auto 14px; border: 1px solid rgba(255,255,255,.2); }
 .video .play::after { content: ""; border-left: 20px solid #fff; border-top: 12px solid transparent; border-bottom: 12px solid transparent; margin-left: 5px; }
 
+/* hero led by the video: <html class="has-vsl"> is set in the page head when config.js carries a vslVideo object.
+   Headline, then the player across the page, then the button. On a phone the player comes straight after the headline. */
+.top-cta { display: none; min-height: 40px; padding: 0 16px; border-radius: 10px; font-size: 14.5px; }
+.has-vsl .top-cta { display: inline-flex; }
+.has-vsl .hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "lede" "video" "cta"; gap: 0; justify-items: center; text-align: center; padding-top: 22px; }
+.has-vsl .hero-copy { display: contents; }
+.has-vsl .hero h1 { grid-area: head; margin-bottom: 14px; }
+.has-vsl .hero .lede { grid-area: lede; max-width: 62ch; margin-bottom: 30px; }
+/* as wide as the page allows, but never so tall that the frame runs off a laptop screen */
+.has-vsl .hero-media { grid-area: video; width: 100%; max-width: clamp(600px, calc((100svh - 318px) * 1.689), 960px); }
+.has-vsl .hero [data-hero-cta] { grid-area: cta; margin-top: 30px; }
+.has-vsl .hero .cta-note { max-width: 56ch; margin-left: auto; margin-right: auto; }
+/* the slot keeps the player's shape (frame plus the chapter row under it) until it mounts, so nothing below it jumps */
+.has-vsl .hero .video { aspect-ratio: 1824 / 1080; overflow: visible; border: 0; box-shadow: none; border-radius: 18px; background: #0b0f18; margin-bottom: calc(50px + clamp(12px, 1.6vw, 18px)); }
+.has-vsl .hero .video.ready { aspect-ratio: auto; background: none; margin-bottom: 0; }
+.has-vsl main { overflow-x: clip; }   /* the glow behind the player is wider than the frame; on a narrow screen it must not widen the page */
+kd-vsl-player {
+  display: block; --kd-font: "DM Sans", system-ui, sans-serif; --kd-display: "Sora", system-ui, sans-serif; --kd-radius: 18px;
+  --kd-cta-bg: linear-gradient(180deg, #5d97ff, #3f78f0); --kd-cta-ink: #fff; --kd-cta-glow: rgba(79, 140, 255, .55);
+}
+@media (max-width: 920px) {
+  .has-vsl .hero { grid-template-areas: "head" "video" "lede" "cta"; justify-items: stretch; text-align: left; padding-top: 10px; }
+  .has-vsl .hero-media { max-width: none; margin: 4px 0 24px; }
+  .has-vsl .hero .lede { max-width: none; margin-bottom: 24px; }
+  .has-vsl .hero [data-hero-cta] { margin-top: 0; }
+  .has-vsl .hero .cta-note { max-width: none; }
+}
+@media (max-width: 480px) { .top-cta { min-height: 36px; padding: 0 12px; font-size: 13.5px; } }
+
 /* proof strip */
 .proof { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
 .proof > div { background: var(--bg-2); padding: 20px; }

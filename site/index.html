@@ -14,15 +14,26 @@
 <link rel="stylesheet" href="assets/funnel.css">
 <script src="assets/config.js"></script>
 <script src="assets/common.js"></script>
+<script src="assets/kd-vsl-player.js" defer></script>
+<script>
+  // A vslVideo object in config.js puts the knowdrive player in the hero and lets the video lead the page
+  // (styles under "hero led by the video" in funnel.css; the player is mounted by the script at the end of this page).
+  (function (V) {
+    if (!V || typeof V !== "object") return;
+    document.documentElement.classList.add("has-vsl");
+    if (V.poster) { const l = document.createElement("link"); l.rel = "preload"; l.as = "image"; l.href = (V.base || "") + V.poster; document.head.appendChild(l); }
+  })((window.KD_FUNNEL || {}).vslVideo);
+</script>
 </head>
 <body>
 <header class="wrap top">
   <a class="wordmark" href="./" aria-label="knowdrive"><img class="mark" src="assets/kd-mark.png" alt="" width="34" height="21">knowdrive</a>
+  <a class="btn ghost top-cta" href="apply/" data-carry data-cta="top">Apply for a demo</a>
 </header>
 
 <main>
   <section class="wrap hero">
-    <div>
+    <div class="hero-copy">
       <h1>Every AI answer, <span class="grad">with a receipt</span>.</h1>
       <p class="lede">Your agents and staff answer from company documents, recordings and video every day. knowdrive returns the exact passage behind each answer, cited to file, version and byte range, so you can stand behind it with a customer, an auditor or your own team.</p>
       <div data-hero-cta>
@@ -30,7 +41,7 @@
         <p class="cta-note">Nine questions, about two minutes. If it's a fit, you pick a time with Joel Augé, our co-founder, straight after. If not, you get the free plan.</p>
       </div>
     </div>
-    <div>
+    <div class="hero-media">
       <div class="video" id="vsl" aria-label="Example of a cited result"></div>
     </div>
   </section>
@@ -84,8 +95,36 @@
 
 <script>
   const C = window.KD_FUNNEL;
-  if (C.vslVideo) KD.videoInto(document.getElementById("vsl"), C.vslVideo, "Breakdown video");
-  else { // until the video is recorded, show what a cited result looks like instead of an empty player
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  // The knowdrive player (assets/kd-vsl-player.js), built from the vslVideo object in config.js.
+  function mountPlayer(slot, V) {
+    const file = f => !f ? "" : (/^([a-z]+:)?\/\//i.test(f) || f[0] === "/" ? f : (V.base || "") + f);
+    const apply = document.querySelector("[data-hero-cta] a").getAttribute("href"); // already carries the visitor's UTMs
+    const t = V.thumbs || {};
+    slot.removeAttribute("aria-label");
+    slot.innerHTML =
+      `<kd-vsl-player heading="${esc(V.title)}" poster="${esc(file(V.poster))}" aspect="${esc(V.aspect || "16/9")}" duration="${esc(V.duration || 0)}"` +
+      (V.playAt ? ` play-at="${esc(V.playAt)}"` : "") +
+      (t.src ? ` thumbs="${esc(file(t.src))}" thumbs-cols="${esc(t.cols)}" thumbs-interval="${esc(t.interval)}" thumbs-width="${esc(t.width)}" thumbs-height="${esc(t.height)}"` : "") +
+      ` end-title="A live demo on your files" cta-label="Apply for a demo" cta-href="${esc(apply)}" cta-note="Nine questions, about two minutes."` +
+      ` alt-label="Or start on the free plan" alt-href="${esc(C.freePlanUrl)}" storage-key="kd-vsl-landing">` +
+      (V.sources || []).map(s => `<source src="${esc(file(s.src))}" type="${esc(s.type || "video/mp4")}" data-quality="${esc(s.quality || "")}">`).join("") +
+      (V.captions ? `<track kind="captions" srclang="en" label="English" src="${esc(file(V.captions))}">` : "") +
+      `<script type="application/json" data-chapters>${JSON.stringify(V.chapters || []).replace(/</g, "\\u003c")}<\/script>` +
+      `</kd-vsl-player>`;
+    const p = slot.firstElementChild;
+    p.addEventListener("kdvsl:play", e => { if (e.detail.first) KD.track("kd_vsl_play"); });
+    p.addEventListener("kdvsl:milestone", e => KD.track("kd_vsl_progress", { [e.detail.kind]: e.detail.value }));  // 30 seconds watched, then 25/50/75/95 percent
+    p.addEventListener("kdvsl:ended", e => KD.track("kd_vsl_complete", { watched_seconds: e.detail.watched }));
+    p.addEventListener("kdvsl:cta", e => KD.track("kd_cta_click", { placement: e.detail.where === "end-card-alt" ? "vsl_end_free_plan" : "vsl_end" }));
+    slot.classList.add("ready");
+  }
+
+  const V = C.vslVideo;
+  if (V && typeof V === "object") document.addEventListener("DOMContentLoaded", () => mountPlayer(document.getElementById("vsl"), V)); // after common.js has carried UTMs onto the links
+  else if (V) KD.videoInto(document.getElementById("vsl"), V, "Breakdown video");
+  else { // with no video set, show what a cited result looks like instead of an empty player
     const v = document.getElementById("vsl");
     v.style.aspectRatio = "auto"; v.style.padding = "22px";
     v.innerHTML = `
